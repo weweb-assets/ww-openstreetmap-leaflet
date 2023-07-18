@@ -166,6 +166,7 @@ export default {
 
 <style lang="scss" scoped>
 .ww-leaflet {
+  min-height: 100px;
   width: 100%;
 
   /* wwEditor:start */
@@ -174,5 +175,16 @@ export default {
   }
   /* wwEditor:end */
   overflow: hidden;
+}
+</style>
+
+<style lang="scss">
+.leaflet-control-attribution {
+  display: flex;
+}
+
+.leaflet-control-attribution > * {
+  margin-left: 2px;
+  margin-right: 2px;
 }
 </style>
