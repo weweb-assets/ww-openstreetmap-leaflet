@@ -11,9 +11,6 @@ export default {
         en: "Tile layer",
       },
       type: "Text",
-      options: {
-        text: " ",
-      },
       bindable: true,
       section: "settings",
       defaultValue: "OpenStreetMap.Mapnik",
@@ -25,7 +22,27 @@ export default {
           },
         ],
         tooltip:
-          "A tile providers name: `<a href='https://leaflet-extras.github.io/leaflet-providers/preview/'>https://leaflet-extras.github.io/leaflet-providers/preview/</a>`",
+          "A providers name: `<a href='https://leaflet-extras.github.io/leaflet-providers/preview/'>https://leaflet-extras.github.io/leaflet-providers/preview/</a>`",
+      },
+      /* wwEditor:end */
+    },
+    providerConfiguration: {
+      label: {
+        en: "Provider configuration",
+      },
+      type: "Script",
+      bindable: true,
+      section: "settings",
+      defaultValue: "{}",
+      /* wwEditor:start */
+      bindingValidation: {
+        validations: [
+          {
+            type: "string",
+          },
+        ],
+        tooltip:
+          "A providers configuration: `<a href='https://github.com/leaflet-extras/leaflet-providers#providers-requiring-registration'>https://github.com/leaflet-extras/leaflet-providers#providers-requiring-registration</a>`",
       },
       /* wwEditor:end */
     },

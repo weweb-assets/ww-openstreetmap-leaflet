@@ -165,8 +165,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ww-openstreetmap {
-  height: 600px;
+.ww-leaflet {
   width: 100%;
 
   /* wwEditor:start */
