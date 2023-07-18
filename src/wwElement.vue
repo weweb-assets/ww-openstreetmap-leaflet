@@ -13,6 +13,9 @@ const DEFAULT_CIRCLE_X = "x";
 const DEFAULT_CIRCLE_Y = "y";
 const DEFAULT_CIRCLE_RADIUS = "radius";
 const DEFAULT_CIRCLE_TOOLTIP = "tooltip";
+const DEFAULT_CIRCLE_STROKE_WEIGHT = "strokeWeight";
+const DEFAULT_CIRCLE_STROKE_COLOR = "strokeColor";
+const DEFAULT_CIRCLE_FILL_COLOR = "fillColor";
 
 export default {
   name: "OpenStreetMap",
@@ -44,14 +47,44 @@ export default {
     this.initializeMap();
   },
   watch: {
-    content: {
-      handler() {
+    "content.tileLayer"() {
+      if (!this.map) return;
+      this.initializeMap();
+    },
+    "content.circles": {
+      handler: function () {
         if (!this.map) return;
-
-        console.log("tototo");
-        this.initializeMap();
+        this.addCircles();
       },
       deep: true,
+    },
+    "content.highLightedCountries": {
+      handler: function () {
+        if (!this.map) return;
+        this.addGeoJSON();
+      },
+      deep: true,
+    },
+    "content.xField"() {
+      this.addCircles();
+    },
+    "content.yField"() {
+      this.addCircles();
+    },
+    "content.radiusField"() {
+      this.addCircles();
+    },
+    "content.strokeWeightField"() {
+      this.addCircles();
+    },
+    "content.strokeColorField"() {
+      this.addCircles();
+    },
+    "content.fillColorField"() {
+      this.addCircles();
+    },
+    "content.tooltipContentField"() {
+      this.addCircles();
     },
   },
   methods: {
@@ -79,7 +112,9 @@ export default {
       const hlCountries = this.content.highLightedCountries;
       if (!this.map || !hlCountries || !Array.isArray(hlCountries)) return;
 
-      const contentCountriesCode = hlCountries.map((item) => item.country);
+      const contentCountriesCode = hlCountries.map(
+        (item) => item?.country || ""
+      );
 
       const selectedCountries = {
         type: countriesJSON.type,
@@ -110,8 +145,8 @@ export default {
       };
     },
     addCircles() {
-      if (Array.isArray(this.circles) === false) return;
-      if (this.circles.length === 0) return;
+      if (!Array.isArray(this.content.circles) || !this.content.circles.length)
+        return;
 
       for (let circleLayer of this.circleLayers) {
         if (this.map && circleLayer) this.map.removeLayer(circleLayer);
@@ -119,17 +154,17 @@ export default {
 
       this.circleLayers = [];
 
-      for (let circle of this.circles) {
+      for (let circle of this.content.circles) {
         circle = this.formatCircles(circle);
 
         if (!circle.x || !circle.y) continue;
 
         let circleInstance = L.circle([circle.x, circle.y], {
           stroke: true,
-          weight: 3,
-          color: "#64B5F620",
-          fillColor: "#1976D2",
-          fillOpacity: 0.5,
+          weight: circle.strokeWeight,
+          color: circle.strokeColor,
+          fillColor: circle.fillColor,
+          // fillOpacity: 0.5,
           radius: circle.radius,
         }).addTo(this.map);
 
@@ -149,12 +184,24 @@ export default {
       const radiusField = this.content.radiusField || DEFAULT_CIRCLE_RADIUS;
       const tooltipField =
         this.content.tooltipContentField || DEFAULT_CIRCLE_TOOLTIP;
+      const strokeWeightField =
+        this.content.strokeWeightField || DEFAULT_CIRCLE_STROKE_WEIGHT;
+      const strokeColorField =
+        this.content.strokeColorField || DEFAULT_CIRCLE_STROKE_COLOR;
+      const fillColorField =
+        this.content.fillColorField || DEFAULT_CIRCLE_FILL_COLOR;
 
       return {
         x: wwLib.resolveObjectPropertyPath(circle, xField),
         y: wwLib.resolveObjectPropertyPath(circle, yField),
         radius: wwLib.resolveObjectPropertyPath(circle, radiusField),
         tooltip: wwLib.resolveObjectPropertyPath(circle, tooltipField),
+        strokeWeight: wwLib.resolveObjectPropertyPath(
+          circle,
+          strokeWeightField
+        ),
+        strokeColor: wwLib.resolveObjectPropertyPath(circle, strokeColorField),
+        fillColor: wwLib.resolveObjectPropertyPath(circle, fillColorField),
       };
     },
     getCountriesGEOJSON() {
@@ -166,7 +213,7 @@ export default {
 
 <style lang="scss" scoped>
 .ww-leaflet {
-  min-height: 100px;
+  height: 500px;
   width: 100%;
 
   /* wwEditor:start */
