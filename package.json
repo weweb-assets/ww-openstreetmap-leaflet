@@ -1,0 +1,15 @@
+{
+  "name": "ww-openStreetMap",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "weweb build",
+    "serve": "weweb serve"
+  },
+  "devDependencies": {
+    "@weweb/cli": "latest"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "leaflet-providers": "^1.13.0"
+  }
+}
