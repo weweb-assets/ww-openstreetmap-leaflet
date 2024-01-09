@@ -1,8 +1,33 @@
+import geoJSON from "./configs/geojson";
+import polyline from "./configs/polyline";
+import polygon from "./configs/polygon";
+import rectangle from "./configs/rectangle";
+import marker from "./configs/marker";
+
 export default {
   editor: {
     label: {
       en: "Leaflet",
     },
+    customSettingsPropertiesOrder: [
+      "tileLayer",
+      "providerConfiguration",
+      [
+        "circles",
+        "xField",
+        "yField",
+        "radiusField",
+        "strokeWeightField",
+        "strokeColorField",
+        "fillColorField",
+        "tooltipContentField",
+      ],
+      ["markerTitle", "marker"],
+      ["geoJSONTitle", "geoJSON"],
+      ["polylineTitle", "polyline"],
+      ["polygonTitle", "polygon"],
+      ["rectangleTitle", "rectangle"],
+    ],
   },
   actions: [{ label: "Get countries GeoJSON", action: "getCountriesGEOJSON" }],
   properties: {
@@ -244,32 +269,10 @@ export default {
       defaultValue: "",
       section: "settings",
     },
-    highLightedCountries: {
-      label: "Highlighted countries",
-      type: "Array",
-      section: "settings",
-      options: {
-        item: {
-          type: "Object",
-          options: {
-            item: {
-              country: {
-                label: "Country (Alpha-3 Code)",
-                type: "Text",
-                options: { placeholder: "USA" },
-                bindable: true,
-              },
-              color: {
-                label: "Color",
-                type: "Color",
-                bindable: true,
-              },
-            },
-          },
-        },
-      },
-      defaultValue: [],
-      bindable: true,
-    },
+    ...marker,
+    ...geoJSON,
+    ...polyline,
+    ...polygon,
+    ...rectangle,
   },
 };
