@@ -8,6 +8,7 @@
 
 <script>
 import { ref, computed, onMounted } from "vue";
+import "leaflet/dist/leaflet.css";
 import useLeafletMap from "./use/useLeafletMap";
 
 export default {
@@ -45,11 +46,22 @@ export default {
 <style lang="scss" scoped>
 .ww-leaflet {
   // TODO: to remove
+  min-width: 600px;
   height: 500px;
   width: 100%;
   overflow: hidden;
   &.editing {
     pointer-events: none;
   }
+}
+</style>
+
+<style lang="scss">
+.leaflet-control-attribution {
+  display: flex;
+}
+
+.leaflet-control-attribution > * {
+  margin: 0px 4px;
 }
 </style>

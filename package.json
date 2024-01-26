@@ -9,7 +9,6 @@
     "@weweb/cli": "latest"
   },
   "dependencies": {
-    "geojson-places": "^1.0.8",
     "leaflet": "^1.9.4",
     "leaflet-providers": "^1.13.0"
   }

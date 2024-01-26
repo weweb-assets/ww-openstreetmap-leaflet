@@ -1,7 +1,6 @@
 import { ref, watch } from "vue";
 import L from "leaflet";
 import "leaflet-providers";
-import "leaflet/dist/leaflet.css";
 
 export default function useLeafletMap(mapContainer, content) {
   let map = null;
@@ -38,17 +37,34 @@ export default function useLeafletMap(mapContainer, content) {
   const addMarkers = () => {
     clearLayers(markerLayers);
 
-    if (!Array.isArray(content.markers) || !content.markers.length) return;
+    if (!Array.isArray(content.marker) || !content.marker.length) return;
 
-    content.markers.forEach((markerData) => {
+    content.marker.forEach((markerData) => {
       if (!markerData || !markerData.data) return;
 
-      const { data, iconUrl, ...options } = markerData;
-      let icon = new L.Icon({ iconUrl: iconUrl, ...autresOptionsIcon });
-      let markerInstance = L.marker(data, { icon: icon, ...options }).addTo(
-        map
-      );
+      const { data, customIcon, iconUrl, iconWidth, iconHeight } = markerData;
 
+      let icon;
+      if (
+        customIcon &&
+        iconUrl &&
+        typeof iconUrl === "string" &&
+        iconUrl.length
+      ) {
+        icon = new L.Icon({
+          iconUrl: iconUrl.startsWith("designs/")
+            ? `${wwLib.wwUtils.getCdnPrefix()}${iconUrl}`
+            : iconUrl,
+          iconSize: [
+            wwLib.wwUtils.getLengthUnit(iconWidth)[0],
+            wwLib.wwUtils.getLengthUnit(iconHeight)[0],
+          ],
+        });
+      } else {
+        icon = L.Icon.Default.prototype;
+      }
+
+      let markerInstance = L.marker(data, { icon }).addTo(map);
       markerLayers.value.push(markerInstance);
     });
   };
@@ -155,7 +171,7 @@ export default function useLeafletMap(mapContainer, content) {
   };
 
   watch(() => content.tileLayer, initializeMap, { deep: true });
-  watch(() => content.markers, addMarkers, { deep: true });
+  watch(() => content.marker, addMarkers, { deep: true });
   watch(() => content.circles, addCircles, { deep: true });
   watch(() => content.geoJSON, addGeoJSONLayers, { deep: true });
   watch(() => content.polyline, addPolylines, { deep: true });
