@@ -1,8 +1,33 @@
+import geoJSON from "./configs/geojson";
+import polyline from "./configs/polyline";
+import polygon from "./configs/polygon";
+import rectangle from "./configs/rectangle";
+import marker from "./configs/marker";
+
 export default {
   editor: {
     label: {
       en: "Leaflet",
     },
+    customSettingsPropertiesOrder: [
+      "tileLayer",
+      "providerConfiguration",
+      [
+        "circles",
+        "xField",
+        "yField",
+        "radiusField",
+        "strokeWeightField",
+        "strokeColorField",
+        "fillColorField",
+        "tooltipContentField",
+      ],
+      ["markerTitle", "marker"],
+      ["geoJSONTitle", "geoJSON"],
+      ["polylineTitle", "polyline"],
+      ["polygonTitle", "polygon"],
+      ["rectangleTitle", "rectangle"],
+    ],
   },
   actions: [{ label: "Get countries GeoJSON", action: "getCountriesGEOJSON" }],
   properties: {
@@ -11,9 +36,6 @@ export default {
         en: "Tile layer",
       },
       type: "Text",
-      options: {
-        text: " ",
-      },
       bindable: true,
       section: "settings",
       defaultValue: "OpenStreetMap.Mapnik",
@@ -25,7 +47,27 @@ export default {
           },
         ],
         tooltip:
-          "A tile providers name: `<a href='https://leaflet-extras.github.io/leaflet-providers/preview/'>https://leaflet-extras.github.io/leaflet-providers/preview/</a>`",
+          "A providers name: `<a href='https://leaflet-extras.github.io/leaflet-providers/preview/'>https://leaflet-extras.github.io/leaflet-providers/preview/</a>`",
+      },
+      /* wwEditor:end */
+    },
+    providerConfiguration: {
+      label: {
+        en: "Provider configuration",
+      },
+      type: "Script",
+      bindable: true,
+      section: "settings",
+      defaultValue: "{}",
+      /* wwEditor:start */
+      bindingValidation: {
+        validations: [
+          {
+            type: "string",
+          },
+        ],
+        tooltip:
+          "A providers configuration: `<a href='https://github.com/leaflet-extras/leaflet-providers#providers-requiring-registration'>https://github.com/leaflet-extras/leaflet-providers#providers-requiring-registration</a>`",
       },
       /* wwEditor:end */
     },
@@ -70,6 +112,29 @@ export default {
                 bindable: true,
                 defaultValue: 1000,
               },
+              strokeWeight: {
+                type: "Number",
+                label: {
+                  en: "Stroke weight",
+                },
+                options: {
+                  step: 1,
+                },
+                bindable: true,
+                defaultValue: 1,
+              },
+              strokeColor: {
+                label: "Stroke color",
+                type: "Color",
+                bindable: true,
+                defaultValue: "#099AF2",
+              },
+              fillColor: {
+                label: "Fill color",
+                type: "Color",
+                bindable: true,
+                defaultValue: "#099AF230",
+              },
               tooltipContent: {
                 // hidden: () => !props.tooltip,
                 label: { en: "Tooltip content" },
@@ -86,7 +151,7 @@ export default {
       bindable: true,
     },
     xField: {
-      hidden: (content, sidepanelContent, boundProps) =>
+      hidden: (content, _, boundProps) =>
         !boundProps.circles || !content.circles,
       label: {
         en: "X field",
@@ -103,7 +168,7 @@ export default {
       section: "settings",
     },
     yField: {
-      hidden: (content, sidepanelContent, boundProps) =>
+      hidden: (content, _, boundProps) =>
         !boundProps.circles || !content.circles,
       label: {
         en: "Y field",
@@ -120,7 +185,7 @@ export default {
       section: "settings",
     },
     radiusField: {
-      hidden: (content, sidepanelContent, boundProps) =>
+      hidden: (content, _, boundProps) =>
         !boundProps.circles || !content.circles,
       label: {
         en: "Radius field",
@@ -136,8 +201,59 @@ export default {
       defaultValue: "",
       section: "settings",
     },
+    strokeWeightField: {
+      hidden: (content, _, boundProps) =>
+        !boundProps.circles || !content.circles,
+      label: {
+        en: "Stroke weight field",
+      },
+      type: "ObjectPropertyPath",
+      options: (content) => {
+        if (!content.circles.length || typeof content.circles[0] !== "object") {
+          return null;
+        }
+
+        return { object: content.circles[0] };
+      },
+      defaultValue: "",
+      section: "settings",
+    },
+    strokeColorField: {
+      hidden: (content, _, boundProps) =>
+        !boundProps.circles || !content.circles,
+      label: {
+        en: "Stroke color field",
+      },
+      type: "ObjectPropertyPath",
+      options: (content) => {
+        if (!content.circles.length || typeof content.circles[0] !== "object") {
+          return null;
+        }
+
+        return { object: content.circles[0] };
+      },
+      defaultValue: "",
+      section: "settings",
+    },
+    fillColorField: {
+      hidden: (content, _, boundProps) =>
+        !boundProps.circles || !content.circles,
+      label: {
+        en: "Fill color field",
+      },
+      type: "ObjectPropertyPath",
+      options: (content) => {
+        if (!content.circles.length || typeof content.circles[0] !== "object") {
+          return null;
+        }
+
+        return { object: content.circles[0] };
+      },
+      defaultValue: "",
+      section: "settings",
+    },
     tooltipContentField: {
-      hidden: (content, sidepanelContent, boundProps) =>
+      hidden: (content, _, boundProps) =>
         !boundProps.circles || !content.circles,
       label: {
         en: "Tooltip content field",
@@ -153,60 +269,10 @@ export default {
       defaultValue: "",
       section: "settings",
     },
-    highLightedCountries: {
-      label: "Highlighted countries",
-      type: "Array",
-      section: "settings",
-      options: {
-        item: {
-          type: "Object",
-          options: {
-            item: {
-              country: {
-                label: "Country (Alpha-3 Code)",
-                type: "Text",
-                options: { placeholder: "USA" },
-                bindable: true,
-              },
-              color: {
-                label: "Color",
-                type: "Color",
-                bindable: true,
-              },
-            },
-          },
-        },
-      },
-      defaultValue: [
-        { country: "AUT", color: "#099AF2" },
-        { country: "BEL", color: "#099AF2" },
-        { country: "BGR", color: "#099AF2" },
-        { country: "HRV", color: "#099AF2" },
-        { country: "CYP", color: "#099AF2" },
-        { country: "CZE", color: "#099AF2" },
-        { country: "DNK", color: "#099AF2" },
-        { country: "EST", color: "#099AF2" },
-        { country: "FIN", color: "#099AF2" },
-        { country: "FRA", color: "#099AF2" },
-        { country: "DEU", color: "#099AF2" },
-        { country: "GRC", color: "#099AF2" },
-        { country: "HUN", color: "#099AF2" },
-        { country: "IRL", color: "#099AF2" },
-        { country: "ITA", color: "#099AF2" },
-        { country: "LVA", color: "#099AF2" },
-        { country: "LTU", color: "#099AF2" },
-        { country: "LUX", color: "#099AF2" },
-        { country: "MLT", color: "#099AF2" },
-        { country: "NLD", color: "#099AF2" },
-        { country: "POL", color: "#099AF2" },
-        { country: "PRT", color: "#099AF2" },
-        { country: "ROU", color: "#099AF2" },
-        { country: "SVK", color: "#099AF2" },
-        { country: "SVN", color: "#099AF2" },
-        { country: "ESP", color: "#099AF2" },
-        { country: "SWE", color: "#099AF2" },
-      ],
-      bindable: true,
-    },
+    ...marker,
+    ...geoJSON,
+    ...polyline,
+    ...polygon,
+    ...rectangle,
   },
 };
