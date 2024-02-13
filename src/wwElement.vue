@@ -20,12 +20,12 @@ export default {
     content: { type: Object, required: true },
   },
   setup(props) {
-    let mapInstance = ref(null);
+    let mapInstance = null;
     const mapContainer = ref();
 
     onMounted(() => {
       const { map } = useLeafletMap(mapContainer.value, props.content);
-      mapInstance.value = map;
+      mapInstance = map;
     });
 
     const isEditing = computed(() => {
