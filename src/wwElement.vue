@@ -3,11 +3,12 @@
     class="ww-leaflet leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom"
     :class="{ editing: isEditing }"
     ref="mapContainer"
+    :key="componentKey"
   ></div>
 </template>
 
 <script>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted, watch, nextTick } from "vue";
 import "leaflet/dist/leaflet.css";
 import useLeafletMap from "./use/useLeafletMap";
 
@@ -20,11 +21,28 @@ export default {
     content: { type: Object, required: true },
   },
   setup(props) {
+    const componentKey = ref(0);
+    const isMarkerBound = computed(() => {
+      return !!props.wwEditorState.boundProps.markers;
+    });
+
+    const boundStates = {
+      markers: isMarkerBound,
+    };
+
     let mapInstance = null;
     const mapContainer = ref(true);
 
-    function initMap() {
-      const { map } = useLeafletMap(mapContainer.value, props.content);
+    async function initMap() {
+      componentKey.value += 1;
+      await nextTick();
+
+      const { map } = useLeafletMap(
+        mapContainer.value,
+        props.content,
+        boundStates
+      );
+
       mapInstance = map;
     }
 
@@ -42,12 +60,20 @@ export default {
 
     watch(
       () => isEditing,
-      async () => {
+      () => {
         initMap();
       }
     );
 
-    return { isEditing, mapContainer, mapInstance };
+    watch(
+      () => boundStates,
+      () => {
+        initMap();
+      },
+      { deep: true }
+    );
+
+    return { isEditing, mapContainer, mapInstance, componentKey };
   },
 };
 </script>

@@ -68,3 +68,61 @@ export const tooltipDefaultValues = {
   tooltipDirection: "auto",
   tooltipPermanent: false,
 };
+
+export const tooltipObjectPropertyPath = (propertyName) => ({
+  tooltipContentField: {
+    label: { en: "Tooltip content field" },
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => {
+      if (
+        !content[propertyName].length ||
+        typeof content[propertyName][0] !== "object"
+      ) {
+        return null;
+      }
+
+      return { object: content[propertyName][0] };
+    },
+    defaultValue: "",
+    section: "settings",
+  },
+  tooltipDirectionField: {
+    label: { en: "Tooltip direction field" },
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps[propertyName] || !content[propertyName],
+    options: (content) => {
+      if (
+        !content[propertyName].length ||
+        typeof content[propertyName][0] !== "object"
+      ) {
+        return null;
+      }
+
+      return { object: content[propertyName][0] };
+    },
+    defaultValue: "auto",
+    section: "settings",
+  },
+  tooltipPermanentField: {
+    label: { en: "Permanent field" },
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps[propertyName] || !content[propertyName],
+    options: (content) => {
+      if (
+        !content[propertyName].length ||
+        typeof content[propertyName][0] !== "object"
+      ) {
+        return null;
+      }
+
+      return { object: content[propertyName][0] };
+    },
+    defaultValue: false,
+    section: "settings",
+  },
+});

@@ -1,7 +1,7 @@
-import basePath from "./basePath";
+import { basePath, basePathObjectPropertyPath } from "./basePath";
 import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
 
-const POLYGON_DATA_HELP = `The polygon data is an array of arrays of latlngs: <br><br> \`[[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04]]\`. <br><br>
+const POLYGON_DATA_HELP = `The polygon data is an array of arrays of LatLng: <br><br> \`[[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04]]\`. <br><br>
 Examples can be found in the <a href="https://leafletjs.com/reference.html#polygon" target="_blank">Leaflet documentation</a>.`;
 
 const polygon = {

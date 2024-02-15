@@ -7,7 +7,9 @@ import default_iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import default_iconUrl from "leaflet/dist/images/marker-icon.png";
 import default_shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
-export default function useLeafletMap(mapContainer, content) {
+import { markerFields } from "./fields.js";
+
+export default function useLeafletMap(mapContainer, content, boundStates) {
   let map = null;
   const markerLayers = ref([]);
   const circleLayers = ref([]);
@@ -51,7 +53,14 @@ export default function useLeafletMap(mapContainer, content) {
     if (!Array.isArray(content.markers) || !content.markers.length) return;
 
     content.markers.forEach((markerData) => {
-      if (!markerData || !markerData.data) return;
+      if (!markerData) return;
+
+      const fields = markerFields(content, markerData);
+
+      console.log(
+        "boundStates && boundStates.markers",
+        boundStates && boundStates.markers.value
+      );
 
       const {
         data,
@@ -63,7 +72,24 @@ export default function useLeafletMap(mapContainer, content) {
         tooltipContent,
         tooptipDirection,
         tooltipPermanent,
-      } = markerData;
+      } =
+        boundStates && boundStates.markers.value
+          ? {
+              data: fields.markerDataField,
+              customIcon:
+                typeof fields.markerIconUrlField === "string" &&
+                fields.markerIconUrlField.length,
+              iconUrl: fields.markerIconUrlField,
+              iconWidth: fields.markerIconWidthField,
+              iconHeight: fields.markerIconHeightField,
+              tooltip:
+                typeof fields.tooltipContentField === "string" &&
+                fields.tooltipContentField.length,
+              tooltipContent: fields.tooltipContentField,
+              tooptipDirection: fields.tooltipDirectionField,
+              tooltipPermanent: fields.tooltipPermanentField,
+            }
+          : markerData;
 
       if (!data || data.length !== 2) return;
 
@@ -258,12 +284,30 @@ export default function useLeafletMap(mapContainer, content) {
     content.geoJSONs.forEach((geoJSON) => {
       if (!geoJSON || !geoJSON.data) return;
 
-      const { data, ...styles } = geoJSON;
+      const {
+        data,
+        tooltip,
+        tooltipContent,
+        tooptipDirection,
+        tooltipPermanent,
+        ...styles
+      } = geoJSON;
 
       if (data) {
         const layer = L.geoJson(data, {
           style: () => ({ ...styles }),
         }).addTo(map);
+
+        if (
+          tooltip &&
+          typeof tooltipContent === "string" &&
+          tooltipContent.length
+        ) {
+          layer.bindTooltip(tooltipContent, {
+            permanent: tooltipPermanent,
+            direction: tooptipDirection,
+          });
+        }
 
         geoJsonLayers.value.push(layer);
       }
@@ -276,13 +320,6 @@ export default function useLeafletMap(mapContainer, content) {
   };
 
   watch(() => content, initializeMap, { deep: true });
-  // watch(() => content.tileLayer, initializeMap, { deep: true });
-  // watch(() => content.markers, addMarkers, { deep: true });
-  // watch(() => content.circles, addCircles, { deep: true });
-  // watch(() => content.polygons, addPolygons, { deep: true });
-  // watch(() => content.rectangles, addRectangles, { deep: true });
-  // watch(() => content.polylines, addPolylines, { deep: true });
-  // watch(() => content.geoJSONs, addGeoJSONLayers, { deep: true });
 
   watch(
     () => mapContainer,

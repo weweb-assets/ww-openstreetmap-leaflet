@@ -1,6 +1,10 @@
-import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
+import {
+  tooltipConfig,
+  tooltipDefaultValues,
+  tooltipObjectPropertyPath,
+} from "./tooltipBase";
 
-const MARKER_DATA_HELP = `The circle data is an array of latlngs: \`[37, -109.05]\``;
+const MARKER_DATA_HELP = `The marker data is an array of LatLng: \`[37, -109.05]\``;
 
 export default {
   markerTitle: {
@@ -113,4 +117,76 @@ export default {
     defaultValue: [],
     bindable: true,
   },
+  markerDataField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.markers || !content.markers,
+    label: {
+      en: "Data field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    propertyHelp: {
+      tooltip: MARKER_DATA_HELP,
+    },
+    options: (content) => {
+      if (!content.markers.length || typeof content.markers[0] !== "object") {
+        return null;
+      }
+
+      return { object: content.markers[0] };
+    },
+    defaultValue: null,
+  },
+  markerIconUrlField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.markers || !content.markers,
+    label: {
+      en: "Icon URL field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    options: (content) => {
+      if (!content.markers.length || typeof content.markers[0] !== "object") {
+        return null;
+      }
+
+      return { object: content.markers[0] };
+    },
+    defaultValue: null,
+  },
+  markerIconWidthField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.markers || !content.markers,
+    label: {
+      en: "Icon width field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    options: (content) => {
+      if (!content.markers.length || typeof content.markers[0] !== "object") {
+        return null;
+      }
+
+      return { object: content.markers[0] };
+    },
+    defaultValue: null,
+  },
+  markerIconHeightField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.markers || !content.markers,
+    label: {
+      en: "Icon height field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    options: (content) => {
+      if (!content.markers.length || typeof content.markers[0] !== "object") {
+        return null;
+      }
+
+      return { object: content.markers[0] };
+    },
+    defaultValue: null,
+  },
+  ...tooltipObjectPropertyPath("markers"),
 };

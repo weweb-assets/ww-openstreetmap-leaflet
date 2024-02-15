@@ -1,4 +1,4 @@
-import basePath from "./basePath";
+import { basePath, basePathObjectPropertyPath } from "./basePath";
 import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
 
 const POLYLINE_DATA_HELP = `The polyline data is defined by an array of LatLng points: <br><br> \`[

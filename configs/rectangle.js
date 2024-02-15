@@ -1,4 +1,4 @@
-import basePath from "./basePath";
+import { basePath, basePathObjectPropertyPath } from "./basePath";
 import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
 
 const RECTANGLE_DATA_HELP = `The rectangle data is defined by an array of rectangle geographical bounds: <br><br> \`[[54.559322, -5.767822], [56.1210604, -3.021240]]\`. <br><br>

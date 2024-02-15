@@ -1,11 +1,9 @@
-// Importing the base configurations that are applicable to most map elements
-import basePath from "./basePath";
+import { basePath, basePathObjectPropertyPath } from "./basePath";
 import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
 
-const CIRCLE_DATA_HELP = `The circle data is an array of latlngs: <br><br> \`[37, -109.05]\` <br><br>
+const CIRCLE_DATA_HELP = `The circle data is an array of LatLng: <br><br> \`[37, -109.05]\` <br><br>
 Examples can be found in the <a href="https://leafletjs.com/reference.html#circle" target="_blank">Leaflet documentation</a>.`;
 
-// Circle-specific configurations, including the radius
 const circle = {
   ...basePath,
   radius: {
