@@ -1,3 +1,7 @@
+import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
+
+const MARKER_DATA_HELP = `The circle data is an array of latlngs: \`[37, -109.05]\``;
+
 export default {
   markerTitle: {
     section: "settings",
@@ -7,8 +11,8 @@ export default {
     },
     editorOnly: true,
   },
-  marker: {
-    label: "Marker",
+  markers: {
+    label: "Markers",
     type: "Array",
     section: "settings",
     options: {
@@ -18,14 +22,18 @@ export default {
           item: {
             data: {
               label: "Marker data",
-              type: "LatLng",
+              type: "Info",
               bindable: true,
+              propertyHelp: {
+                tooltip: MARKER_DATA_HELP,
+              },
               defaultValue: [2.333333, 48.866667],
             },
             customIcon: {
               label: { en: "Custom marker" },
               type: "OnOff",
               defaultValue: false,
+              bindable: true,
               propertyHelp: `See icon documentation here: https://leafletjs.com/reference.html#icon`,
             },
             iconUrl: {
@@ -60,6 +68,8 @@ export default {
               ) => {
                 return specific__array.item && !specific__array.item.customIcon;
               },
+              responsive: true,
+              bindable: true,
             },
             iconHeight: {
               type: "Length",
@@ -79,10 +89,26 @@ export default {
               ) => {
                 return specific__array.item && !specific__array.item.customIcon;
               },
+              responsive: true,
+              bindable: true,
             },
+            ...tooltipConfig,
           },
         },
+        defaultValue: {
+          data: [46.603354, 1.888334],
+          customIcon: false,
+          iconUrl: "https://placehold.co/400x400/png",
+          iconWidth: "32",
+          iconHeight: "32",
+          tooltip: false,
+          tooltipContent: "<b>Hello world!</b><br>I am a tooltip",
+          tooltipDirection: "auto",
+          tooltipPermanent: false,
+          ...tooltipDefaultValues,
+        },
       },
+      expandable: true,
     },
     defaultValue: [],
     bindable: true,

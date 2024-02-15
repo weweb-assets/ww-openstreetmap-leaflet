@@ -100,7 +100,12 @@ export default {
     label: { en: "Fill Opacity" },
     bindable: true,
     type: "Number",
-    defaultValue: 0.2,
+    defaultValue: 0.3,
+    options: {
+      min: 0,
+      max: 1,
+      step: 0.1,
+    },
   },
   fillRule: {
     label: { en: "Fill Rule" },

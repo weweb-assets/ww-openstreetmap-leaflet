@@ -9,8 +9,8 @@ export default {
     },
     editorOnly: true,
   },
-  geoJSON: {
-    label: "goeJSON",
+  geoJSONs: {
+    label: "goeJSONs",
     type: "Array",
     section: "settings",
     options: {
@@ -22,6 +22,9 @@ export default {
               label: "GeoJSON data",
               type: "Array",
               bindable: true,
+              options: {
+                fixed: true,
+              },
               defaultValue: [],
             },
             ...basePath,

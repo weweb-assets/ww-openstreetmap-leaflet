@@ -1,40 +1,37 @@
+// Importing the base configurations that are applicable to most map elements
 import basePath from "./basePath";
 import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
 
-const POLYLINE_DATA_HELP = `The polyline data is defined by an array of LatLng points: <br><br> \`[
-  [45.51, -122.68],
-  [37.77, -122.43],
-  [34.04, -118.2]
-]\`. <br><br>
-Examples can be found in the <a href="https://leafletjs.com/reference.html#polyline" target="_blank">Leaflet documentation</a>.`;
+const CIRCLE_DATA_HELP = `The circle data is an array of latlngs: <br><br> \`[37, -109.05]\` <br><br>
+Examples can be found in the <a href="https://leafletjs.com/reference.html#circle" target="_blank">Leaflet documentation</a>.`;
 
-const polyline = {
+// Circle-specific configurations, including the radius
+const circle = {
   ...basePath,
-  smoothFactor: {
-    label: { en: "Smooth Factor" },
+  radius: {
+    label: { en: "Radius" },
     bindable: true,
     type: "Number",
-    defaultValue: 1.0,
+    defaultValue: 5000, // Default radius in meters
+    options: {
+      min: 0,
+      step: 1,
+    },
   },
-  noClip: {
-    label: { en: "No Clip" },
-    bindable: true,
-    type: "OnOff",
-    defaultValue: false,
-  },
+  // Add other circle-specific configurations here
 };
 
 export default {
-  polylineTitle: {
+  circleTitle: {
     section: "settings",
     type: "Title",
     label: {
-      en: "Polyline",
+      en: "Circle",
     },
     editorOnly: true,
   },
-  polylines: {
-    label: "Polylines",
+  circles: {
+    label: "Circles",
     type: "Array",
     section: "settings",
     options: {
@@ -43,23 +40,20 @@ export default {
         options: {
           item: {
             data: {
-              label: "Polyline data",
+              label: "Circle data",
               type: "Info",
               bindable: true,
-              propertyHelp: {
-                tooltip: POLYLINE_DATA_HELP,
-              },
               defaultValue: [],
+              propertyHelp: {
+                tooltip: CIRCLE_DATA_HELP,
+              },
             },
-            ...polyline,
+            ...circle,
             ...tooltipConfig,
           },
         },
         defaultValue: {
-          data: [
-            [54.559322, -5.767822],
-            [56.1210604, -3.02124],
-          ],
+          data: [46.603354, 1.888334],
           stroke: true,
           color: "#3388ff",
           weight: 3,
@@ -72,11 +66,11 @@ export default {
           fillColor: "#3388ff",
           fillOpacity: 0.2,
           fillRule: "evenodd",
-          smoothFactor: 1.0,
-          noClip: false,
+          radius: 50000,
           ...tooltipDefaultValues,
         },
       },
+      expandable: true,
     },
     defaultValue: [],
     bindable: true,

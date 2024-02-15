@@ -1,13 +1,13 @@
 <template>
   <div
-    class="ww-leaflet"
+    class="ww-leaflet leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom"
     :class="{ editing: isEditing }"
     ref="mapContainer"
   ></div>
 </template>
 
 <script>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import "leaflet/dist/leaflet.css";
 import useLeafletMap from "./use/useLeafletMap";
 
@@ -21,12 +21,14 @@ export default {
   },
   setup(props) {
     let mapInstance = null;
-    const mapContainer = ref();
+    const mapContainer = ref(true);
 
-    onMounted(() => {
+    function initMap() {
       const { map } = useLeafletMap(mapContainer.value, props.content);
       mapInstance = map;
-    });
+    }
+
+    onMounted(() => initMap());
 
     const isEditing = computed(() => {
       /* wwEditor:start */
@@ -37,6 +39,13 @@ export default {
       // eslint-disable-next-line no-unreachable
       return false;
     });
+
+    watch(
+      () => isEditing,
+      async () => {
+        initMap();
+      }
+    );
 
     return { isEditing, mapContainer, mapInstance };
   },
