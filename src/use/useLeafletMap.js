@@ -110,6 +110,18 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
             }
           : markerData;
 
+      console.log("data ⚠️", {
+        data,
+        customIcon,
+        iconUrl,
+        iconWidth,
+        iconHeight,
+        tooltip,
+        tooltipContent,
+        tooptipDirection,
+        tooltipPermanent,
+      });
+
       if (!data || data.length !== 2) return;
 
       let markerInstance, icon;
