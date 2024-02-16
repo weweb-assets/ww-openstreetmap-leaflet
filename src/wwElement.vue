@@ -22,12 +22,32 @@ export default {
   },
   setup(props) {
     const componentKey = ref(0);
-    const isMarkerBound = computed(() => {
+    const isMarkersBound = computed(() => {
       return !!props.wwEditorState.boundProps.markers;
+    });
+    const isCirclesBound = computed(() => {
+      return !!props.wwEditorState.boundProps.circles;
+    });
+    const isPolygonsBound = computed(() => {
+      return !!props.wwEditorState.boundProps.polygons;
+    });
+    const isRectanglesBound = computed(() => {
+      return !!props.wwEditorState.boundProps.rectangles;
+    });
+    const isPolylinesBound = computed(() => {
+      return !!props.wwEditorState.boundProps.polylines;
+    });
+    const isGeoJSONsBound = computed(() => {
+      return !!props.wwEditorState.boundProps.geoJSONs;
     });
 
     const boundStates = {
-      markers: isMarkerBound,
+      markers: isMarkersBound,
+      circles: isCirclesBound,
+      polygons: isPolygonsBound,
+      rectangles: isRectanglesBound,
+      polylines: isPolylinesBound,
+      geoJSONs: isGeoJSONsBound,
     };
 
     let mapInstance = null;
@@ -44,6 +64,8 @@ export default {
       );
 
       mapInstance = map;
+
+      console.log("Content 🔥", props.content);
     }
 
     onMounted(() => initMap());

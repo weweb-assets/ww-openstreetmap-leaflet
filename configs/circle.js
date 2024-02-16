@@ -1,5 +1,9 @@
 import { basePath, basePathObjectPropertyPath } from "./basePath";
-import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
+import {
+  tooltipConfig,
+  tooltipDefaultValues,
+  tooltipObjectPropertyPath,
+} from "./tooltipBase";
 
 const CIRCLE_DATA_HELP = `The circle data is an array of LatLng: <br><br> \`[37, -109.05]\` <br><br>
 Examples can be found in the <a href="https://leafletjs.com/reference.html#circle" target="_blank">Leaflet documentation</a>.`;
@@ -73,4 +77,43 @@ export default {
     defaultValue: [],
     bindable: true,
   },
+  circleDataField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.circles || !content.circles,
+    label: {
+      en: "Data field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    propertyHelp: {
+      tooltip: CIRCLE_DATA_HELP,
+    },
+    options: (content) => {
+      if (!content.circles.length || typeof content.circles[0] !== "object") {
+        return null;
+      }
+
+      return { object: content.circles[0] };
+    },
+    defaultValue: null,
+  },
+  circleRadiusField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.circles || !content.circles,
+    label: {
+      en: "Circle radius field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    options: (content) => {
+      if (!content.circles.length || typeof content.circles[0] !== "object") {
+        return null;
+      }
+
+      return { object: content.circles[0] };
+    },
+    defaultValue: null,
+  },
+  ...basePathObjectPropertyPath("circles"),
+  ...tooltipObjectPropertyPath("circles"),
 };

@@ -1,13 +1,35 @@
 import { ref, watch } from "vue";
 import L from "../leaflet";
-import _L, { tooltip } from "leaflet";
+import _L from "leaflet";
 import "leaflet-providers";
 
 import default_iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import default_iconUrl from "leaflet/dist/images/marker-icon.png";
 import default_shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
-import { markerFields } from "./fields.js";
+import {
+  markerFields,
+  circleFields,
+  polygonFields,
+  polylineFields,
+} from "./fields.js";
+
+const generateVectorStyles = (fields, vector) => {
+  return {
+    stroke: fields[`${vector}_strokeField`],
+    color: fields[`${vector}_colorField`],
+    weight: fields[`${vector}_weightField`],
+    opacity: fields[`${vector}_opacityField`],
+    lineCap: fields[`${vector}_lineCapField`],
+    lineJoin: fields[`${vector}_lineJoinField`],
+    dashArray: fields[`${vector}_dashArrayField`],
+    dashOffset: fields[`${vector}_dashOffsetField`],
+    fill: fields[`${vector}_fillField`],
+    fillColor: fields[`${vector}_fillColorField`],
+    fillOpacity: fields[`${vector}_fillOpacityField`],
+    fillRule: fields[`${vector}_fillRuleField`],
+  };
+};
 
 export default function useLeafletMap(mapContainer, content, boundStates) {
   let map = null;
@@ -57,11 +79,6 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
 
       const fields = markerFields(content, markerData);
 
-      console.log(
-        "boundStates && boundStates.markers",
-        boundStates && boundStates.markers.value
-      );
-
       const {
         data,
         customIcon,
@@ -83,11 +100,11 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
               iconWidth: fields.markerIconWidthField,
               iconHeight: fields.markerIconHeightField,
               tooltip:
-                typeof fields.tooltipContentField === "string" &&
-                fields.tooltipContentField.length,
-              tooltipContent: fields.tooltipContentField,
-              tooptipDirection: fields.tooltipDirectionField,
-              tooltipPermanent: fields.tooltipPermanentField,
+                typeof fields.markers_tooltipContentField === "string" &&
+                fields.markers_tooltipContentField.length,
+              tooltipContent: fields.markers_tooltipContentField,
+              tooptipDirection: fields.markers_tooltipDirectionField,
+              tooltipPermanent: fields.markers_tooltipPermanentField,
             }
           : markerData;
 
@@ -134,6 +151,8 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
         });
       }
 
+      console.log(content);
+
       markerLayers.value.push(markerInstance);
     });
   };
@@ -143,20 +162,36 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
     if (!Array.isArray(content.circles) || !content.circles.length) return;
 
     content.circles.forEach((circleData) => {
-      if (!circleData || !circleData.data) return;
+      if (!circleData) return;
+
+      const fields = circleFields(content, circleData);
 
       const {
         data,
+        radius,
         tooltip,
         tooltipContent,
         tooptipDirection,
         tooltipPermanent,
         ...styles
-      } = circleData;
+      } =
+        boundStates && boundStates.circles.value
+          ? {
+              data: fields.circleDataField,
+              radius: fields.circleRadiusField,
+              tooltip:
+                typeof fields.circles_tooltipContentField === "string" &&
+                fields.circles_tooltipContentField.length,
+              tooltipContent: fields.circles_tooltipContentField,
+              tooptipDirection: fields.circles_tooltipDirectionField,
+              tooltipPermanent: fields.circles_tooltipPermanentField,
+              ...generateVectorStyles(fields, "circles"),
+            }
+          : circleData;
 
-      if (!data || !data.length || typeof styles.radius !== "number") return;
+      if (!data || !data.length) return;
 
-      let circleInstance = L.circle(data, { ...styles }).addTo(map);
+      let circleInstance = L.circle(data, { ...styles, radius }).addTo(map);
 
       if (
         tooltip &&
@@ -179,6 +214,10 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
     if (!Array.isArray(content.polygons) || !content.polygons.length) return;
 
     content.polygons.forEach((polygonData) => {
+      if (!polygonData) return;
+
+      const fields = polygonFields(content, polygonData);
+
       const {
         data,
         tooltip,
@@ -186,7 +225,19 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
         tooptipDirection,
         tooltipPermanent,
         ...styles
-      } = polygonData;
+      } =
+        boundStates && boundStates.polygons.value
+          ? {
+              data: fields.circleDataField,
+              tooltip:
+                typeof fields.circles_tooltipContentField === "string" &&
+                fields.circles_tooltipContentField.length,
+              tooltipContent: fields.circles_tooltipContentField,
+              tooptipDirection: fields.circles_tooltipDirectionField,
+              tooltipPermanent: fields.circles_tooltipPermanentField,
+              ...generateVectorStyles(fields, "polygons"),
+            }
+          : polygonData;
 
       if (!data || !data.length) return;
 
@@ -214,6 +265,10 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
       return;
 
     content.rectangles.forEach((rectangleData) => {
+      if (!rectangleData) return;
+
+      const fields = polygonFields(content, rectangleData);
+
       const {
         data,
         tooltip,
@@ -221,7 +276,20 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
         tooptipDirection,
         tooltipPermanent,
         ...styles
-      } = rectangleData;
+      } =
+        boundStates && boundStates.rectangles.value
+          ? {
+              data: fields.rectangleDataField,
+              tooltip:
+                typeof fields.rectangles_tooltipContentField === "string" &&
+                fields.rectangles_tooltipContentField.length,
+              tooltipContent: fields.rectangles_tooltipContentField,
+              tooptipDirection: fields.rectangles_tooltipDirectionField,
+              tooltipPermanent: fields.rectangles_tooltipPermanentField,
+              ...generateVectorStyles(fields, "rectangles"),
+            }
+          : rectangleData;
+
       if (!data || data.length !== 2) return;
 
       let rectangleInstance = L.rectangle(data, { ...styles }).addTo(map);
@@ -247,19 +315,40 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
     if (!Array.isArray(content.polylines) || !content.polylines.length) return;
 
     content.polylines.forEach((polylineData) => {
-      if (!polylineData || !polylineData.data) return;
+      if (!polylineData) return;
+
+      const fields = polygonFields(content, polylineData);
 
       const {
         data,
+        smoothFactorField,
+        noClipField,
         tooltip,
         tooltipContent,
         tooptipDirection,
         tooltipPermanent,
         ...styles
-      } = polylineData;
+      } =
+        boundStates && boundStates.polylines.value
+          ? {
+              data: fields.polylineDataField,
+              tooltip:
+                typeof fields.polylines_tooltipContentField === "string" &&
+                fields.polylines_tooltipContentField.length,
+              tooltipContent: fields.polylines_tooltipContentField,
+              tooptipDirection: fields.polylines_tooltipDirectionField,
+              tooltipPermanent: fields.polylines_tooltipPermanentField,
+              ...generateVectorStyles(fields, "polylines"),
+            }
+          : polylineData;
+
       if (!data || !data.length) return;
 
-      let polylineInstance = L.polyline(data, { ...styles }).addTo(map);
+      let polylineInstance = L.polyline(data, {
+        ...styles,
+        smoothFactorField,
+        noClipField,
+      }).addTo(map);
 
       if (
         tooltip &&

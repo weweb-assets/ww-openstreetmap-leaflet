@@ -122,9 +122,9 @@ export const basePath = {
 };
 
 export const basePathObjectPropertyPath = (propertyName) => ({
-  strokeField: {
+  [propertyName + "_strokeField"]: {
     hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.stroke || !content.stroke,
+      !boundProps[propertyName] || !content[propertyName],
     label: {
       en: "Stroke field",
     },
@@ -138,18 +138,19 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },
-  colorField: {
-    hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.color || !content.color,
+  [propertyName + "_colorField"]: {
     label: {
       en: "Color field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
     options: (content) => {
       if (
         !content[propertyName].length ||
@@ -158,18 +159,19 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },
-  weightField: {
-    hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.weight || !content.weight,
+  [propertyName + "_weightField"]: {
     label: {
       en: "Weight field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
     options: (content) => {
       if (
         !content[propertyName].length ||
@@ -178,18 +180,19 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },
-  opacityField: {
-    hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.opacity || !content.opacity,
+  [propertyName + "_opacityField"]: {
     label: {
       en: "Opacity field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
     options: (content) => {
       if (
         !content[propertyName].length ||
@@ -198,18 +201,19 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },
-  lineCapField: {
-    hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.lineCap || !content.lineCap,
+  [propertyName + "_lineCapField"]: {
     label: {
       en: "Line Cap field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
     options: (content) => {
       if (
         !content[propertyName].length ||
@@ -218,18 +222,19 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },
-  lineJoinField: {
-    hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.lineJoin || !content.lineJoin,
+  [propertyName + "_lineJoinField"]: {
     label: {
       en: "Line Join field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
     options: (content) => {
       if (
         !content[propertyName].length ||
@@ -238,18 +243,19 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },
-  dashArrayField: {
-    hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.dashArray || !content.dashArray,
+  [propertyName + "_dashArrayField"]: {
     label: {
       en: "Dash Array field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
     options: (content) => {
       if (
         !content[propertyName].length ||
@@ -258,18 +264,19 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },
-  dashOffsetField: {
-    hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.dashOffset || !content.dashOffset,
+  [propertyName + "_dashOffsetField"]: {
     label: {
       en: "Dash Offset field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
     options: (content) => {
       if (
         !content[propertyName].length ||
@@ -278,18 +285,19 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },
-  fillField: {
-    hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.fill || !content.fill,
+  [propertyName + "_fillField"]: {
     label: {
       en: "Fill field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
     options: (content) => {
       if (
         !content[propertyName].length ||
@@ -298,18 +306,19 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },
-  fillColorField: {
-    hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.fillColor || !content.fillColor,
+  [propertyName + "_fillColorField"]: {
     label: {
       en: "Fill Color field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
     options: (content) => {
       if (
         !content[propertyName].length ||
@@ -318,18 +327,19 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },
-  fillOpacityField: {
-    hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.fillOpacity || !content.fillOpacity,
+  [propertyName + "_fillOpacityField"]: {
     label: {
       en: "Fill Opacity field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
     options: (content) => {
       if (
         !content[propertyName].length ||
@@ -338,18 +348,19 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },
-  fillRuleField: {
-    hidden: (content, sidepanelContent, boundProps) =>
-      !boundProps.fillRule || !content.fillRule,
+  [propertyName + "_fillRuleField"]: {
     label: {
       en: "Fill Rule field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
     options: (content) => {
       if (
         !content[propertyName].length ||
@@ -358,7 +369,7 @@ export const basePathObjectPropertyPath = (propertyName) => ({
         return null;
       }
 
-      return { object: content.markers[0] };
+      return { object: content[propertyName][0] };
     },
     defaultValue: null,
   },

@@ -67,4 +67,26 @@ export default {
     defaultValue: [],
     bindable: true,
   },
+  polygonDataField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.polygons || !content.polygons,
+    label: {
+      en: "Data field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    propertyHelp: {
+      tooltip: POLYGON_DATA_HELP,
+    },
+    options: (content) => {
+      if (!content.polygons.length || typeof content.polygons[0] !== "object") {
+        return null;
+      }
+
+      return { object: content.polygons[0] };
+    },
+    defaultValue: null,
+  },
+  ...basePathObjectPropertyPath("polygons"),
+  ...tooltipObjectPropertyPath("polygons"),
 };

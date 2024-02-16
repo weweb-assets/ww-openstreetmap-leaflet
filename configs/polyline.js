@@ -81,4 +81,69 @@ export default {
     defaultValue: [],
     bindable: true,
   },
+  polylineDataField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.polylines || !content.polylines,
+    label: {
+      en: "Data field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    propertyHelp: {
+      tooltip: POLYGON_DATA_HELP,
+    },
+    options: (content) => {
+      if (
+        !content.polylines.length ||
+        typeof content.polylines[0] !== "object"
+      ) {
+        return null;
+      }
+
+      return { object: content.polylines[0] };
+    },
+    defaultValue: null,
+  },
+  smoothFactorField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.polylines || !content.polylines,
+    label: {
+      en: "Smooth factor field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    options: (content) => {
+      if (
+        !content.polylines.length ||
+        typeof content.polylines[0] !== "object"
+      ) {
+        return null;
+      }
+
+      return { object: content.polylines[0] };
+    },
+    defaultValue: null,
+  },
+  noClipField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.polylines || !content.polylines,
+    label: {
+      en: "No clip field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    options: (content) => {
+      if (
+        !content.polylines.length ||
+        typeof content.polylines[0] !== "object"
+      ) {
+        return null;
+      }
+
+      return { object: content.polylines[0] };
+    },
+    defaultValue: null,
+  },
+  ...basePathObjectPropertyPath("polylines"),
+  ...tooltipObjectPropertyPath("polylines"),
 };

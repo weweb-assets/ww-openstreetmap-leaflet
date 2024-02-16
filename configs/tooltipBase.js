@@ -70,7 +70,7 @@ export const tooltipDefaultValues = {
 };
 
 export const tooltipObjectPropertyPath = (propertyName) => ({
-  tooltipContentField: {
+  [propertyName + "_tooltipContentField"]: {
     label: { en: "Tooltip content field" },
     type: "ObjectPropertyPath",
     hidden: (content, sidepanelContent, boundProps) => {
@@ -89,7 +89,7 @@ export const tooltipObjectPropertyPath = (propertyName) => ({
     defaultValue: "",
     section: "settings",
   },
-  tooltipDirectionField: {
+  [propertyName + "_tooltipDirectionField"]: {
     label: { en: "Tooltip direction field" },
     type: "ObjectPropertyPath",
     hidden: (content, sidepanelContent, boundProps) =>
@@ -107,7 +107,7 @@ export const tooltipObjectPropertyPath = (propertyName) => ({
     defaultValue: "auto",
     section: "settings",
   },
-  tooltipPermanentField: {
+  [propertyName + "_tooltipPermanentField"]: {
     label: { en: "Permanent field" },
     type: "ObjectPropertyPath",
     hidden: (content, sidepanelContent, boundProps) =>
