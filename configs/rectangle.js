@@ -1,5 +1,9 @@
 import { basePath, basePathObjectPropertyPath } from "./basePath";
-import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
+import {
+  tooltipConfig,
+  tooltipDefaultValues,
+  tooltipObjectPropertyPath,
+} from "./tooltipBase";
 
 const RECTANGLE_DATA_HELP = `The rectangle data is defined by an array of rectangle geographical bounds: <br><br> \`[[54.559322, -5.767822], [56.1210604, -3.021240]]\`. <br><br>
 Examples can be found in the <a href="https://leafletjs.com/reference.html#rectangle" target="_blank">Leaflet documentation</a>.`;
@@ -65,4 +69,29 @@ export default {
     defaultValue: [],
     bindable: true,
   },
+  rectangleDataField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.rectangles || !content.rectangles,
+    label: {
+      en: "Rectangle data field",
+    },
+    propertyHelp: {
+      tooltip: RECTANGLE_DATA_HELP,
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    options: (content) => {
+      if (
+        !content.rectangles.length ||
+        typeof content.rectangles[0] !== "object"
+      ) {
+        return null;
+      }
+
+      return { object: content.rectangles[0] };
+    },
+    defaultValue: null,
+  },
+  ...basePathObjectPropertyPath("rectangles"),
+  ...tooltipObjectPropertyPath("rectangles"),
 };

@@ -1,5 +1,9 @@
 import { basePath, basePathObjectPropertyPath } from "./basePath";
-import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
+import {
+  tooltipConfig,
+  tooltipDefaultValues,
+  tooltipObjectPropertyPath,
+} from "./tooltipBase";
 
 const POLYGON_DATA_HELP = `The polygon data is an array of arrays of LatLng: <br><br> \`[[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04]]\`. <br><br>
 Examples can be found in the <a href="https://leafletjs.com/reference.html#polygon" target="_blank">Leaflet documentation</a>.`;
@@ -71,7 +75,7 @@ export default {
     hidden: (content, sidepanelContent, boundProps) =>
       !boundProps.polygons || !content.polygons,
     label: {
-      en: "Data field",
+      en: "Polygon data field",
     },
     section: "settings",
     type: "ObjectPropertyPath",

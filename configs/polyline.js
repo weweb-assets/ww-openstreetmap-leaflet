@@ -1,5 +1,9 @@
 import { basePath, basePathObjectPropertyPath } from "./basePath";
-import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
+import {
+  tooltipConfig,
+  tooltipDefaultValues,
+  tooltipObjectPropertyPath,
+} from "./tooltipBase";
 
 const POLYLINE_DATA_HELP = `The polyline data is defined by an array of LatLng points: <br><br> \`[
   [45.51, -122.68],
@@ -85,12 +89,12 @@ export default {
     hidden: (content, sidepanelContent, boundProps) =>
       !boundProps.polylines || !content.polylines,
     label: {
-      en: "Data field",
+      en: "Polyline data field",
     },
     section: "settings",
     type: "ObjectPropertyPath",
     propertyHelp: {
-      tooltip: POLYGON_DATA_HELP,
+      tooltip: POLYLINE_DATA_HELP,
     },
     options: (content) => {
       if (

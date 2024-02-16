@@ -1,5 +1,9 @@
 import { basePath, basePathObjectPropertyPath } from "./basePath";
-import { tooltipConfig, tooltipDefaultValues } from "./tooltipBase";
+import {
+  tooltipConfig,
+  tooltipDefaultValues,
+  tooltipObjectPropertyPath,
+} from "./tooltipBase";
 import usaJSON from "./examples/usaJSON.json";
 
 const GEOJSON_DATA_HELP = `GeoJSON data is a format for encoding a variety of geographic data structures. A GeoJSON object may represent a geometry, a feature, or a collection of features. GeoJSON supports the following geometry types: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. Features in GeoJSON contain a geometry object and additional properties, and a feature collection represents a list of features. <br><br> A simple GeoJSON data example is: <br><br> \`
@@ -89,7 +93,10 @@ export default {
     hidden: (content, sidepanelContent, boundProps) =>
       !boundProps.geoJSONs || !content.geoJSONs,
     label: {
-      en: "Circle radius field",
+      en: "geoJSON data field",
+    },
+    propertyHelp: {
+      tooltip: GEOJSON_DATA_HELP,
     },
     section: "settings",
     type: "ObjectPropertyPath",

@@ -345,7 +345,6 @@ export const rectangleFields = (content, rectangleData) => {
     rectangles_dashArrayField,
     rectangles_dashOffsetField,
     rectangles_fillField,
-    rectangles_fillColor,
     rectangles_fillColorField,
     rectangles_fillOpacityField,
     rectangles_fillRuleField,

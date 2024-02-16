@@ -103,6 +103,9 @@ export default {
     label: {
       en: "Circle radius field",
     },
+    propertyHelp: {
+      tooltip: CIRCLE_DATA_HELP,
+    },
     section: "settings",
     type: "ObjectPropertyPath",
     options: (content) => {

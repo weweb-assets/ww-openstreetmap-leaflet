@@ -91,6 +91,8 @@ export default {
         "polylineTitle",
         "polylines",
         "polylineDataField",
+        "smoothFactorField",
+        "noClipField",
         "polylines_strokeField",
         "polylines_colorField",
         "polylines_weightField",
