@@ -83,5 +83,25 @@ export default {
         },
       },
     },
+    bindable: true,
   },
+  geoJSONsDataField: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps.geoJSONs || !content.geoJSONs,
+    label: {
+      en: "Circle radius field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    options: (content) => {
+      if (!content.geoJSONs.length || typeof content.geoJSONs[0] !== "object") {
+        return null;
+      }
+
+      return { object: content.geoJSONs[0] };
+    },
+    defaultValue: null,
+  },
+  ...basePathObjectPropertyPath("geoJSONs"),
+  ...tooltipObjectPropertyPath("geoJSONs"),
 };

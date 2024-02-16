@@ -467,3 +467,104 @@ export const polylineFields = (content, polylineData) => {
     polylines_tooltipPermanentField,
   };
 };
+
+export const geoJSONFields = (content, geoJSONData) => {
+  const geoJSONsDataField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONsDataField
+  );
+
+  const geoJSONs_strokeField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_strokeField
+  );
+
+  const geoJSONs_colorField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_colorField
+  );
+
+  const geoJSONs_weightField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_weightField
+  );
+
+  const geoJSONs_opacityField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_opacityField
+  );
+
+  const geoJSONs_lineCapField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_lineCapField
+  );
+
+  const geoJSONs_lineJoinField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_lineJoinField
+  );
+
+  const geoJSONs_dashArrayField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_dashArrayField
+  );
+
+  const geoJSONs_dashOffsetField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_dashOffsetField
+  );
+
+  const geoJSONs_fillField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_fillField
+  );
+
+  const geoJSONs_fillColorField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_fillColorField
+  );
+
+  const geoJSONs_fillOpacityField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_fillOpacityField
+  );
+
+  const geoJSONs_fillRuleField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_fillRuleField
+  );
+
+  const geoJSONs_tooltipContentField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_tooltipContentField
+  );
+
+  const geoJSONs_tooltipDirectionField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_tooltipDirectionField
+  );
+
+  const geoJSONs_tooltipPermanentField = wwLib.resolveObjectPropertyPath(
+    geoJSONData,
+    content.geoJSONs_tooltipPermanentField
+  );
+
+  return {
+    geoJSONsDataField,
+    geoJSONs_strokeField,
+    geoJSONs_colorField,
+    geoJSONs_weightField,
+    geoJSONs_opacityField,
+    geoJSONs_lineCapField,
+    geoJSONs_lineJoinField,
+    geoJSONs_dashArrayField,
+    geoJSONs_dashOffsetField,
+    geoJSONs_fillField,
+    geoJSONs_fillColorField,
+    geoJSONs_fillOpacityField,
+    geoJSONs_fillRuleField,
+    geoJSONs_tooltipContentField,
+    geoJSONs_tooltipDirectionField,
+    geoJSONs_tooltipPermanentField,
+  };
+};

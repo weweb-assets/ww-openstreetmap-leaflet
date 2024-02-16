@@ -12,6 +12,8 @@ import {
   circleFields,
   polygonFields,
   polylineFields,
+  rectangleFields,
+  geoJSONFields,
 } from "./fields.js";
 
 const generateVectorStyles = (fields, vector) => {
@@ -267,7 +269,7 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
     content.rectangles.forEach((rectangleData) => {
       if (!rectangleData) return;
 
-      const fields = polygonFields(content, rectangleData);
+      const fields = rectangleFields(content, rectangleData);
 
       const {
         data,
@@ -317,7 +319,7 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
     content.polylines.forEach((polylineData) => {
       if (!polylineData) return;
 
-      const fields = polygonFields(content, polylineData);
+      const fields = polylineFields(content, polylineData);
 
       const {
         data,
@@ -371,7 +373,9 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
     if (!Array.isArray(content.geoJSONs) || !content.geoJSONs.length) return;
 
     content.geoJSONs.forEach((geoJSON) => {
-      if (!geoJSON || !geoJSON.data) return;
+      if (!geoJSON) return;
+
+      const fields = geoJSONFields(content, geoJSON);
 
       const {
         data,
@@ -380,7 +384,19 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
         tooptipDirection,
         tooltipPermanent,
         ...styles
-      } = geoJSON;
+      } =
+        boundStates && boundStates.polylines.value
+          ? {
+              data: fields.geoJSONsDataField,
+              tooltip:
+                typeof fields.geoJSONs_tooltipContentField === "string" &&
+                fields.geoJSONs_tooltipContentField.length,
+              tooltipContent: fields.geoJSONs_tooltipContentField,
+              tooptipDirection: fields.geoJSONs_tooltipDirectionField,
+              tooltipPermanent: fields.geoJSONs_tooltipPermanentField,
+              ...generateVectorStyles(fields, "geoJSONs"),
+            }
+          : geoJSON;
 
       if (data) {
         const layer = L.geoJson(data, {

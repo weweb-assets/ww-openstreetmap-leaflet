@@ -14,7 +14,7 @@ const circle = {
     label: { en: "Radius" },
     bindable: true,
     type: "Number",
-    defaultValue: 5000, // Default radius in meters
+    defaultValue: 5000, // meters
     options: {
       min: 0,
       step: 1,
