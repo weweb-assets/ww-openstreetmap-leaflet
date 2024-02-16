@@ -153,8 +153,6 @@ export default function useLeafletMap(mapContainer, content, boundStates) {
         });
       }
 
-      console.log(content);
-
       markerLayers.value.push(markerInstance);
     });
   };
