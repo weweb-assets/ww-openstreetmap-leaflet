@@ -22,6 +22,7 @@ export default {
   },
   setup(props) {
     const componentKey = ref(0);
+    /* wwEditor:start */
     const isMarkersBound = computed(() => {
       return !!props.wwEditorState.boundProps.markers;
     });
@@ -49,6 +50,7 @@ export default {
       polylines: isPolylinesBound,
       geoJSONs: isGeoJSONsBound,
     };
+    /* wwEditor:end */
 
     let mapInstance = null;
     const mapContainer = ref(true);
@@ -60,12 +62,19 @@ export default {
       const { map } = useLeafletMap(
         mapContainer.value,
         props.content,
-        boundStates
+        props.wwEditorState
+          ? boundStates
+          : {
+              markers: false,
+              circles: false,
+              polygons: false,
+              rectangles: false,
+              polylines: false,
+              geoJSONs: false,
+            }
       );
 
       mapInstance = map;
-
-      console.log("Content 🔥", props.content);
     }
 
     onMounted(() => initMap());
