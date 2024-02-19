@@ -1,4 +1,4 @@
-export const getOptions = (content) => {
+export const getOptions = (content, propertyName) => {
   if (
     !content[propertyName].length ||
     typeof content[propertyName][0] !== "object"

@@ -78,7 +78,7 @@ export const tooltipObjectPropertyPath = (propertyName) => ({
     hidden: (content, sidepanelContent, boundProps) => {
       return !boundProps[propertyName] || !content[propertyName];
     },
-    options: (content) => getOptions(content),
+    options: (content) => getOptions(content, propertyName),
     defaultValue: "",
     section: "settings",
   },
@@ -87,7 +87,7 @@ export const tooltipObjectPropertyPath = (propertyName) => ({
     type: "ObjectPropertyPath",
     hidden: (content, sidepanelContent, boundProps) =>
       !boundProps[propertyName] || !content[propertyName],
-    options: (content) => getOptions(content),
+    options: (content) => getOptions(content, propertyName),
     defaultValue: "auto",
     section: "settings",
   },
@@ -96,7 +96,7 @@ export const tooltipObjectPropertyPath = (propertyName) => ({
     type: "ObjectPropertyPath",
     hidden: (content, sidepanelContent, boundProps) =>
       !boundProps[propertyName] || !content[propertyName],
-    options: (content) => getOptions(content),
+    options: (content) => getOptions(content, propertyName),
     defaultValue: false,
     section: "settings",
   },
