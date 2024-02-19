@@ -10,6 +10,7 @@ export default {
     label: {
       en: "Leaflet",
     },
+    icon: "map",
     customSettingsPropertiesOrder: [
       "tileLayer",
       "providerConfiguration",

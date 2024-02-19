@@ -113,14 +113,13 @@ export default {
 
 <style lang="scss" scoped>
 .ww-leaflet {
-  // TODO: to remove
-  min-width: 600px;
-  height: 500px;
   width: 100%;
   overflow: hidden;
+  /* wwEditor:start */
   &.editing {
     pointer-events: none;
   }
+  /* wwEditor:end */
 }
 </style>
 
