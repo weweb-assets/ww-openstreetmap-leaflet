@@ -1,3 +1,5 @@
+import { getOptions } from "./common";
+
 export const tooltipConfig = {
   tooltip: {
     label: { en: "Tooltip" },
@@ -76,16 +78,7 @@ export const tooltipObjectPropertyPath = (propertyName) => ({
     hidden: (content, sidepanelContent, boundProps) => {
       return !boundProps[propertyName] || !content[propertyName];
     },
-    options: (content) => {
-      if (
-        !content[propertyName].length ||
-        typeof content[propertyName][0] !== "object"
-      ) {
-        return null;
-      }
-
-      return { object: content[propertyName][0] };
-    },
+    options: (content) => getOptions(content),
     defaultValue: "",
     section: "settings",
   },
@@ -94,16 +87,7 @@ export const tooltipObjectPropertyPath = (propertyName) => ({
     type: "ObjectPropertyPath",
     hidden: (content, sidepanelContent, boundProps) =>
       !boundProps[propertyName] || !content[propertyName],
-    options: (content) => {
-      if (
-        !content[propertyName].length ||
-        typeof content[propertyName][0] !== "object"
-      ) {
-        return null;
-      }
-
-      return { object: content[propertyName][0] };
-    },
+    options: (content) => getOptions(content),
     defaultValue: "auto",
     section: "settings",
   },
@@ -112,16 +96,7 @@ export const tooltipObjectPropertyPath = (propertyName) => ({
     type: "ObjectPropertyPath",
     hidden: (content, sidepanelContent, boundProps) =>
       !boundProps[propertyName] || !content[propertyName],
-    options: (content) => {
-      if (
-        !content[propertyName].length ||
-        typeof content[propertyName][0] !== "object"
-      ) {
-        return null;
-      }
-
-      return { object: content[propertyName][0] };
-    },
+    options: (content) => getOptions(content),
     defaultValue: false,
     section: "settings",
   },
