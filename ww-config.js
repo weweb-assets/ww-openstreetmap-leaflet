@@ -132,7 +132,6 @@ export default {
       ],
     ],
   },
-  actions: [{ label: "Get countries GeoJSON", action: "getCountriesGEOJSON" }],
   properties: {
     tileLayer: {
       label: {
