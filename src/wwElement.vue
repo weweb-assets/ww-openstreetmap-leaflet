@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, watch, nextTick } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from "vue";
 import "leaflet/dist/leaflet.css";
 import useLeafletMap from "./use/useLeafletMap";
 
@@ -66,6 +66,18 @@ export default {
     let mapInstance = null;
     const mapContainer = ref(true);
 
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
     async function initMap() {
       componentKey.value += 1;
       await nextTick();
@@ -79,7 +91,29 @@ export default {
       mapInstance = map;
     }
 
-    onMounted(() => initMap());
+    const debouncedInitMap = debounce(initMap, 1000);
+
+    onMounted(() => {
+      initMap();
+
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          if (entry.contentRect) {
+            debouncedInitMap();
+          }
+        }
+      });
+
+      if (mapContainer.value) {
+        resizeObserver.observe(mapContainer.value);
+      }
+
+      onUnmounted(() => {
+        if (mapContainer.value) {
+          resizeObserver.unobserve(mapContainer.value);
+        }
+      });
+    });
 
     const isEditing = computed(() => {
       /* wwEditor:start */
