@@ -65,6 +65,7 @@ export default {
           ...tooltipDefaultValues,
         },
       },
+      expandable: true,
     },
     defaultValue: [],
     bindable: true,

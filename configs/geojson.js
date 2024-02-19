@@ -86,6 +86,7 @@ export default {
           ...tooltipDefaultValues,
         },
       },
+      expandable: true,
     },
     bindable: true,
   },
