@@ -1,13 +1,14 @@
 <template>
   <div
-    class="ww-leaflet"
+    class="ww-leaflet leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom"
     :class="{ editing: isEditing }"
     ref="mapContainer"
+    :key="componentKey"
   ></div>
 </template>
 
 <script>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from "vue";
 import "leaflet/dist/leaflet.css";
 import useLeafletMap from "./use/useLeafletMap";
 
@@ -20,12 +21,98 @@ export default {
     content: { type: Object, required: true },
   },
   setup(props) {
-    let mapInstance = ref(null);
-    const mapContainer = ref();
+    const componentKey = ref(0);
+    /* wwEditor:start */
+    const isMarkersBound = computed(() => {
+      return !!props.wwEditorState.boundProps.markers;
+    });
+    const isCirclesBound = computed(() => {
+      return !!props.wwEditorState.boundProps.circles;
+    });
+    const isPolygonsBound = computed(() => {
+      return !!props.wwEditorState.boundProps.polygons;
+    });
+    const isRectanglesBound = computed(() => {
+      return !!props.wwEditorState.boundProps.rectangles;
+    });
+    const isPolylinesBound = computed(() => {
+      return !!props.wwEditorState.boundProps.polylines;
+    });
+    const isGeoJSONsBound = computed(() => {
+      return !!props.wwEditorState.boundProps.geoJSONs;
+    });
+    /* wwEditor:end */
+
+    let boundStates = {
+      markers: false,
+      circles: false,
+      polygons: false,
+      rectangles: false,
+      polylines: false,
+      geoJSONs: false,
+    };
+
+    /* wwEditor:start */
+    boundStates = {
+      markers: isMarkersBound,
+      circles: isCirclesBound,
+      polygons: isPolygonsBound,
+      rectangles: isRectanglesBound,
+      polylines: isPolylinesBound,
+      geoJSONs: isGeoJSONsBound,
+    };
+    /* wwEditor:end */
+
+    let mapInstance = null;
+    const mapContainer = ref(true);
+
+    function debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    async function initMap() {
+      componentKey.value += 1;
+      await nextTick();
+
+      const { map } = useLeafletMap(
+        mapContainer.value,
+        props.content,
+        boundStates
+      );
+
+      mapInstance = map;
+    }
+
+    const debouncedInitMap = debounce(initMap, 1000);
 
     onMounted(() => {
-      const { map } = useLeafletMap(mapContainer.value, props.content);
-      mapInstance.value = map;
+      initMap();
+
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          if (entry.contentRect) {
+            debouncedInitMap();
+          }
+        }
+      });
+
+      if (mapContainer.value) {
+        resizeObserver.observe(mapContainer.value);
+      }
+
+      onUnmounted(() => {
+        if (mapContainer.value) {
+          resizeObserver.unobserve(mapContainer.value);
+        }
+      });
     });
 
     const isEditing = computed(() => {
@@ -38,21 +125,35 @@ export default {
       return false;
     });
 
-    return { isEditing, mapContainer, mapInstance };
+    watch(
+      () => isEditing,
+      () => {
+        initMap();
+      }
+    );
+
+    watch(
+      () => boundStates,
+      () => {
+        initMap();
+      },
+      { deep: true }
+    );
+
+    return { isEditing, mapContainer, mapInstance, componentKey };
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .ww-leaflet {
-  // TODO: to remove
-  min-width: 600px;
-  height: 500px;
   width: 100%;
   overflow: hidden;
+  /* wwEditor:start */
   &.editing {
     pointer-events: none;
   }
+  /* wwEditor:end */
 }
 </style>
 

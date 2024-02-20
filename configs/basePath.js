@@ -1,4 +1,6 @@
-export default {
+import { getOptions } from "./common";
+
+export const basePath = {
   stroke: {
     label: { en: "Stroke" },
     bindable: true,
@@ -100,7 +102,12 @@ export default {
     label: { en: "Fill Opacity" },
     bindable: true,
     type: "Number",
-    defaultValue: 0.2,
+    defaultValue: 0.3,
+    options: {
+      min: 0,
+      max: 1,
+      step: 0.1,
+    },
   },
   fillRule: {
     label: { en: "Fill Rule" },
@@ -115,3 +122,149 @@ export default {
     defaultValue: "evenodd",
   },
 };
+
+export const basePathObjectPropertyPath = (propertyName) => ({
+  [propertyName + "_strokeField"]: {
+    hidden: (content, sidepanelContent, boundProps) =>
+      !boundProps[propertyName] || !content[propertyName],
+    label: {
+      en: "Stroke field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+  [propertyName + "_colorField"]: {
+    label: {
+      en: "Color field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+  [propertyName + "_weightField"]: {
+    label: {
+      en: "Weight field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+  [propertyName + "_opacityField"]: {
+    label: {
+      en: "Opacity field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+  [propertyName + "_lineCapField"]: {
+    label: {
+      en: "Line Cap field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+  [propertyName + "_lineJoinField"]: {
+    label: {
+      en: "Line Join field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+  [propertyName + "_dashArrayField"]: {
+    label: {
+      en: "Dash Array field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+  [propertyName + "_dashOffsetField"]: {
+    label: {
+      en: "Dash Offset field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+  [propertyName + "_fillField"]: {
+    label: {
+      en: "Fill field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+  [propertyName + "_fillColorField"]: {
+    label: {
+      en: "Fill Color field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+  [propertyName + "_fillOpacityField"]: {
+    label: {
+      en: "Fill Opacity field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+  [propertyName + "_fillRuleField"]: {
+    label: {
+      en: "Fill Rule field",
+    },
+    section: "settings",
+    type: "ObjectPropertyPath",
+    hidden: (content, sidepanelContent, boundProps) => {
+      return !boundProps[propertyName] || !content[propertyName];
+    },
+    options: (content) => getOptions(content, propertyName),
+    defaultValue: null,
+  },
+});
