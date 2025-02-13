@@ -106,10 +106,6 @@ export default {
           L.control.scale().addTo(mapInstance);
         }
 
-        if (props.content.fullscreenControl) {
-          L.control.fullscreen().addTo(mapInstance);
-        }
-
         if (props.content.layerControl) {
           const baseLayers = {};
           const overlays = {};
@@ -126,25 +122,6 @@ export default {
             maxClusterRadius: props.content.clusterRadius || 80,
           });
           mapInstance.addLayer(markers);
-        }
-
-        // Enable shape editing if needed
-        if (props.content.editableShapes) {
-          mapInstance.editTools.enable();
-        }
-
-        // Enable drawing tools if needed
-        if (props.content.drawingTools) {
-          const drawControl = new L.Control.Draw({
-            draw: {
-              polyline: true,
-              polygon: true,
-              circle: true,
-              rectangle: true,
-              marker: true,
-            },
-          });
-          mapInstance.addControl(drawControl);
         }
       } catch (error) {
         console.error("Map initialization error:", error);

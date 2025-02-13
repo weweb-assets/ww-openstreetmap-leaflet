@@ -3,8 +3,6 @@ import L from "../leaflet";
 import _L from "leaflet";
 import "leaflet-providers";
 import "leaflet.markercluster";
-import "@geoman-io/leaflet-geoman-free";
-import "leaflet-fullscreen";
 import "leaflet.locatecontrol";
 
 import default_iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
