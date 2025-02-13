@@ -120,38 +120,167 @@ keywords:
 - Tooltip direction can be auto-calculated or explicitly set
 - Provider configuration is required for some tile providers
 
-7. **Example:**
+7. **Data Binding Examples:**
 
-```json
-{
-  "tileLayer": "OpenStreetMap.Mapnik",
-  "lat": "48.8566",
-  "lng": "2.3522",
-  "zoom": 13,
-  "markers": [
-    {
-      "data": [48.8566, 2.3522],
-      "customIcon": true,
-      "iconUrl": "https://example.com/marker.png",
-      "iconWidth": "32px",
-      "iconHeight": "32px",
-      "tooltip": true,
-      "tooltipContent": "Welcome to Paris!",
-      "tooltipDirection": "top",
-      "tooltipPermanent": false
-    }
-  ],
-  "circles": [
-    {
-      "data": [48.8566, 2.3522],
-      "radius": 1000,
-      "color": "#3388ff",
-      "fillColor": "#3388ff",
-      "fillOpacity": 0.2,
-      "weight": 3
-    }
-  ]
-}
+For each type of map element, here's how the data should be structured when binding:
+
+**Markers:**
+
+```javascript
+const markersData = [
+  {
+    data: [48.8566, 2.3522], // [latitude, longitude]
+    customIcon: true, // optional
+    iconUrl: "path/to/icon.png", // required if customIcon is true
+    iconWidth: "32px", // optional
+    iconHeight: "32px", // optional
+    tooltip: true, // optional
+    tooltipContent: "Paris", // optional
+    tooltipDirection: "top", // optional: "auto", "top", "bottom", "left", "right"
+    tooltipPermanent: false, // optional
+  },
+];
+```
+
+**Circles:**
+
+```javascript
+const circlesData = [
+  {
+    data: [48.8566, 2.3522], // [latitude, longitude] - center point
+    radius: 5000, // radius in meters
+    stroke: true, // optional
+    color: "#3388ff", // optional
+    weight: 3, // optional
+    opacity: 1, // optional
+    lineCap: "round", // optional: "butt", "round", "square"
+    lineJoin: "round", // optional: "miter", "round", "bevel"
+    dashArray: null, // optional
+    dashOffset: null, // optional
+    fill: true, // optional
+    fillColor: "#3388ff", // optional
+    fillOpacity: 0.2, // optional
+    fillRule: "evenodd", // optional: "nonzero", "evenodd"
+    tooltip: true, // optional
+    tooltipContent: "5km Radius", // optional
+    tooltipDirection: "top", // optional
+    tooltipPermanent: false, // optional
+  },
+];
+```
+
+**Polygons:**
+
+```javascript
+const polygonsData = [
+  {
+    data: [
+      // Array of [latitude, longitude] points
+      [37, -109.05],
+      [41, -109.03],
+      [41, -102.05],
+      [37, -102.04],
+    ],
+    // Same style options as circles
+    stroke: true,
+    color: "#3388ff",
+    weight: 3,
+    opacity: 1,
+    fillColor: "#3388ff",
+    fillOpacity: 0.2,
+    tooltip: true,
+    tooltipContent: "Area",
+    tooltipDirection: "auto",
+    tooltipPermanent: false,
+  },
+];
+```
+
+**Rectangles:**
+
+```javascript
+const rectanglesData = [
+  {
+    data: [
+      // Array of 2 points: [bottomLeft, topRight]
+      [54.559322, -5.767822], // [latitude, longitude] - bottom left
+      [56.1210604, -3.02124], // [latitude, longitude] - top right
+    ],
+    // Same style options as circles and polygons
+    stroke: true,
+    color: "#3388ff",
+    weight: 3,
+    opacity: 1,
+    fillColor: "#3388ff",
+    fillOpacity: 0.2,
+    tooltip: true,
+    tooltipContent: "Rectangle",
+    tooltipDirection: "auto",
+    tooltipPermanent: false,
+  },
+];
+```
+
+**Polylines:**
+
+```javascript
+const polylinesData = [
+  {
+    data: [
+      // Array of [latitude, longitude] points
+      [45.51, -122.68],
+      [37.77, -122.43],
+      [34.04, -118.2],
+    ],
+    smoothFactor: 1.0, // optional: how much to simplify the polyline
+    noClip: false, // optional: disable polyline clipping
+    // Same style options as other shapes
+    stroke: true,
+    color: "#3388ff",
+    weight: 3,
+    opacity: 1,
+    tooltip: true,
+    tooltipContent: "Path",
+    tooltipDirection: "auto",
+    tooltipPermanent: false,
+  },
+];
+```
+
+**GeoJSON:**
+
+```javascript
+const geoJSONsData = [
+  {
+    data: {
+      // Valid GeoJSON object
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [-122.42, 37.77],
+          },
+          properties: {
+            name: "San Francisco",
+          },
+        },
+      ],
+    },
+    // Same style options as other shapes
+    stroke: true,
+    color: "#3388ff",
+    weight: 3,
+    opacity: 1,
+    fillColor: "#3388ff",
+    fillOpacity: 0.2,
+    tooltip: true,
+    tooltipContent: "GeoJSON Feature",
+    tooltipDirection: "auto",
+    tooltipPermanent: false,
+  },
+];
 ```
 
 8. **Best Practices:**
