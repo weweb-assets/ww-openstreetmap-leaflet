@@ -86,7 +86,7 @@ export default {
       const { map } = useLeafletMap(
         mapContainer.value,
         props.content,
-        boundStates
+        boundStates,
         emit
       );
 
