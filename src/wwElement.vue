@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onUnmounted, watch, nextTick } from "vue";
+import { ref, onMounted, onBeforeUnmount, nextTick, watch } from "vue";
+import { useLeafletMap } from "./useLeafletMap";
 import "leaflet/dist/leaflet.css";
-import useLeafletMap from "./use/useLeafletMap";
 
 export default {
   name: "OpenStreetMap",
@@ -110,18 +110,6 @@ export default {
           const baseLayers = {};
           const overlays = {};
           L.control.layers(baseLayers, overlays).addTo(mapInstance);
-        }
-
-        if (props.content.locationControl) {
-          L.control.locate().addTo(mapInstance);
-        }
-
-        // Enable marker clustering if needed
-        if (props.content.clusterMarkers) {
-          const markers = L.markerClusterGroup({
-            maxClusterRadius: props.content.clusterRadius || 80,
-          });
-          mapInstance.addLayer(markers);
         }
       } catch (error) {
         console.error("Map initialization error:", error);

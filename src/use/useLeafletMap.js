@@ -2,8 +2,6 @@ import { ref, watch } from "vue";
 import L from "../leaflet";
 import _L from "leaflet";
 import "leaflet-providers";
-import "leaflet.markercluster";
-import "leaflet.locatecontrol";
 
 import default_iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import default_iconUrl from "leaflet/dist/images/marker-icon.png";
@@ -48,16 +46,11 @@ export default function useLeafletMap(
   const rectangleLayers = ref([]);
   const polylineLayers = ref([]);
   const geoJsonLayers = ref([]);
-  let markerClusterGroup = null;
 
   const clearLayers = (layersRef) => {
     try {
       layersRef.value.forEach((layer) => map.removeLayer(layer));
       layersRef.value = [];
-
-      if (markerClusterGroup) {
-        markerClusterGroup.clearLayers();
-      }
     } catch (error) {
       console.error("Error clearing layers:", error);
     }
@@ -94,14 +87,6 @@ export default function useLeafletMap(
 
       tileLayer.addTo(map);
 
-      // Initialize marker cluster if enabled
-      if (content.clusterMarkers) {
-        markerClusterGroup = L.markerClusterGroup({
-          maxClusterRadius: content.clusterRadius || 80,
-        });
-        map.addLayer(markerClusterGroup);
-      }
-
       // Add map event listeners
       map.on("click", (e) =>
         fireEvent("map:click", {
@@ -122,31 +107,6 @@ export default function useLeafletMap(
       map.on("dragend", () =>
         fireEvent("map:dragend", { center: map.getCenter() })
       );
-
-      // Enable drawing tools if needed
-      if (content.drawingTools) {
-        map.pm.addControls({
-          position: "topleft",
-          drawMarker: true,
-          drawCircleMarker: false,
-          drawPolyline: true,
-          drawRectangle: true,
-          drawPolygon: true,
-          drawCircle: true,
-          editMode: true,
-          dragMode: true,
-          cutPolygon: false,
-          removalMode: true,
-        });
-
-        // Add drawing event listeners
-        map.on("pm:create", (e) =>
-          fireEvent("draw:end", { type: e.shape, shape: e.layer })
-        );
-        map.on("pm:drawstart", (e) =>
-          fireEvent("draw:start", { type: e.shape })
-        );
-      }
 
       addMarkers();
       addCircles();
@@ -265,10 +225,6 @@ export default function useLeafletMap(
         markerInstance.on("dragend", (e) =>
           fireEvent("marker:dragend", { marker: markerData, latlng: e.latlng })
         );
-
-        if (content.clusterMarkers) {
-          markerClusterGroup.addLayer(markerInstance);
-        }
       });
     } catch (error) {
       console.error("Error adding markers:", error);

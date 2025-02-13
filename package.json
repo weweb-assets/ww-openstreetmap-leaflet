@@ -8,9 +8,7 @@
   },
   "dependencies": {
     "leaflet": "^1.9.4",
-    "leaflet-providers": "^2.0.0",
-    "leaflet.markercluster": "^1.5.3",
-    "leaflet.locatecontrol": "^0.79.0"
+    "leaflet-providers": "^2.0.0"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
