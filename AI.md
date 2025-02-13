@@ -25,15 +25,6 @@ keywords:
    - `zoom`: `number` - Initial zoom level (0-20). Default: `4`
    - `zoomControl`: `boolean` - Show zoom controls. Default: `true`
    - `attributionControl`: `boolean` - Show attribution. Default: `true`
-   - `scaleControl`: `boolean` - Show scale control. Default: `false`
-   - `fullscreenControl`: `boolean` - Show fullscreen control. Default: `false`
-   - `layerControl`: `boolean` - Show layer control for multiple layers. Default: `false`
-   - `locationControl`: `boolean` - Show current location control. Default: `false`
-   - `clusterMarkers`: `boolean` - Enable marker clustering. Default: `false`
-   - `clusterRadius`: `number` - Radius for clustering markers. Default: `80`
-   - `draggableMarkers`: `boolean` - Allow markers to be dragged. Default: `false`
-   - `editableShapes`: `boolean` - Allow shapes to be edited. Default: `false`
-   - `drawingTools`: `boolean` - Show drawing tools for shapes. Default: `false`
 
    **Markers:**
 
@@ -118,35 +109,7 @@ keywords:
    - Support for both static and dynamic (bound) data
 
 5. **Events:**
-
-   **Map Events:**
-
-   - `map:click` - Triggered when clicking the map. Payload: `{ latlng: [number, number], originalEvent: Event }`
-   - `map:zoom` - Triggered when zoom level changes. Payload: `{ zoom: number }`
-   - `map:move` - Triggered when map position changes. Payload: `{ center: [number, number], bounds: [[number, number], [number, number]] }`
-   - `map:bounds` - Triggered when map bounds change. Payload: `{ bounds: [[number, number], [number, number]] }`
-
-   **Marker Events:**
-
-   - `marker:click` - Triggered when clicking a marker. Payload: `{ marker: Object, latlng: [number, number], originalEvent: Event }`
-   - `marker:dragstart` - Triggered when marker drag starts. Payload: `{ marker: Object, latlng: [number, number] }`
-   - `marker:drag` - Triggered during marker drag. Payload: `{ marker: Object, latlng: [number, number] }`
-   - `marker:dragend` - Triggered when marker drag ends. Payload: `{ marker: Object, latlng: [number, number] }`
-
-   **Shape Events:**
-
-   - `shape:click` - Triggered when clicking a shape. Payload: `{ type: 'circle'|'polygon'|'rectangle'|'polyline', shape: Object, latlng: [number, number] }`
-   - `shape:edit` - Triggered when shape is edited. Payload: `{ type: string, shape: Object, latlng: Array<[number, number]> }`
-   - `shape:delete` - Triggered when shape is deleted. Payload: `{ type: string, shape: Object }`
-
-   **Drawing Events:**
-
-   - `draw:start` - Triggered when drawing starts. Payload: `{ type: string }`
-   - `draw:end` - Triggered when drawing ends. Payload: `{ type: string, shape: Object }`
-
-   **Cluster Events:**
-
-   - `cluster:click` - Triggered when clicking a cluster. Payload: `{ cluster: Object, markers: Array<Object> }`
+   None
 
 6. **Notes:**
 
@@ -185,84 +148,7 @@ keywords:
       "color": "#3388ff",
       "fillColor": "#3388ff",
       "fillOpacity": 0.2,
-      "weight": 3,
-      "tooltip": true,
-      "tooltipContent": "1km radius around Paris",
-      "tooltipDirection": "auto",
-      "tooltipPermanent": false
-    }
-  ],
-  "polygons": [
-    {
-      "data": [
-        [48.8566, 2.3522],
-        [48.8766, 2.3522],
-        [48.8766, 2.3722],
-        [48.8566, 2.3722]
-      ],
-      "color": "#ff3388",
-      "fillColor": "#ff3388",
-      "fillOpacity": 0.2,
-      "weight": 2,
-      "tooltip": true,
-      "tooltipContent": "Paris District",
-      "tooltipDirection": "auto"
-    }
-  ],
-  "rectangles": [
-    {
-      "data": [
-        [48.8566, 2.3522],
-        [48.8766, 2.3722]
-      ],
-      "color": "#88ff33",
-      "fillColor": "#88ff33",
-      "fillOpacity": 0.2,
-      "weight": 2
-    }
-  ],
-  "polylines": [
-    {
-      "data": [
-        [48.8566, 2.3522],
-        [48.8766, 2.3522],
-        [48.8766, 2.3722]
-      ],
-      "color": "#8833ff",
-      "weight": 3,
-      "smoothFactor": 1.0,
-      "noClip": false
-    }
-  ],
-  "geoJSONs": [
-    {
-      "data": {
-        "type": "FeatureCollection",
-        "features": [
-          {
-            "type": "Feature",
-            "properties": {
-              "name": "Paris Center"
-            },
-            "geometry": {
-              "type": "Polygon",
-              "coordinates": [
-                [
-                  [2.3522, 48.8566],
-                  [2.3722, 48.8566],
-                  [2.3722, 48.8766],
-                  [2.3522, 48.8766],
-                  [2.3522, 48.8566]
-                ]
-              ]
-            }
-          }
-        ]
-      },
-      "color": "#ff8833",
-      "fillColor": "#ff8833",
-      "fillOpacity": 0.2,
-      "weight": 2
+      "weight": 3
     }
   ]
 }
@@ -277,11 +163,3 @@ keywords:
 - For large GeoJSON datasets, consider data optimization techniques
 - Use appropriate color and opacity values for overlapping layers
 - Test the map at different zoom levels and viewport sizes
-- Use marker clustering when displaying large numbers of markers (>100) for better performance
-- Enable shape editing only when necessary as it can impact performance
-- Consider using the scale control when distance measurement is important
-- Use the layer control when working with multiple tile layers or overlays
-- Enable location control for mobile-focused applications
-- Implement proper event handling for interactive features
-- Consider adding loading states for asynchronous operations
-- Implement error handling for tile loading and geolocation failures

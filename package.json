@@ -1,18 +1,15 @@
 {
-  "name": "ww-openstreetmap-leaflet",
-  "version": "1.0.0",
-  "description": "A versatile OpenStreetMap component based on Leaflet.js for WeWeb",
-  "main": "src/wwElement.vue",
+  "name": "ww-openStreetMap",
+  "version": "0.0.1",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "weweb build",
+    "serve": "weweb serve"
+  },
+  "devDependencies": {
+    "@weweb/cli": "latest"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
-    "leaflet-providers": "^2.0.0"
-  },
-  "peerDependencies": {
-    "vue": "^3.0.0"
-  },
-  "author": "",
-  "license": "MIT"
+    "leaflet-providers": "^1.13.0"
+  }
 }

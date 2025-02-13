@@ -15,8 +15,7 @@ export default {
       "tileLayer",
       "providerConfiguration",
       ["lat", "lng", "zoom"],
-      ["zoomControl", "attributionControl", "scrollZoom", "fixedBounds"],
-      ["scaleControl", "layerControl"],
+      ["zoomControl", "attributionControl"],
       [
         "markerTitle",
         "markers",
@@ -132,135 +131,146 @@ export default {
         "geoJSONs_TooltipPermanentField",
       ],
     ],
-    triggerEvents: [
-      {
-        name: "map:load",
-        label: { en: "On map load" },
-      },
-      {
-        name: "map:click",
-        label: { en: "On map click" },
-        event: {
-          latlng: {
-            lat: 48.84872727506581,
-            lng: 2.351657694024656,
-          },
-          originalEvent: { x: 0, y: 0 },
-        },
-        default: true,
-      },
-      {
-        name: "map:zoom",
-        label: { en: "On map zoom" },
-        event: {
-          zoom: 13,
-        },
-      },
-      {
-        name: "map:move",
-        label: { en: "On map move" },
-        event: {
-          center: {
-            lat: 48.84872727506581,
-            lng: 2.351657694024656,
-          },
-          bounds: {
-            _northEast: { lat: 48.86, lng: 2.37 },
-            _southWest: { lat: 48.83, lng: 2.33 },
-          },
-        },
-      },
-      {
-        name: "map:dragstart",
-        label: { en: "On map drag start" },
-        event: {
-          center: {
-            lat: 48.84872727506581,
-            lng: 2.351657694024656,
-          },
-        },
-      },
-      {
-        name: "map:dragend",
-        label: { en: "On map drag end" },
-        event: {
-          center: {
-            lat: 48.84872727506581,
-            lng: 2.351657694024656,
-          },
-        },
-      },
-      {
-        name: "marker:click",
-        label: { en: "On marker click" },
-        event: {
-          marker: {
-            data: [48.84872727506581, 2.351657694024656],
-            rawData: {},
-          },
-          latlng: {
-            lat: 48.84872727506581,
-            lng: 2.351657694024656,
-          },
-          originalEvent: { x: 0, y: 0 },
-        },
-      },
-      {
-        name: "marker:dragstart",
-        label: { en: "On marker drag start" },
-        event: {
-          marker: {
-            data: [48.84872727506581, 2.351657694024656],
-            rawData: {},
-          },
-          latlng: {
-            lat: 48.84872727506581,
-            lng: 2.351657694024656,
-          },
-        },
-      },
-      {
-        name: "marker:drag",
-        label: { en: "On marker drag" },
-        event: {
-          marker: {
-            data: [48.84872727506581, 2.351657694024656],
-            rawData: {},
-          },
-          latlng: {
-            lat: 48.84872727506581,
-            lng: 2.351657694024656,
-          },
-        },
-      },
-      {
-        name: "marker:dragend",
-        label: { en: "On marker drag end" },
-        event: {
-          marker: {
-            data: [48.84872727506581, 2.351657694024656],
-            rawData: {},
-          },
-          latlng: {
-            lat: 48.84872727506581,
-            lng: 2.351657694024656,
-          },
-        },
-      },
-      {
-        name: "shape:click",
-        label: { en: "On shape click" },
-        event: {
-          type: "circle",
-          shape: {},
-          latlng: {
-            lat: 48.84872727506581,
-            lng: 2.351657694024656,
-          },
-        },
-      },
-    ],
   },
+  triggerEvents: [
+    {
+      name: "map:load",
+      label: { en: "On map load" },
+    },
+    {
+      name: "map:click",
+      label: { en: "On map click" },
+      event: {
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+        originalEvent: { x: 0, y: 0 },
+      },
+    },
+    {
+      name: "map:zoom",
+      label: { en: "On map zoom" },
+      event: {
+        zoom: 13,
+      },
+    },
+    {
+      name: "map:move",
+      label: { en: "On map move" },
+      event: {
+        center: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+        bounds: {
+          _northEast: { lat: 48.86, lng: 2.37 },
+          _southWest: { lat: 48.83, lng: 2.33 },
+        },
+      },
+    },
+    {
+      name: "map:dragstart",
+      label: { en: "On map drag start" },
+      event: {
+        center: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "map:dragend",
+      label: { en: "On map drag end" },
+      event: {
+        center: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "marker:click",
+      label: { en: "On marker click" },
+      event: {
+        marker: {
+          data: [48.84872727506581, 2.351657694024656],
+          rawData: {},
+        },
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+        originalEvent: { x: 0, y: 0 },
+      },
+    },
+    {
+      name: "marker:dragstart",
+      label: { en: "On marker drag start" },
+      event: {
+        marker: {
+          data: [48.84872727506581, 2.351657694024656],
+          rawData: {},
+        },
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "marker:drag",
+      label: { en: "On marker drag" },
+      event: {
+        marker: {
+          data: [48.84872727506581, 2.351657694024656],
+          rawData: {},
+        },
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "marker:dragend",
+      label: { en: "On marker drag end" },
+      event: {
+        marker: {
+          data: [48.84872727506581, 2.351657694024656],
+          rawData: {},
+        },
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "shape:click",
+      label: { en: "On shape click" },
+      event: {
+        type: "circle",
+        shape: {},
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "shape:edit",
+      label: { en: "On shape edit" },
+      event: {
+        type: "circle",
+        shape: {},
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+  ],
   properties: {
     tileLayer: {
       label: {
@@ -364,45 +374,11 @@ export default {
       section: "settings",
       defaultValue: true,
     },
-    scrollZoom: {
-      label: { en: "Enable scroll zoom" },
-      type: "OnOff",
-      section: "settings",
-      defaultValue: true,
-      bindable: true,
-    },
-    fixedBounds: {
-      label: { en: "Auto-fit bounds" },
-      type: "OnOff",
-      section: "settings",
-      defaultValue: false,
-      bindable: true,
-    },
-    scaleControl: {
-      label: { en: "Show scale control" },
-      type: "OnOff",
-      section: "settings",
-      defaultValue: false,
-      bindable: true,
-    },
-    layerControl: {
-      label: { en: "Show layer control" },
-      type: "OnOff",
-      section: "settings",
-      defaultValue: false,
-      bindable: true,
-    },
-    locationControl: undefined,
-    clusterMarkers: undefined,
-    clusterRadius: undefined,
     ...marker,
     ...geoJSON,
     ...polyline,
     ...polygon,
     ...rectangle,
     ...circle,
-    fullscreenControl: undefined,
-    editableShapes: undefined,
-    drawingTools: undefined,
   },
 };

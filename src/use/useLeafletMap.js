@@ -47,6 +47,13 @@ export default function useLeafletMap(
   const polylineLayers = ref([]);
   const geoJsonLayers = ref([]);
 
+  function fireEvent(eventName, payload) {
+    emit("trigger-event", {
+      name: eventName,
+      event: payload,
+    });
+  }
+
   const clearLayers = (layersRef) => {
     try {
       layersRef.value.forEach((layer) => map.removeLayer(layer));
@@ -76,7 +83,6 @@ export default function useLeafletMap(
         zoomControl: content.zoomControl,
         markerZoomAnimation: true,
         attributionControl: content.attributionControl,
-        scrollWheelZoom: content.scrollZoom,
       });
 
       const tileLayer = _L.tileLayer.provider(content.tileLayer);
@@ -88,6 +94,7 @@ export default function useLeafletMap(
       tileLayer.addTo(map);
 
       // Add map event listeners
+      map.on("load", () => fireEvent("map:load"));
       map.on("click", (e) =>
         fireEvent("map:click", {
           latlng: e.latlng,
@@ -584,7 +591,7 @@ export default function useLeafletMap(
         // Add event listeners
         layer.on("click", (e) =>
           fireEvent("shape:click", {
-            type: "geojson",
+            type: "geoJSON",
             shape: geoJSON,
             latlng: e.latlng,
           })
@@ -592,7 +599,7 @@ export default function useLeafletMap(
         if (content.editableShapes) {
           layer.on("edit", (e) =>
             fireEvent("shape:edit", {
-              type: "geojson",
+              type: "geoJSON",
               shape: geoJSON,
               latlng: e.latlng,
             })
@@ -604,28 +611,6 @@ export default function useLeafletMap(
     }
   };
 
-  function fireEvent(eventName, payload) {
-    emit("trigger-event", {
-      name: eventName,
-      event: payload,
-    });
-  }
-
-  function fitBounds() {
-    if (!map || !markerLayers.value.length) return;
-
-    const group = L.featureGroup([
-      ...markerLayers.value,
-      ...circleLayers.value,
-      ...polygonLayers.value,
-      ...rectangleLayers.value,
-      ...polylineLayers.value,
-      ...geoJsonLayers.value,
-    ]);
-
-    map.fitBounds(group.getBounds(), { padding: [20, 20] });
-  }
-
   watch(() => content, initializeMap, { deep: true });
 
   watch(
@@ -635,23 +620,6 @@ export default function useLeafletMap(
     },
     { immediate: true }
   );
-
-  // Initialize map
-  initializeMap();
-
-  // Add layers
-  clearLayers();
-  addMarkers();
-  addCircles();
-  addPolygons();
-  addRectangles();
-  addPolylines();
-  addGeoJSONLayers();
-
-  // Fit bounds if needed
-  if (content.fixedBounds) {
-    fitBounds();
-  }
 
   return { map };
 }
