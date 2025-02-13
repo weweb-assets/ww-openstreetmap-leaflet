@@ -1,5 +1,11 @@
 <template>
+  <div v-if="error" class="map-placeholder">
+    <div class="placeholder-content">
+      {{ error }}
+    </div>
+  </div>
   <div
+    v-else
     class="ww-leaflet leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom"
     :class="{ editing: isEditing }"
     ref="mapContainer"
@@ -20,8 +26,13 @@ export default {
     /* wwEditor:end */
     content: { type: Object, required: true },
   },
-  setup(props) {
+  emits: ["trigger-event"],
+  setup(props, { emit }) {
     const componentKey = ref(0);
+    const error = ref("");
+    const mapContainer = ref(null);
+    let mapInstance = null;
+
     /* wwEditor:start */
     const isMarkersBound = computed(() => {
       return !!props.wwEditorState.boundProps.markers;
@@ -63,9 +74,6 @@ export default {
     };
     /* wwEditor:end */
 
-    let mapInstance = null;
-    const mapContainer = ref(true);
-
     function debounce(func, wait) {
       let timeout;
       return function (...args) {
@@ -79,16 +87,69 @@ export default {
     }
 
     async function initMap() {
-      componentKey.value += 1;
-      await nextTick();
+      try {
+        error.value = "";
+        componentKey.value += 1;
+        await nextTick();
 
-      const { map } = useLeafletMap(
-        mapContainer.value,
-        props.content,
-        boundStates
-      );
+        const { map } = useLeafletMap(
+          mapContainer.value,
+          props.content,
+          boundStates,
+          emit
+        );
 
-      mapInstance = map;
+        mapInstance = map;
+
+        // Initialize map controls based on props
+        if (props.content.scaleControl) {
+          L.control.scale().addTo(mapInstance);
+        }
+
+        if (props.content.fullscreenControl) {
+          L.control.fullscreen().addTo(mapInstance);
+        }
+
+        if (props.content.layerControl) {
+          const baseLayers = {};
+          const overlays = {};
+          L.control.layers(baseLayers, overlays).addTo(mapInstance);
+        }
+
+        if (props.content.locationControl) {
+          L.control.locate().addTo(mapInstance);
+        }
+
+        // Enable marker clustering if needed
+        if (props.content.clusterMarkers) {
+          const markers = L.markerClusterGroup({
+            maxClusterRadius: props.content.clusterRadius || 80,
+          });
+          mapInstance.addLayer(markers);
+        }
+
+        // Enable shape editing if needed
+        if (props.content.editableShapes) {
+          mapInstance.editTools.enable();
+        }
+
+        // Enable drawing tools if needed
+        if (props.content.drawingTools) {
+          const drawControl = new L.Control.Draw({
+            draw: {
+              polyline: true,
+              polygon: true,
+              circle: true,
+              rectangle: true,
+              marker: true,
+            },
+          });
+          mapInstance.addControl(drawControl);
+        }
+      } catch (error) {
+        console.error("Map initialization error:", error);
+        error.value = error.message;
+      }
     }
 
     const debouncedInitMap = debounce(initMap, 1000);
@@ -140,12 +201,45 @@ export default {
       { deep: true }
     );
 
-    return { isEditing, mapContainer, mapInstance, componentKey };
+    return {
+      isEditing,
+      mapContainer,
+      mapInstance,
+      componentKey,
+      error,
+    };
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.map-placeholder {
+  overflow: hidden;
+  z-index: 2;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+
+  .placeholder-content {
+    text-align: center;
+    width: 90%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8em 1.2em;
+    border-radius: 12px;
+  }
+}
+
 .ww-leaflet {
   width: 100%;
   overflow: hidden;

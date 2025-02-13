@@ -131,6 +131,161 @@ export default {
         "geoJSONs_TooltipPermanentField",
       ],
     ],
+    triggerEvents: [
+      {
+        name: "map:load",
+        label: { en: "On map load" },
+      },
+      {
+        name: "map:click",
+        label: { en: "On map click" },
+        event: {
+          latlng: {
+            lat: 48.84872727506581,
+            lng: 2.351657694024656,
+          },
+          originalEvent: { x: 0, y: 0 },
+        },
+        default: true,
+      },
+      {
+        name: "map:zoom",
+        label: { en: "On map zoom" },
+        event: {
+          zoom: 13,
+        },
+      },
+      {
+        name: "map:move",
+        label: { en: "On map move" },
+        event: {
+          center: {
+            lat: 48.84872727506581,
+            lng: 2.351657694024656,
+          },
+          bounds: {
+            _northEast: { lat: 48.86, lng: 2.37 },
+            _southWest: { lat: 48.83, lng: 2.33 },
+          },
+        },
+      },
+      {
+        name: "map:dragstart",
+        label: { en: "On map drag start" },
+        event: {
+          center: {
+            lat: 48.84872727506581,
+            lng: 2.351657694024656,
+          },
+        },
+      },
+      {
+        name: "map:dragend",
+        label: { en: "On map drag end" },
+        event: {
+          center: {
+            lat: 48.84872727506581,
+            lng: 2.351657694024656,
+          },
+        },
+      },
+      {
+        name: "marker:click",
+        label: { en: "On marker click" },
+        event: {
+          marker: {
+            data: [48.84872727506581, 2.351657694024656],
+            rawData: {},
+          },
+          latlng: {
+            lat: 48.84872727506581,
+            lng: 2.351657694024656,
+          },
+          originalEvent: { x: 0, y: 0 },
+        },
+      },
+      {
+        name: "marker:dragstart",
+        label: { en: "On marker drag start" },
+        event: {
+          marker: {
+            data: [48.84872727506581, 2.351657694024656],
+            rawData: {},
+          },
+          latlng: {
+            lat: 48.84872727506581,
+            lng: 2.351657694024656,
+          },
+        },
+      },
+      {
+        name: "marker:drag",
+        label: { en: "On marker drag" },
+        event: {
+          marker: {
+            data: [48.84872727506581, 2.351657694024656],
+            rawData: {},
+          },
+          latlng: {
+            lat: 48.84872727506581,
+            lng: 2.351657694024656,
+          },
+        },
+      },
+      {
+        name: "marker:dragend",
+        label: { en: "On marker drag end" },
+        event: {
+          marker: {
+            data: [48.84872727506581, 2.351657694024656],
+            rawData: {},
+          },
+          latlng: {
+            lat: 48.84872727506581,
+            lng: 2.351657694024656,
+          },
+        },
+      },
+      {
+        name: "shape:click",
+        label: { en: "On shape click" },
+        event: {
+          type: "circle",
+          shape: {},
+          latlng: {
+            lat: 48.84872727506581,
+            lng: 2.351657694024656,
+          },
+        },
+      },
+      {
+        name: "shape:edit",
+        label: { en: "On shape edit" },
+        event: {
+          type: "circle",
+          shape: {},
+          latlng: {
+            lat: 48.84872727506581,
+            lng: 2.351657694024656,
+          },
+        },
+      },
+      {
+        name: "draw:start",
+        label: { en: "On draw start" },
+        event: {
+          type: "circle",
+        },
+      },
+      {
+        name: "draw:end",
+        label: { en: "On draw end" },
+        event: {
+          type: "circle",
+          shape: {},
+        },
+      },
+    ],
   },
   properties: {
     tileLayer: {

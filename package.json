@@ -1,15 +1,22 @@
 {
-  "name": "ww-openStreetMap",
-  "version": "0.0.1",
+  "name": "ww-openstreetmap-leaflet",
+  "version": "1.0.0",
+  "description": "A versatile OpenStreetMap component based on Leaflet.js for WeWeb",
+  "main": "src/wwElement.vue",
   "scripts": {
-    "build": "weweb build",
-    "serve": "weweb serve"
-  },
-  "devDependencies": {
-    "@weweb/cli": "latest"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
-    "leaflet-providers": "^1.13.0"
-  }
+    "leaflet-providers": "^2.0.0",
+    "leaflet.markercluster": "^1.5.3",
+    "@geoman-io/leaflet-geoman-free": "^2.14.2",
+    "leaflet-fullscreen": "^1.0.2",
+    "leaflet.locatecontrol": "^0.79.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "author": "",
+  "license": "MIT"
 }
