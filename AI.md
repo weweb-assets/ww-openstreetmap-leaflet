@@ -17,6 +17,190 @@ keywords:
 
 A highly customizable map component based on Leaflet.js that supports various map features including markers, polygons, circles, rectangles, polylines, and GeoJSON layers. It's designed to handle both static and dynamic data with comprehensive styling options and tooltip support.
 
+## Content Structure Example
+
+Below is an example of how the component's content structure should look when properly configured:
+
+```json
+{
+    "default": {
+        "lat": "46.603354",
+        "lng": "1.888334",
+        "zoom": 7,
+        "tileLayer": "OpenStreetMap.Mapnik",
+        "zoomControl": true,
+        "attributionControl": true,
+        "providerConfiguration": "{}",
+
+        // Map elements arrays (can be bound to variables)
+        "markers": [...],
+        "circles": [...],
+        "polygons": [...],
+        "rectangles": [...],
+        "polylines": [...],
+        "geoJSONs": [...],
+
+        // Data field mappings for dynamic binding
+        "markerDataField": "['data']",
+        "circleDataField": "['data']",
+        "polygonDataField": "['data']",
+        "rectangleDataField": "['data']",
+        "polylineDataField": "['data']",
+        "geoJSONsDataField": "['data']",
+
+        // Style field mappings
+        "circles_strokeField": "['stroke']",
+        "circles_colorField": "['color']",
+        "circles_weightField": "['weight']",
+        "circles_opacityField": "['opacity']",
+        "circles_fillField": "['fill']",
+        "circles_fillColorField": "['fillColor']",
+        "circles_fillOpacityField": "['fillOpacity']",
+
+        // Similar style mappings for other shape types
+        "polygons_strokeField": "['stroke']",
+        "polygons_colorField": "['color']",
+        // ...
+
+        // Tooltip field mappings
+        "circles_tooltipContentField": "['tooltipContent']",
+        "circles_tooltipDirectionField": "['tooltipDirection']",
+        "circles_tooltipPermanentField": "['tooltipPermanent']",
+        // Similar tooltip mappings for other shape types
+    }
+}
+```
+
+When generating content for this component, ensure that:
+
+1. Base map properties (`lat`, `lng`, `zoom`, `tileLayer`) are properly set
+2. Map element arrays follow the structure defined in the Properties section
+3. Data field mappings use the correct property path syntax (e.g., `"['data']"`)
+4. Style and tooltip field mappings are correctly configured for each shape type
+5. When using bound data, the field mappings must correspond to the actual structure of your data
+
+### Field Mapping Syntax
+
+Note the specific syntax used for field mappings:
+
+- Simple property access: `"['propertyName']"`
+- Nested property access: `"['parent']['child']"` or `"['parent.child']"`
+- For GeoJSON and complex data structures, ensure the paths correctly point to the required properties
+
+### GeoJSON Data Structure Example
+
+Here's a detailed example of how GeoJSON data should be structured in the component:
+
+```json
+"geoJSONs": [
+    {
+        "data": {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [2.3522, 48.8566]
+                    },
+                    "properties": {
+                        "name": "Île-de-France",
+                        "description": "The region surrounding Paris, known for its rich history and culture."
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [1.4442, 43.6045],
+                                [1.4460, 43.6050],
+                                [1.4480, 43.6060],
+                                [1.4500, 43.6070],
+                                [1.4521, 43.6108],
+                                [1.4540, 43.6090],
+                                [1.4560, 43.6080],
+                                [1.4580, 43.6070],
+                                [1.4600, 43.6045],
+                                [1.4580, 43.6030],
+                                [1.4560, 43.6020],
+                                [1.4540, 43.6010],
+                                [1.4442, 43.6045]
+                            ]
+                        ]
+                    },
+                    "properties": {
+                        "name": "Occitanie",
+                        "description": "A region in southern France known for its medieval cities and Mediterranean beaches."
+                    }
+                }
+            ]
+        },
+        "fill": true,
+        "color": "#F06F5C",
+        "stroke": true,
+        "weight": 3,
+        "opacity": 1,
+        "lineCap": "round",
+        "lineJoin": "round",
+        "dashArray": null,
+        "dashOffset": null,
+        "fillColor": "#F45252",
+        "fillOpacity": 0.2,
+        "fillRule": "evenodd",
+        "tooltip": true,
+        "tooltipContent": "<b>Hello world!</b><br>I am a tooltip",
+        "tooltipDirection": "auto",
+        "tooltipPermanent": false
+    }
+]
+```
+
+Important notes about GeoJSON:
+
+1. The GeoJSON format follows the [GeoJSON specification](https://geojson.org/)
+2. GeoJSON uses `[longitude, latitude]` coordinate order (opposite of Leaflet's default)
+3. Each feature can have its own properties that can be used for tooltips or styling
+4. The component applies the style properties (color, weight, etc.) to all features in the GeoJSON
+5. For feature-specific styling, you would need to use multiple GeoJSON objects or implement custom styling logic
+
+### Variable and Formula Binding
+
+The component supports binding map elements to variables and formulas. Here's how the binding structure looks in the content:
+
+```json
+{
+    "default": {
+        "circles": {
+            "__wwtype": "f",
+            "defaultValue": [],
+            "code": "variables['89d75e62-d069-4861-b08d-17a46b96ec33']"
+        },
+        "markers": {
+            "__wwtype": "f",
+            "defaultValue": [],
+            "code": "variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']"
+        },
+        "geoJSONs": {
+            "__wwtype": "f",
+            "defaultValue": [...],  // Can include default GeoJSON data
+            "code": "formulas['69269f44-66c1-4ff8-b91d-835c6a1eab9d']()"
+        }
+    }
+}
+```
+
+When binding map elements:
+
+1. Use `__wwtype: "f"` to indicate a binding
+2. Provide a `defaultValue` array that will be used if the binding returns null or is unavailable
+3. Use `code` to specify the binding source:
+   - `variables['variable-id']` for binding to a variable
+   - `formulas['formula-id']()` for binding to a formula
+
+This allows for dynamic map data that can be updated through variables or calculated through formulas. When combined with the field mapping properties, you can create highly dynamic maps that respond to user interactions or data changes.
+
 ## Properties
 
 ### Base Map Configuration
@@ -424,3 +608,55 @@ const myRegionsData = [
 - Provider configuration is required for some tile providers
 - The component is fully responsive and will adjust to container size changes
 - For large datasets, consider loading data incrementally or using clustering techniques
+
+## Troubleshooting Content Structure Issues
+
+When working with this component, you might encounter these common issues related to content structure:
+
+### Map Elements Not Displaying
+
+If map elements (markers, circles, etc.) are not displaying:
+
+1. **Check Data Format**: Ensure coordinates are in the correct format:
+
+   - Most Leaflet elements use `[latitude, longitude]` order
+   - GeoJSON uses `[longitude, latitude]` order
+   - Verify that coordinates are valid numbers within range
+
+2. **Verify Field Mappings**: If using dynamic binding:
+
+   - Confirm that field mappings (e.g., `markerDataField`) correctly point to your data
+   - Check the syntax of property paths (e.g., `"['data']"`)
+   - Ensure bound variables or formulas are returning the expected data structure
+
+3. **Inspect Bound Data**: If binding to variables or formulas:
+   - Verify the variable or formula exists and returns data
+   - Check that the returned data matches the expected structure
+   - Ensure defaultValue is properly formatted as a fallback
+
+### Styling Issues
+
+If map elements appear but with incorrect styling:
+
+1. **Check Style Field Mappings**: Verify that style field mappings (e.g., `circles_colorField`) correctly point to your style properties
+2. **Inspect Style Values**: Ensure color values are valid CSS colors (hex, rgb, etc.)
+3. **Check Numeric Properties**: Properties like weight, opacity, and radius should be numbers
+
+### Tooltip Issues
+
+If tooltips are not appearing or displaying incorrectly:
+
+1. **Verify Tooltip Content**: Check that tooltipContent is a non-empty string
+2. **Check Tooltip Field Mappings**: Ensure tooltip field mappings point to the correct properties
+3. **Tooltip Settings**: Verify tooltipDirection is one of: "auto", "top", "bottom", "left", "right"
+
+### GeoJSON-Specific Issues
+
+Common issues with GeoJSON data:
+
+1. **Invalid GeoJSON Structure**: Ensure your GeoJSON follows the specification
+2. **Coordinate Order**: Remember GeoJSON uses `[longitude, latitude]` order
+3. **Feature Properties**: If using properties for tooltips, ensure they exist in your GeoJSON
+4. **Complex GeoJSON**: For large or complex GeoJSON, consider simplifying geometries
+
+By addressing these common issues, you can ensure your map displays correctly with the proper content structure.
