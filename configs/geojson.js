@@ -4,7 +4,6 @@ import {
   tooltipDefaultValues,
   tooltipObjectPropertyPath,
 } from "./tooltipBase";
-import usaJSON from "./examples/usaJSON.json";
 
 const GEOJSON_DATA_HELP = `GeoJSON data is a format for encoding a variety of geographic data structures. A GeoJSON object may represent a geometry, a feature, or a collection of features. GeoJSON supports the following geometry types: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. Features in GeoJSON contain a geometry object and additional properties, and a feature collection represents a list of features. <br><br> A simple GeoJSON data example is: <br><br> \`
 {
@@ -48,7 +47,7 @@ export default {
     editorOnly: true,
   },
   geoJSONs: {
-    label: "goeJSONs",
+    label: "geoJSONs",
     type: "Array",
     section: "settings",
     options: {
@@ -70,7 +69,7 @@ export default {
           },
         },
         defaultValue: {
-          data: usaJSON,
+          data: {},
           stroke: true,
           color: "#3388ff",
           weight: 3,
