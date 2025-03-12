@@ -1,352 +1,296 @@
 ---
 name: ww-openstreetmap-leaflet
-description: A versatile OpenStreetMap component based on Leaflet.js, supporting map features including markers and circles with customizable styles and tooltips.
+description: An OpenStreetMap component based on Leaflet.js, supporting map features including markers and circles with customizable styles and tooltips.
 keywords:
   - map
   - openstreetmap
   - leaflet
   - geolocation
   - markers
+  - circles
 ---
 
 # OpenStreetMap Leaflet Component
 
-## Component Purpose
+## Component Overview
 
-A customizable map component based on Leaflet.js that supports map features including markers and circles. It's designed to handle both static and dynamic data with comprehensive styling options and tooltip support.
+A map component based on Leaflet.js that enables displaying interactive maps with markers and circles. Key features include:
 
-## Content Structure Example
+- Interactive OpenStreetMap maps with various tile providers
+- Custom markers with optional custom icons
+- Circles with customizable radius and styling
+- Tooltip support for all map elements
+- Comprehensive styling options for all features
+- Responsive design that adapts to container size
+- Support for both static and variable-bound data
 
-Below is an example of how the component's content structure should look when properly configured:
+## Configuration Basics
+
+### Base Map Configuration
+
+| Property                | Type    | Description                                        | Default                  |
+| ----------------------- | ------- | -------------------------------------------------- | ------------------------ |
+| `tileLayer`             | string  | Map tile provider name                             | `"OpenStreetMap.Mapnik"` |
+| `providerConfiguration` | object  | Configuration for providers requiring registration | `{}`                     |
+| `lat`                   | string  | Initial latitude                                   | `"46.603354"`            |
+| `lng`                   | string  | Initial longitude                                  | `"1.888334"`             |
+| `zoom`                  | number  | Initial zoom level (0-20)                          | `4`                      |
+| `zoomControl`           | boolean | Show zoom controls                                 | `true`                   |
+| `attributionControl`    | boolean | Show attribution                                   | `true`                   |
+
+For available tile providers, see [Leaflet providers preview](https://leaflet-extras.github.io/leaflet-providers/preview/).
+
+## Variable Binding Setup
+
+To use dynamic data with this component, follow these two critical steps:
+
+### 1. Create Variable Bindings
+
+Bind each map element type to a variable with this structure:
 
 ```json
-{
-    "default": {
-        "lat": "46.603354",
-        "lng": "1.888334",
-        "zoom": 7,
-        "tileLayer": "OpenStreetMap.Mapnik",
-        "zoomControl": true,
-        "attributionControl": true,
-        "providerConfiguration": "{}",
-
-        // Map elements arrays (can be bound to variables)
-        "markers": [...],
-        "circles": [...],
-
-        // Data field mappings for dynamic binding
-        "markerDataField": "['data']",
-        "circleDataField": "['data']",
-
-        // Style field mappings
-        "circles_strokeField": "['stroke']",
-        "circles_colorField": "['color']",
-        "circles_weightField": "['weight']",
-        "circles_opacityField": "['opacity']",
-        "circles_fillField": "['fill']",
-        "circles_fillColorField": "['fillColor']",
-        "circles_fillOpacityField": "['fillOpacity']",
-
-        // Tooltip field mappings
-        "circles_tooltipContentField": "['tooltipContent']",
-        "circles_tooltipDirectionField": "['tooltipDirection']",
-        "circles_tooltipPermanentField": "['tooltipPermanent']",
-    }
+"markers": {
+    "__wwtype": "f",
+    "code": "variables['your-variable-id']",
+    "defaultValue": []
 }
 ```
 
-When generating content for this component, ensure that:
+### 2. Configure Field Mappings
 
-1. Base map properties (`lat`, `lng`, `zoom`, `tileLayer`) are properly set
-2. Map element arrays follow the structure defined in the Properties section
-3. Data field mappings use the correct property path syntax (e.g., `"['data']"`)
-4. Style and tooltip field mappings are correctly configured for each shape type
-5. When using bound data, the field mappings must correspond to the actual structure of your data
+Field mappings tell the component where to find specific properties in your data:
 
-### Field Mapping Syntax
+```json
+"markerDataField": "['data']",
+"circles_colorField": "['color']"
+```
 
-Note the specific syntax used for field mappings:
+This means:
 
-- Simple property access: `"['propertyName']"`
-- Nested property access: `"['parent']['child']"` or `"['parent.child']"`
+- Look for coordinates in a property called `data` in each marker object
+- Look for circle stroke color in a property called `color` in each circle object
 
-### Variable and Formula Binding
+## Complete Implementation Example
 
-The component supports binding map elements to variables and formulas. Here's how the binding structure looks in the content:
+Below is a comprehensive example showing both component configuration and the matching data structure:
+
+### Component Configuration
 
 ```json
 {
   "default": {
-    "circles": {
-      "__wwtype": "f",
-      "defaultValue": [],
-      "code": "variables['89d75e62-d069-4861-b08d-17a46b96ec33']"
-    },
+    // Base map configuration
+    "lat": "46.603354",
+    "lng": "1.888334",
+    "zoom": 7,
+    "tileLayer": "OpenStreetMap.Mapnik",
+    "zoomControl": true,
+    "attributionControl": true,
+    "providerConfiguration": "{}",
+
+    // Map elements bound to variables
     "markers": {
       "__wwtype": "f",
-      "defaultValue": [],
-      "code": "variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']"
-    }
+      "code": "variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']",
+      "defaultValue": []
+    },
+    "circles": {
+      "__wwtype": "f",
+      "code": "variables['89d75e62-d069-4861-b08d-17a46b96ec33']",
+      "defaultValue": []
+    },
+
+    // === MARKERS FIELD MAPPINGS ===
+    // Data field mapping
+    "markerDataField": "['data']",
+    // Icon field mappings
+    "markerIconUrlField": "['iconUrl']",
+    "markerIconWidthField": "['iconWidth']",
+    "markerIconHeightField": "['iconHeight']",
+    // Tooltip field mappings
+    "markers_tooltipContentField": "['tooltipContent']",
+    "markers_tooltipDirectionField": "['tooltipDirection']",
+    "markers_tooltipPermanentField": "['tooltipPermanent']",
+
+    // === CIRCLES FIELD MAPPINGS ===
+    // Data and radius field mappings
+    "circleDataField": "['data']",
+    "circleRadiusField": "['radius']",
+    // Style field mappings
+    "circles_strokeField": "['stroke']",
+    "circles_colorField": "['color']",
+    "circles_weightField": "['weight']",
+    "circles_opacityField": "['opacity']",
+    "circles_lineCapField": "['lineCap']",
+    "circles_lineJoinField": "['lineJoin']",
+    "circles_dashArrayField": "['dashArray']",
+    "circles_dashOffsetField": "['dashOffset']",
+    "circles_fillField": "['fill']",
+    "circles_fillColorField": "['fillColor']",
+    "circles_fillOpacityField": "['fillOpacity']",
+    "circles_fillRuleField": "['fillRule']",
+    // Tooltip field mappings
+    "circles_tooltipContentField": "['tooltipContent']",
+    "circles_tooltipDirectionField": "['tooltipDirection']",
+    "circles_tooltipPermanentField": "['tooltipPermanent']"
   }
 }
 ```
 
-When binding map elements:
+### Required Data Structure
 
-1. Use `__wwtype: "f"` to indicate a binding
-2. Provide a `defaultValue` array that will be used if the binding returns null or is unavailable
-3. Use `code` to specify the binding source:
-   - `variables['variable-id']` for binding to a variable
-   - `formulas['formula-id']()` for binding to a formula
+Your variables must contain data with properties that exactly match your field mappings:
 
-This allows for dynamic map data that can be updated through variables or calculated through formulas. When combined with the field mapping properties, you can create highly dynamic maps that respond to user interactions or data changes.
+#### Markers Variable Example
 
-## Properties
-
-### Base Map Configuration
-
-- `tileLayer`: `string` - Map tile provider name. Default: `"OpenStreetMap.Mapnik"`. See [available providers](https://leaflet-extras.github.io/leaflet-providers/preview/)
-- `providerConfiguration`: `object` - Configuration for tile providers requiring registration. Default: `{}`
-- `lat`: `string` - Initial latitude. Default: `"46.603354"`
-- `lng`: `string` - Initial longitude. Default: `"1.888334"`
-- `zoom`: `number` - Initial zoom level (0-20). Default: `4`
-- `zoomControl`: `boolean` - Show zoom controls. Default: `true`
-- `attributionControl`: `boolean` - Show attribution. Default: `true`
-
-### Map Elements
-
-#### Markers
-
-```
-markers: Array<{
-  data: [number, number];
-  customIcon: boolean;
-  iconUrl: string;
-  iconWidth: string;
-  iconHeight: string;
-  tooltip: boolean;
-  tooltipContent: string;
-  tooltipDirection: "auto" | "top" | "bottom" | "left" | "right";
-  tooltipPermanent: boolean;
-}>;
-```
-
-#### Circles
-
-```
-circles: Array<{
-  data: [number, number];
-  radius: number;
-  stroke: boolean;
-  color: string;
-  weight: number;
-  opacity: number;
-  lineCap: "butt" | "round" | "square";
-  lineJoin: "miter" | "round" | "bevel";
-  dashArray: string | null;
-  dashOffset: string | null;
-  fill: boolean;
-  fillColor: string;
-  fillOpacity: number;
-  fillRule: "nonzero" | "evenodd";
-  tooltip: boolean;
-  tooltipContent: string;
-  tooltipDirection: string;
-  tooltipPermanent: boolean;
-}>;
-```
-
-## Implementation Approaches
-
-The component supports two distinct approaches for configuring map elements:
-
-### Static Configuration
-
-In this approach, you manually configure each map element individually through the editor interface. This is suitable for:
-
-- Maps with a fixed, predetermined set of elements
-- Simple implementations with few elements
-- Cases where elements rarely change
-
-For static configuration, you would:
-
-1. Add an item to the relevant property array (e.g., Markers, Circles)
-2. Configure its data points manually
-3. Set styling options individually (stroke, color, weight, etc.)
-4. Configure tooltip content if desired
-
-### Dynamic Data Binding
-
-This more powerful approach allows binding an entire array of data to populate map elements. Instead of configuring each element individually, you:
-
-1. Bind the entire property (e.g., Circles) to a data array
-2. Use ObjectPropertyPath properties to map your data structure to component properties
-
-When binding data dynamically, you use special mapping properties to tell the component how to interpret your data structure:
-
-- `[propertyName]DataField`: Maps to the coordinates data for the element
-- `[propertyName]_strokeField`: Maps to the stroke visibility property
-- `[propertyName]_colorField`: Maps to the stroke color property
-- `[propertyName]_weightField`: Maps to the stroke weight property
-- `[propertyName]_opacityField`: Maps to the stroke opacity property
-- `[propertyName]_fillField`: Maps to the fill visibility property
-- `[propertyName]_fillColorField`: Maps to the fill color property
-- `[propertyName]_fillOpacityField`: Maps to the fill opacity property
-- `[propertyName]_tooltipContentField`: Maps to the tooltip content
-- `[propertyName]_tooltipDirectionField`: Maps to the tooltip direction
-- `[propertyName]_tooltipPermanentField`: Maps to the tooltip permanence setting
-
-## Special Features
-
-- Support for multiple map tile providers
-- Custom marker icons with size configuration
-- Circle layers with radius and styling options
-- Tooltip support for all layers with customizable position and behavior
-- Responsive design
-- Zoom and attribution controls
-- Support for both static and dynamic (bound) data
-
-## Data Binding Examples
-
-For each type of map element, here's how the data should be structured when binding:
-
-### Markers
-
-```
-const markersData = [
+```javascript
+[
   {
+    // Coordinate data
     data: [48.8566, 2.3522], // [latitude, longitude]
-    customIcon: true, // optional
-    iconUrl: "path/to/icon.png", // required if customIcon is true
-    iconWidth: "32px", // optional
-    iconHeight: "32px", // optional
-    tooltip: true, // optional
-    tooltipContent: "Paris", // optional
-    tooltipDirection: "top", // optional: "auto", "top", "bottom", "left", "right"
-    tooltipPermanent: false, // optional
+    // Custom icon properties
+    customIcon: true,
+    iconUrl: "https://example.com/marker-icon.png",
+    iconWidth: "32px",
+    iconHeight: "32px",
+    // Tooltip properties
+    tooltip: true,
+    tooltipContent: "Paris",
+    tooltipDirection: "top",
+    tooltipPermanent: false,
   },
-];
-```
-
-### Circles
-
-```
-const circlesData = [
   {
-    data: [48.8566, 2.3522], // [latitude, longitude] - center point
-    radius: 5000, // radius in meters
-    stroke: true, // optional
-    color: "#3388ff", // optional
-    weight: 3, // optional
-    opacity: 1, // optional
-    lineCap: "round", // optional: "butt", "round", "square"
-    lineJoin: "round", // optional: "miter", "round", "bevel"
-    dashArray: null, // optional
-    dashOffset: null, // optional
-    fill: true, // optional
-    fillColor: "#3388ff", // optional
-    fillOpacity: 0.2, // optional
-    fillRule: "evenodd", // optional: "nonzero", "evenodd"
-    tooltip: true, // optional
-    tooltipContent: "5km Radius", // optional
-    tooltipDirection: "top", // optional
-    tooltipPermanent: false, // optional
+    data: [51.5074, -0.1278],
+    customIcon: false,
+    iconUrl: "",
+    iconWidth: "32px",
+    iconHeight: "32px",
+    tooltip: true,
+    tooltipContent: "London",
+    tooltipDirection: "bottom",
+    tooltipPermanent: false,
   },
 ];
 ```
 
-## Dynamic Binding Example Using ObjectPropertyPath
+#### Circles Variable Example
 
-When using dynamic binding with a data source that has a different structure than the component expects, you can use ObjectPropertyPath properties to map your data:
-
-```
-// Your data source
-const myCirclesData = [
+```javascript
+[
   {
-    name: "City Center",
-    position: [48.8566, 2.3522],
-    size: 2500,
-    styleInfo: {
-      borderColor: "#FF5500",
-      fillShade: "#FF7722",
-      transparency: 0.4,
-    },
-    showInfo: true,
-    description: "Main city center with 2.5km radius",
+    // Coordinate and radius
+    data: [48.8566, 2.3522],
+    radius: 5000, // meters
+    // Stroke properties
+    stroke: true,
+    color: "#3388ff",
+    weight: 3,
+    opacity: 1,
+    lineCap: "round",
+    lineJoin: "round",
+    dashArray: null,
+    dashOffset: null,
+    // Fill properties
+    fill: true,
+    fillColor: "#3388ff",
+    fillOpacity: 0.2,
+    fillRule: "evenodd",
+    // Tooltip properties
+    tooltip: true,
+    tooltipContent: "5km Radius around Paris",
+    tooltipDirection: "top",
+    tooltipPermanent: false,
   },
-  // More circles...
+  {
+    data: [51.5074, -0.1278],
+    radius: 10000,
+    stroke: true,
+    color: "#ff3333",
+    weight: 2,
+    opacity: 0.8,
+    lineCap: "round",
+    lineJoin: "round",
+    dashArray: "5, 5",
+    dashOffset: null,
+    fill: true,
+    fillColor: "#ff3333",
+    fillOpacity: 0.1,
+    fillRule: "evenodd",
+    tooltip: true,
+    tooltipContent: "10km Radius around London",
+    tooltipDirection: "auto",
+    tooltipPermanent: false,
+  },
 ];
-
-// ObjectPropertyPath mapping configuration
-// circleDataField: "position"
-// circleRadiusField: "size"
-// circles_colorField: "styleInfo.borderColor"
-// circles_fillColorField: "styleInfo.fillShade"
-// circles_fillOpacityField: "styleInfo.transparency"
-// circles_tooltipContentField: "description"
-// circles_tooltipPermanentField: "showInfo"
 ```
+
+## ⚠️ Critical Implementation Requirements
+
+The component performs strict property lookups with no fallbacks or error messages. Missing required properties will cause elements to silently fail to render.
+
+### Required Field Mappings
+
+You must include ALL field mappings for each map element type you use:
+
+#### For Markers
+
+- Data: `markerDataField`
+- Icon (if using custom icons): `markerIconUrlField`, `markerIconWidthField`, `markerIconHeightField`
+- Tooltip: `markers_tooltipContentField`, `markers_tooltipDirectionField`, `markers_tooltipPermanentField`
+
+#### For Circles
+
+- Data: `circleDataField`, `circleRadiusField`
+- Stroke: `circles_strokeField`, `circles_colorField`, `circles_weightField`, `circles_opacityField`
+- Line styling (optional): `circles_lineCapField`, `circles_lineJoinField`, `circles_dashArrayField`, `circles_dashOffsetField`
+- Fill: `circles_fillField`, `circles_fillColorField`, `circles_fillOpacityField`, `circles_fillRuleField`
+- Tooltip: `circles_tooltipContentField`, `circles_tooltipDirectionField`, `circles_tooltipPermanentField`
+
+### Required Data Properties
+
+Your data objects MUST include properties for ALL field mappings you configure:
+
+#### For Markers
+
+- Coordinates: `data` property with [latitude, longitude] array
+- Custom icon (if enabled): `customIcon`, `iconUrl`, `iconWidth`, `iconHeight`
+- Tooltip (if enabled): `tooltip`, `tooltipContent`, `tooltipDirection`, `tooltipPermanent`
+
+#### For Circles
+
+- Coordinates and size: `data` property with [latitude, longitude] array, `radius` in meters
+- Stroke properties: `stroke`, `color`, `weight`, `opacity`
+- Line styling (if needed): `lineCap`, `lineJoin`, `dashArray`, `dashOffset`
+- Fill properties: `fill`, `fillColor`, `fillOpacity`, `fillRule`
+- Tooltip (if enabled): `tooltip`, `tooltipContent`, `tooltipDirection`, `tooltipPermanent`
+
+### Common Implementation Errors
+
+- **Missing field mappings**: Include all required field mappings even if you don't use all features
+- **Missing data properties**: Include all properties in your data that correspond to your field mappings
+- **Mismatched property names**: Property names in data must match exactly what your field mapping expects
+- **Incorrect data types**: Coordinates must be [lat, lng] arrays, radius must be a number, etc.
+- **Empty default values**: Always provide proper default values in your variable binding
+
+**NOTE:** Even if you don't use certain features (like tooltips), you must still include the corresponding properties in your data with appropriate values (e.g., `tooltip: false`).
 
 ## Best Practices
 
-- Always provide valid coordinates (latitude between -90 and 90, longitude between -180 and 180)
-- Use appropriate zoom levels based on your use case (0 for world view, 18+ for building details)
-- Consider using tooltips to provide additional information about map features
-- When using custom marker icons, ensure proper image dimensions for optimal display
-- Use appropriate color and opacity values for overlapping layers
-- Test the map at different zoom levels and viewport sizes
-- When using dynamic binding, ensure your ObjectPropertyPath mappings are correctly set to match your data structure
-- For complex data structures, prefer dynamic binding with ObjectPropertyPath mapping over static configuration
-- Remember that latitude comes first [lat, lng] in this component's data format
+- **Coordinate format**: Latitude first, longitude second: `[lat, lng]`
+- **Zoom levels**: Use 0-4 for world/continent view, 5-10 for country/region, 11-15 for city/district, 16+ for streets/buildings
+- **Custom markers**: Keep icon images small (32x32px is recommended) for better performance
+- **Circle radius**: Express in meters, adjust based on zoom level (larger for zoomed-out views)
+- **Styling consistency**: Use similar styling options for related map elements
+- **Testing**: Test at different zoom levels and viewport sizes
+- **Provider config**: Some tile providers require API keys through the providerConfiguration property
 
 ## Technical Notes
 
-- All geometry types support data binding for dynamic updates
-- Circle layers share common styling properties
-- Custom marker icons support both local and remote URLs
-- Tooltip direction can be auto-calculated or explicitly set
-- Provider configuration is required for some tile providers
-- The component is fully responsive and will adjust to container size changes
-- For large datasets, consider loading data incrementally or using clustering techniques
-
-## Troubleshooting Content Structure Issues
-
-When working with this component, you might encounter these common issues related to content structure:
-
-### Map Elements Not Displaying
-
-If map elements (markers, circles) are not displaying:
-
-1. **Check Data Format**: Ensure coordinates are in the correct format:
-
-   - Leaflet elements use `[latitude, longitude]` order
-   - Verify that coordinates are valid numbers within range
-
-2. **Verify Field Mappings**: If using dynamic binding:
-
-   - Confirm that field mappings (e.g., `markerDataField`) correctly point to your data
-   - Check the syntax of property paths (e.g., `"['data']"`)
-   - Ensure bound variables or formulas are returning the expected data structure
-
-3. **Inspect Bound Data**: If binding to variables or formulas:
-   - Verify the variable or formula exists and returns data
-   - Check that the returned data matches the expected structure
-   - Ensure defaultValue is properly formatted as a fallback
-
-### Styling Issues
-
-If map elements appear but with incorrect styling:
-
-1. **Check Style Field Mappings**: Verify that style field mappings (e.g., `circles_colorField`) correctly point to your style properties
-2. **Inspect Style Values**: Ensure color values are valid CSS colors (hex, rgb, etc.)
-3. **Check Numeric Properties**: Properties like weight, opacity, and radius should be numbers
-
-### Tooltip Issues
-
-If tooltips are not appearing or displaying incorrectly:
-
-1. **Verify Tooltip Content**: Check that tooltipContent is a non-empty string
-2. **Check Tooltip Field Mappings**: Ensure tooltip field mappings point to the correct properties
-3. **Tooltip Settings**: Verify tooltipDirection is one of: "auto", "top", "bottom", "left", "right"
-
-By addressing these common issues, you can ensure your map displays correctly with the proper content structure.
+- The component builds on [Leaflet.js](https://leafletjs.com/) and [Leaflet Providers](https://github.com/leaflet-extras/leaflet-providers)
+- Tooltip direction can be "auto", "top", "bottom", "left", or "right"
+- Stroke weight refers to the line width in pixels
+- Opacity values range from 0 (transparent) to 1 (opaque)
+- Line caps can be "butt", "round", or "square"
+- Line joins can be "miter", "round", or "bevel"
+- Fill rules can be "nonzero" or "evenodd"
+- The component is responsive and will adjust to container size changes
