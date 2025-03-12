@@ -70,6 +70,22 @@ This means:
 - Look for coordinates in a property called `data` in each marker object
 - Look for circle stroke color in a property called `color` in each circle object
 
+## ⚠️ CRITICAL: Variable Data Structure Requirements
+
+**THE MOST IMPORTANT ASPECT OF THIS COMPONENT:** Your variables MUST contain data formatted EXACTLY as shown in the examples below. This connection between field mappings and data structure is absolutely critical:
+
+1. The component uses field mappings (like `markerDataField: "['data']"`) to look for specific properties in your variable data
+2. Your variable data MUST include ALL properties that correspond to ALL field mappings
+3. The property names must EXACTLY match what is specified in the field mappings
+4. Missing properties or mismatched names will cause the component to silently fail with NO error messages
+
+The examples below show the EXACT format required for:
+
+- Marker variable data (required for all markers to display correctly)
+- Circle variable data (required for all circles to display correctly)
+
+**COPY THESE EXAMPLES EXACTLY** and only change the specific values (coordinates, colors, etc.) while keeping all property names and structure identical.
+
 ## Complete Implementation Example
 
 Below is a comprehensive example showing both component configuration and the matching data structure:
@@ -137,34 +153,46 @@ Below is a comprehensive example showing both component configuration and the ma
 }
 ```
 
+### ⚠️ CRITICAL: Variable Data Format Requirements
+
+**EXTREMELY IMPORTANT:** The variable data referenced in the configuration above MUST EXACTLY match the format shown in the examples below. For instance:
+
+- The variable `variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']` (markers) MUST contain an array of objects with ALL the properties shown in the Markers Variable Example below.
+- The variable `variables['89d75e62-d069-4861-b08d-17a46b96ec33']` (circles) MUST contain an array of objects with ALL the properties shown in the Circles Variable Example below.
+
+If the data in your variables does not exactly match these formats, with all required properties and correct property names, **the component will silently fail to render the map elements without any error messages**. This mapping between the variable binding and the data format is PRIMORDIAL for the component to function correctly.
+
 ### Required Data Structure
 
-Your variables must contain data with properties that exactly match your field mappings:
+Your variables must contain data with properties that exactly match your field mappings. Below are comprehensive examples including ALL required properties:
 
 #### Markers Variable Example
 
 ```javascript
 [
   {
-    // Coordinate data
+    // Required for markerDataField
     data: [48.8566, 2.3522], // [latitude, longitude]
-    // Custom icon properties
+
+    // Required for custom icon field mappings
     customIcon: true,
     iconUrl: "https://example.com/marker-icon.png",
     iconWidth: "32px",
     iconHeight: "32px",
-    // Tooltip properties
+
+    // Required for tooltip field mappings
     tooltip: true,
-    tooltipContent: "Paris",
-    tooltipDirection: "top",
+    tooltipContent: "Paris - The City of Light",
+    tooltipDirection: "top", // "auto", "top", "bottom", "left", or "right"
     tooltipPermanent: false,
   },
   {
+    // Second marker with different properties
     data: [51.5074, -0.1278],
-    customIcon: false,
-    iconUrl: "",
-    iconWidth: "32px",
-    iconHeight: "32px",
+    customIcon: false, // Will use default icon
+    iconUrl: "", // Not needed when customIcon is false, but include it anyway
+    iconWidth: "32px", // Still include even if customIcon is false
+    iconHeight: "32px", // Still include even if customIcon is false
     tooltip: true,
     tooltipContent: "London",
     tooltipDirection: "bottom",
@@ -178,44 +206,54 @@ Your variables must contain data with properties that exactly match your field m
 ```javascript
 [
   {
-    // Coordinate and radius
-    data: [48.8566, 2.3522],
-    radius: 5000, // meters
-    // Stroke properties
+    // Required for circleDataField and circleRadiusField
+    data: [48.8566, 2.3522], // [latitude, longitude]
+    radius: 5000, // radius in meters
+
+    // Required for circles_strokeField and related style mappings
     stroke: true,
-    color: "#3388ff",
-    weight: 3,
-    opacity: 1,
-    lineCap: "round",
-    lineJoin: "round",
-    dashArray: null,
-    dashOffset: null,
-    // Fill properties
+    color: "#3388ff", // Stroke color
+    weight: 3, // Stroke width in pixels
+    opacity: 1, // Stroke opacity (0-1)
+
+    // Required for line styling field mappings
+    lineCap: "round", // "butt", "round", or "square"
+    lineJoin: "round", // "miter", "round", or "bevel"
+    dashArray: null, // For dashed lines, e.g., "5, 5" or null
+    dashOffset: null, // Dash pattern offset or null
+
+    // Required for circles_fillField and related style mappings
     fill: true,
-    fillColor: "#3388ff",
-    fillOpacity: 0.2,
-    fillRule: "evenodd",
-    // Tooltip properties
+    fillColor: "#3388ff", // Fill color
+    fillOpacity: 0.2, // Fill opacity (0-1)
+    fillRule: "evenodd", // "nonzero" or "evenodd"
+
+    // Required for tooltip field mappings
     tooltip: true,
     tooltipContent: "5km Radius around Paris",
-    tooltipDirection: "top",
-    tooltipPermanent: false,
+    tooltipDirection: "top", // "auto", "top", "bottom", "left", or "right"
+    tooltipPermanent: false, // Whether tooltip is always visible
   },
   {
+    // Second circle with different properties
     data: [51.5074, -0.1278],
     radius: 10000,
+
     stroke: true,
     color: "#ff3333",
     weight: 2,
     opacity: 0.8,
+
     lineCap: "round",
     lineJoin: "round",
-    dashArray: "5, 5",
+    dashArray: "5, 5", // Example of a dashed line
     dashOffset: null,
+
     fill: true,
     fillColor: "#ff3333",
     fillOpacity: 0.1,
     fillRule: "evenodd",
+
     tooltip: true,
     tooltipContent: "10km Radius around London",
     tooltipDirection: "auto",
@@ -223,6 +261,8 @@ Your variables must contain data with properties that exactly match your field m
   },
 ];
 ```
+
+**IMPORTANT:** Even if you set some features to `false` (like `tooltip: false` or `customIcon: false`), you must still include ALL the related properties in your data objects.
 
 ## ⚠️ Critical Implementation Requirements
 
