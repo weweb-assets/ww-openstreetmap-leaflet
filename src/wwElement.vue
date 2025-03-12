@@ -134,6 +134,7 @@ export default {
 
 <style lang="scss" scoped>
 .ww-leaflet {
+  border: 5px solid red;
   width: 100%;
   overflow: hidden;
   /* wwEditor:start */
