@@ -1,6 +1,5 @@
-import circle from "./configs/circle";
 import marker from "./configs/marker";
-import geoJSON from "./configs/geojson";
+import circle from "./configs/circle";
 import polygon from "./configs/polygon";
 
 export default {
@@ -65,26 +64,6 @@ export default {
         "polygons_tooltipContentField",
         "polygons_tooltipDirectionField",
         "polygons_tooltipPermanentField",
-      ],
-      [
-        "geoJSONTitle",
-        "geoJSONs",
-        "geoJSONsDataField",
-        "geoJSONs_strokeField",
-        "geoJSONs_colorField",
-        "geoJSONs_weightField",
-        "geoJSONs_opacityField",
-        "geoJSONs_lineCapField",
-        "geoJSONs_lineJoinField",
-        "geoJSONs_dashArrayField",
-        "geoJSONs_dashOffsetField",
-        "geoJSONs_fillField",
-        "geoJSONs_fillColorField",
-        "geoJSONs_fillOpacityField",
-        "geoJSONs_fillRuleField",
-        "geoJSONs_tooltipContentField",
-        "geoJSONs_tooltipDirectionField",
-        "geoJSONs_tooltipPermanentField",
       ],
     ],
   },
@@ -333,6 +312,5 @@ export default {
     ...marker,
     ...circle,
     ...polygon,
-    ...geoJSON,
   },
 };

@@ -33,20 +33,12 @@ export default {
     const isPolygonsBound = computed(() => {
       return !!props.wwEditorState.boundProps.polygons;
     });
-    const isRectanglesBound = computed(() => {
-      return !!props.wwEditorState.boundProps.rectangles;
-    });
-    const isGeoJSONsBound = computed(() => {
-      return !!props.wwEditorState.boundProps.geoJSONs;
-    });
     /* wwEditor:end */
 
     let boundStates = {
       markers: false,
       circles: false,
       polygons: false,
-      rectangles: false,
-      geoJSONs: false,
     };
 
     /* wwEditor:start */
@@ -54,8 +46,6 @@ export default {
       markers: isMarkersBound,
       circles: isCirclesBound,
       polygons: isPolygonsBound,
-      rectangles: isRectanglesBound,
-      geoJSONs: isGeoJSONsBound,
     };
     /* wwEditor:end */
 

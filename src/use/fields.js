@@ -61,25 +61,6 @@ const polygonFieldConfigs = [
   { field: "polygons_tooltipPermanentField" },
 ];
 
-const geoJSONFieldConfigs = [
-  { field: "geoJSONsDataField" },
-  { field: "geoJSONs_strokeField" },
-  { field: "geoJSONs_colorField" },
-  { field: "geoJSONs_weightField" },
-  { field: "geoJSONs_opacityField" },
-  { field: "geoJSONs_lineCapField" },
-  { field: "geoJSONs_lineJoinField" },
-  { field: "geoJSONs_dashArrayField" },
-  { field: "geoJSONs_dashOffsetField" },
-  { field: "geoJSONs_fillField" },
-  { field: "geoJSONs_fillColorField" },
-  { field: "geoJSONs_fillOpacityField" },
-  { field: "geoJSONs_fillRuleField" },
-  { field: "geoJSONs_tooltipContentField" },
-  { field: "geoJSONs_tooltipDirectionField" },
-  { field: "geoJSONs_tooltipPermanentField" },
-];
-
 export const markerFields = (content, markerData) => {
   return resolveFields(content, markerData, markerFieldConfigs);
 };
@@ -90,8 +71,4 @@ export const circleFields = (content, circleData) => {
 
 export const polygonFields = (content, polygonData) => {
   return resolveFields(content, polygonData, polygonFieldConfigs);
-};
-
-export const geoJSONFields = (content, geoJSONData) => {
-  return resolveFields(content, geoJSONData, geoJSONFieldConfigs);
 };

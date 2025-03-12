@@ -106,6 +106,7 @@ export default function useLeafletMap(
 
       addMarkers();
       addCircles();
+      addPolygons();
     } catch (error) {
       console.error("Map initialization error:", error);
       throw error;
@@ -365,80 +366,6 @@ export default function useLeafletMap(
       });
     } catch (error) {
       console.error("Error adding polygons:", error);
-    }
-  };
-
-  const addGeoJSONLayers = () => {
-    try {
-      clearLayers(geoJsonLayers);
-
-      if (!Array.isArray(content.geoJSONs) || !content.geoJSONs.length) return;
-
-      content.geoJSONs.forEach((geoJSON) => {
-        if (!geoJSON) return;
-
-        const fields = geoJSONFields(content, geoJSON);
-
-        const {
-          data,
-          tooltip,
-          tooltipContent,
-          tooltipDirection,
-          tooltipPermanent,
-          ...styles
-        } =
-          boundStates && boundStates.geoJSONs.value
-            ? {
-                data: fields.geoJSONsDataField,
-                tooltip:
-                  typeof fields.geoJSONs_tooltipContentField === "string" &&
-                  fields.geoJSONs_tooltipContentField.length,
-                tooltipContent: fields.geoJSONs_tooltipContentField,
-                tooltipDirection: fields.geoJSONs_tooltipDirectionField,
-                tooltipPermanent: fields.geoJSONs_tooltipPermanentField,
-                ...generateVectorStyles(fields, "geoJSONs"),
-              }
-            : geoJSON;
-
-        if (!data) return;
-
-        const layer = L.geoJson(data, {
-          style: () => ({ ...styles }),
-        }).addTo(map);
-
-        if (
-          tooltip &&
-          typeof tooltipContent === "string" &&
-          tooltipContent.length
-        ) {
-          layer.bindTooltip(tooltipContent, {
-            permanent: tooltipPermanent,
-            direction: tooltipDirection,
-          });
-        }
-
-        geoJsonLayers.value.push(layer);
-
-        // Add event listeners
-        layer.on("click", (e) =>
-          fireEvent("shape:click", {
-            type: "geoJSON",
-            shape: geoJSON,
-            latlng: e.latlng,
-          })
-        );
-        if (content.editableShapes) {
-          layer.on("edit", (e) =>
-            fireEvent("shape:edit", {
-              type: "geoJSON",
-              shape: geoJSON,
-              latlng: e.latlng,
-            })
-          );
-        }
-      });
-    } catch (error) {
-      console.error("Error adding GeoJSON layers:", error);
     }
   };
 
