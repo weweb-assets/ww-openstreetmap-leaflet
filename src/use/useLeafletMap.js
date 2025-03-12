@@ -7,7 +7,7 @@ import default_iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import default_iconUrl from "leaflet/dist/images/marker-icon.png";
 import default_shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
-import { markerFields, circleFields } from "./fields.js";
+import { markerFields, circleFields, polygonFields } from "./fields.js";
 
 const generateVectorStyles = (fields, vector) => {
   return {
@@ -35,6 +35,7 @@ export default function useLeafletMap(
   let map = null;
   const markerLayers = ref([]);
   const circleLayers = ref([]);
+  const polygonLayers = ref([]);
 
   function fireEvent(eventName, payload) {
     emit("trigger-event", {
