@@ -46,6 +46,25 @@ The field mapping properties are crucial for the component to correctly interpre
 
 These mappings must match the structure of your data objects in the bound variables.
 
+## ⚠️ CRITICAL: EXACT PROPERTY MATCHING REQUIRED
+
+**EXTREMELY IMPORTANT:** There is a strict 1:1 relationship between field mappings and data properties. For every field mapping you define, the EXACT corresponding property MUST EXIST in your variable data objects.
+
+For example:
+
+- If you define `circles_colorField: "['color']"`, then EVERY object in your circles variable MUST have a `color` property
+- If you define `markers_tooltipContentField: "['tooltipContent']"`, then EVERY object in your markers variable MUST have a `tooltipContent` property
+
+**This is non-negotiable.** If any mapped property is missing from your data objects, the map elements will NOT display. The component performs strict property lookups and will fail silently if properties are missing.
+
+When generating data for this component, you MUST ensure that:
+
+1. Every field mapping has a corresponding property in your data objects
+2. Property names match EXACTLY (case-sensitive)
+3. All required properties are included in EVERY object in your data arrays
+
+**No exceptions are possible.** The component will not display elements with missing properties.
+
 ## Data Structure Requirements
 
 For each map element type, your variable data must follow these structures:
@@ -408,6 +427,37 @@ For example, if you're using circles, you must include:
 Even if you don't need tooltips, you must still include the tooltip field mappings. The same applies to all other map element types.
 
 Additionally, your data objects in the bound variables must include ALL the corresponding properties. Missing properties will cause elements to fail to render.
+
+### ⚠️ CRITICAL: Variable Data MUST Match Field Mappings EXACTLY
+
+**EXTREMELY IMPORTANT:** When generating data for the variables, you MUST include ALL properties that correspond to your field mappings. For example:
+
+If your configuration includes:
+
+```json
+"circles_colorField": "['color']",
+"circles_weightField": "['weight']",
+"circles_fillColorField": "['fillColor']"
+```
+
+Then EVERY object in your circles variable MUST include:
+
+```javascript
+{
+  color: "#3388ff",    // Must exist because of circles_colorField
+  weight: 3,           // Must exist because of circles_weightField
+  fillColor: "#3388ff" // Must exist because of circles_fillColorField
+  // ... other properties
+}
+```
+
+**The component performs strict property lookups.** If any property referenced by a field mapping is missing from your data objects, the map elements will NOT display, and there will be NO error message. The component will silently fail to render the elements.
+
+When generating data for this component, ensure that:
+
+1. Every field mapping has a corresponding property in your data objects
+2. Property names match EXACTLY (case-sensitive)
+3. All required properties are included in EVERY object in your data arrays
 
 ## ⚠️ CRITICAL: Required Properties for Map Elements
 
