@@ -23,7 +23,6 @@ A map component based on Leaflet.js that enables displaying interactive maps wit
 - Polygons with customizable styling
 - Tooltip support for all map elements
 - Comprehensive styling options for all features
-- Responsive design that adapts to container size
 - Support for both static and variable-bound data
 
 ## Configuration Basics
@@ -39,8 +38,6 @@ A map component based on Leaflet.js that enables displaying interactive maps wit
 | `zoom`                  | number  | Initial zoom level (0-20)                          | `4`                      |
 | `zoomControl`           | boolean | Show zoom controls                                 | `true`                   |
 | `attributionControl`    | boolean | Show attribution                                   | `true`                   |
-
-For available tile providers, see [Leaflet providers preview](https://leaflet-extras.github.io/leaflet-providers/preview/).
 
 ## Variable Binding Setup
 
@@ -184,19 +181,17 @@ Below is a comprehensive example showing both component configuration and the ma
 }
 ```
 
-### ⚠️ CRITICAL: Variable Data Format Requirements
-
 **EXTREMELY IMPORTANT:** The variable data referenced in the configuration above MUST EXACTLY match the format shown in the examples below. For instance:
 
-- The variable `variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']` (markers) MUST contain an array of objects with ALL the properties shown in the Markers Variable Example below.
-- The variable `variables['89d75e62-d069-4861-b08d-17a46b96ec33']` (circles) MUST contain an array of objects with ALL the properties shown in the Circles Variable Example below.
-- The variable `variables['c3e7a2d8-f5b1-42e9-9a83-87c6149b31c9']` (polygons) MUST contain an array of objects with ALL the properties shown in the Polygons Variable Example below.
+- The variable `variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']` (markers) MUST contain an array of objects with ALL the properties needed.
+- The variable `variables['89d75e62-d069-4861-b08d-17a46b96ec33']` (circles) MUST contain an array of objects with ALL the properties needed.
+- The variable `variables['c3e7a2d8-f5b1-42e9-9a83-87c6149b31c9']` (polygons) MUST contain an array of objects with ALL the properties needed.
 
 If the data in your variables does not exactly match these formats, with all required properties and correct property names, **the component will silently fail to render the map elements without any error messages**. This mapping between the variable binding and the data format is PRIMORDIAL for the component to function correctly.
 
 ### Required Data Structure
 
-Your variables must contain data with properties that exactly match your field mappings. Below are comprehensive examples including ALL required properties:
+So, your variables must contain data with properties that exactly match your field mappings. Below are comprehensive examples including ALL required properties:
 
 #### Markers Variable Example
 
