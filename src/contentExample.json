@@ -1,0 +1,339 @@
+{
+    "default": {
+        "lat": "46.603354",
+        "lng": "1.888334",
+        "zoom": 7,
+        "circles": {
+            "__wwtype": "f",
+            "defaultValue": [],
+            "code": "variables['89d75e62-d069-4861-b08d-17a46b96ec33']"
+        },
+        "markers": {
+            "__wwtype": "f",
+            "defaultValue": [],
+            "code": "variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']"
+        },
+        "geoJSONs": {
+            "__wwtype": "f",
+            "defaultValue": [
+                {
+                    "data": {
+                        "crs": {
+                            "type": "name",
+                            "properties": {
+                                "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+                            }
+                        },
+                        "type": "FeatureCollection",
+                        "features": [
+                            {
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Point",
+                                    "coordinates": [2.3522, 48.8566]
+                                },
+                                "properties": {
+                                    "name": "Île-de-France",
+                                    "description": "The region surrounding Paris, known for its rich history and culture."
+                                }
+                            },
+                            {
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Polygon",
+                                    "coordinates": [
+                                        [
+                                            [1.4442, 43.6045],
+                                            [1.4460, 43.6050],
+                                            [1.4480, 43.6060],
+                                            [1.4500, 43.6070],
+                                            [1.4521, 43.6108],
+                                            [1.4540, 43.6090],
+                                            [1.4560, 43.6080],
+                                            [1.4580, 43.6070],
+                                            [1.4600, 43.6045],
+                                            [1.4580, 43.6030],
+                                            [1.4560, 43.6020],
+                                            [1.4540, 43.6010],
+                                            [1.4442, 43.6045]
+                                        ]
+                                    ]
+                                },
+                                "properties": {
+                                    "name": "Occitanie",
+                                    "description": "A region in southern France known for its medieval cities and Mediterranean beaches."
+                                }
+                            },
+                            {
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Polygon",
+                                    "coordinates": [
+                                        [
+                                            [5.3698, 43.2965],
+                                            [5.3710, 43.2970],
+                                            [5.3730, 43.2980],
+                                            [5.3750, 43.2990],
+                                            [5.3800, 43.3000],
+                                            [5.3770, 43.2990],
+                                            [5.3750, 43.2980],
+                                            [5.3730, 43.2970],
+                                            [5.3710, 43.2965],
+                                            [5.3698, 43.2965]
+                                        ]
+                                    ]
+                                },
+                                "properties": {
+                                    "name": "Provence-Alpes-Côte d'Azur",
+                                    "description": "A region in southeastern France bordering Italy and the Mediterranean Sea."
+                                }
+                            },
+                            {
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Polygon",
+                                    "coordinates": [
+                                        [
+                                            [4.8357, 45.7640],
+                                            [4.8370, 45.7650],
+                                            [4.8390, 45.7660],
+                                            [4.8410, 45.7670],
+                                            [4.8450, 45.7700],
+                                            [4.8430, 45.7690],
+                                            [4.8410, 45.7680],
+                                            [4.8390, 45.7670],
+                                            [4.8370, 45.7660],
+                                            [4.8357, 45.7640]
+                                        ]
+                                    ]
+                                },
+                                "properties": {
+                                    "name": "Auvergne-Rhône-Alpes",
+                                    "description": "A region in central France known for its mountains and ski resorts."
+                                }
+                            },
+                            {
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Polygon",
+                                    "coordinates": [
+                                        [
+                                            [7.2620, 43.7102],
+                                            [7.2635, 43.7110],
+                                            [7.2650, 43.7120],
+                                            [7.2665, 43.7130],
+                                            [7.2700, 43.7150],
+                                            [7.2685, 43.7140],
+                                            [7.2670, 43.7130],
+                                            [7.2655, 43.7120],
+                                            [7.2640, 43.7110],
+                                            [7.2620, 43.7102]
+                                        ]
+                                    ]
+                                },
+                                "properties": {
+                                    "name": "Nice",
+                                    "description": "A city on the French Riviera known for its beautiful beaches and vibrant culture."
+                                }
+                            }
+                        ]
+                    },
+                    "fill": true,
+                    "full": true,
+                    "color": "#F06F5C",
+                    "stroke": true,
+                    "weight": 3,
+                    "lineCap": "round",
+                    "opacity": 1,
+                    "tooltip": true,
+                    "fillRule": "evenodd",
+                    "lineJoin": "round",
+                    "dashArray": null,
+                    "fillColor": "#F45252",
+                    "dashOffset": null,
+                    "fillOpacity": 0.2,
+                    "tooltipContent": "<b>Hello world!</b><br>I am a tooltip",
+                    "tooltipDirection": "auto",
+                    "tooltipPermanent": false
+                },
+                {
+                    "data": {
+                        "type": "FeatureCollection",
+                        "features": [
+                            {
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Polygon",
+                                    "coordinates": [
+                                        [
+                                            [-122.4194, 37.7749],
+                                            [-122.4300, 37.7800],
+                                            [-122.4400, 37.7850],
+                                            [-122.4300, 37.7900],
+                                            [-122.4200, 37.7950],
+                                            [-122.4100, 37.7900],
+                                            [-122.4000, 37.7850],
+                                            [-122.4100, 37.7800],
+                                            [-122.4194, 37.7749]
+                                        ]
+                                    ]
+                                },
+                                "properties": {
+                                    "name": "San Francisco",
+                                    "description": "A major city in California known for its iconic Golden Gate Bridge and tech industry."
+                                }
+                            },
+                            {
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "Polygon",
+                                    "coordinates": [
+                                        [
+                                            [-74.0060, 40.7128],
+                                            [-74.0160, 40.7228],
+                                            [-74.0260, 40.7328],
+                                            [-74.0160, 40.7428],
+                                            [-74.0060, 40.7328],
+                                            [-73.9960, 40.7228],
+                                            [-74.0060, 40.7128]
+                                        ]
+                                    ]
+                                },
+                                "properties": {
+                                    "name": "New York City",
+                                    "description": "The largest city in the United States, known for its skyscrapers and cultural diversity."
+                                }
+                            }
+                        ]
+                    },
+                    "full": true,
+                    "color": "#3388ff",
+                    "stroke": true,
+                    "weight": 3,
+                    "lineCap": "round",
+                    "opacity": 1,
+                    "tooltip": false,
+                    "fillRule": "evenodd",
+                    "lineJoin": "round",
+                    "dashArray": null,
+                    "fillColor": "#3388ff",
+                    "dashOffset": null,
+                    "fillOpacity": 0.2,
+                    "tooltipContent": "<b>Hello world!</b><br>I am a tooltip",
+                    "tooltipDirection": "auto",
+                    "tooltipPermanent": false
+                }
+            ],
+            "code": "formulas['69269f44-66c1-4ff8-b91d-835c6a1eab9d']()"
+        },
+        "polygons": {
+            "__wwtype": "f",
+            "defaultValue": [],
+            "code": "variables['744ef1e5-114a-4a84-a1d3-154bac30dd76']"
+        },
+        "polylines": {
+            "__wwtype": "f",
+            "defaultValue": [],
+            "code": "variables['481d5a42-50d5-44a1-a3fe-8e2f3a46ae98']"
+        },
+        "tileLayer": "OpenStreetMap.Mapnik",
+        "rectangles": {
+            "__wwtype": "f",
+            "defaultValue": [],
+            "code": "variables['ee579c7e-7198-4cda-a07f-40dc0866069f']"
+        },
+        "noClipField": null,
+        "zoomControl": true,
+        "circleDataField": "['data']",
+        "markerDataField": "['data']",
+        "polygonDataField": "['data']",
+        "circleRadiusField": "['radius']",
+        "circles_fillField": "['fill']",
+        "geoJSONsDataField": "['data']",
+        "polylineDataField": "['data']",
+        "smoothFactorField": null,
+        "attributionControl": true,
+        "circles_colorField": "['color']",
+        "geoJSONs_fillField": "['fill']",
+        "markerIconUrlField": null,
+        "polygons_fillField": "['fill']",
+        "rectangleDataField": "['data']",
+        "circles_strokeField": "['stroke']",
+        "circles_weightField": "['weight']",
+        "geoJSONs_colorField": "['color']",
+        "polygons_colorField": "['color']",
+        "polylines_fillField": null,
+        "circles_lineCapField": null,
+        "circles_opacityField": "['opacity']",
+        "geoJSONs_strokeField": "['stroke']",
+        "geoJSONs_weightField": "['weight']",
+        "markerIconWidthField": null,
+        "polygons_strokeField": "['stroke']",
+        "polygons_weightField": "['weight']",
+        "polylines_colorField": "['color']",
+        "rectangles_fillField": null,
+        "circles_fillRuleField": null,
+        "circles_lineJoinField": null,
+        "geoJSONs_lineCapField": "['lineCap']",
+        "geoJSONs_opacityField": null,
+        "markerIconHeightField": null,
+        "polygons_lineCapField": null,
+        "polygons_opacityField": "['opacity']",
+        "polylines_strokeField": "['stroke']",
+        "polylines_weightField": "['weight']",
+        "providerConfiguration": "{}",
+        "rectangles_colorField": "['color']",
+        "circles_dashArrayField": null,
+        "circles_fillColorField": "['fillColor']",
+        "geoJSONs_fillRuleField": "['fillRule']",
+        "geoJSONs_lineJoinField": "['lineJoin']",
+        "polygons_fillRuleField": null,
+        "polygons_lineJoinField": null,
+        "polylines_lineCapField": null,
+        "polylines_opacityField": null,
+        "rectangles_strokeField": "['stroke']",
+        "rectangles_weightField": "['weight']",
+        "circles_dashOffsetField": null,
+        "geoJSONs_dashArrayField": "['dashArray']",
+        "geoJSONs_fillColorField": "['fillColor']",
+        "polygons_dashArrayField": null,
+        "polygons_fillColorField": "['fillColor']",
+        "polylines_fillRuleField": null,
+        "polylines_lineJoinField": null,
+        "rectangles_lineCapField": null,
+        "rectangles_opacityField": null,
+        "circles_fillOpacityField": null,
+        "geoJSONs_dashOffsetField": "['dashOffset']",
+        "polygons_dashOffsetField": null,
+        "polylines_dashArrayField": null,
+        "polylines_fillColorField": null,
+        "rectangles_fillRuleField": null,
+        "rectangles_lineJoinField": null,
+        "geoJSONs_fillOpacityField": "['fillOpacity']",
+        "polygons_fillOpacityField": "['fillOpacity']",
+        "polylines_dashOffsetField": null,
+        "rectangles_dashArrayField": null,
+        "rectangles_fillColorField": null,
+        "polylines_fillOpacityField": null,
+        "rectangles_dashOffsetField": null,
+        "circles_tooltipContentField": "['tooltipContent']",
+        "markers_tooltipContentField": "['tooltipContent']",
+        "rectangles_fillOpacityField": null,
+        "geoJSONs_tooltipContentField": "['tooltipContent']",
+        "polygons_tooltipContentField": "['tooltipContent']",
+        "circles_tooltipDirectionField": "['tooltipDirection']",
+        "circles_tooltipPermanentField": "['tooltipPermanent']",
+        "markers_tooltipDirectionField": "['tooltipDirection']",
+        "markers_tooltipPermanentField": "['tooltipPermanent']",
+        "polylines_tooltipContentField": "",
+        "geoJSONs_tooltipDirectionField": "['tooltipDirection']",
+        "geoJSONs_tooltipPermanentField": null,
+        "polygons_tooltipDirectionField": "['tooltipDirection']",
+        "polygons_tooltipPermanentField": "['tooltipPermanent']",
+        "rectangles_tooltipContentField": "",
+        "polylines_tooltipDirectionField": "auto",
+        "polylines_tooltipPermanentField": false,
+        "rectangles_tooltipDirectionField": null,
+        "rectangles_tooltipPermanentField": false
+    }
+}
