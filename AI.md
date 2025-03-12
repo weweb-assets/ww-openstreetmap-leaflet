@@ -386,27 +386,49 @@ Below is an example of how the component's content structure should look when pr
 }
 ```
 
+### ⚠️ CRITICAL: All Field Mappings Must Be Configured
+
+**IMPORTANT:** You MUST configure ALL the field mappings shown above for each map element type you're using. If any mapping is missing, your map elements will not display correctly or may not appear at all.
+
+For example, if you're using circles, you must include:
+
+- `circleDataField`
+- `circleRadiusField`
+- `circles_strokeField`
+- `circles_colorField`
+- `circles_weightField`
+- `circles_opacityField`
+- `circles_fillField`
+- `circles_fillColorField`
+- `circles_fillOpacityField`
+- `circles_tooltipContentField`
+- `circles_tooltipDirectionField`
+- `circles_tooltipPermanentField`
+
+Even if you don't need tooltips, you must still include the tooltip field mappings. The same applies to all other map element types.
+
+Additionally, your data objects in the bound variables must include ALL the corresponding properties. Missing properties will cause elements to fail to render.
+
 ## ⚠️ CRITICAL: Required Properties for Map Elements
 
 **IMPORTANT:** For map elements to display correctly, you MUST include ALL required properties in your data objects. If any of these properties are missing, the map elements may not appear at all.
 
 For all vector elements (circles, polygons, rectangles, polylines, geoJSONs):
 
-- `data`: Coordinates array or geoJSONs object (required)
-- `stroke`: Boolean to enable stroke (required, set to `true`)
-- `color`: Stroke color (required, e.g., "#3388ff")
-- `weight`: Stroke width (required, e.g., 3)
-- `opacity`: Stroke opacity (required, e.g., 1)
-- `fill`: Boolean to enable fill (required, set to `true`)
-- `fillColor`: Fill color (required, e.g., "#3388ff")
-- `fillOpacity`: Fill opacity (required, e.g., 0.5)
+- `[element]_DataField`: Coordinates array or geoJSONs object (required)
+- `[element]_strokeField`: Boolean to enable stroke (required, set to `true`)
+- `[element]_colorField`: Stroke color (required, e.g., "#3388ff")
+- `[element]_weightField`: Stroke width (required, e.g., 3)
+- `[element]_opacityField`: Stroke opacity (required, e.g., 1)
+- `[element]_fillField`: Boolean to enable fill (required, set to `true`)
+- `[element]_fillColorField`: Fill color (required, e.g., "#3388ff")
+- `[element]_fillOpacityField`: Fill opacity (required, e.g., 0.5)
 
 For tooltips:
 
-- `tooltip`: Boolean to enable tooltip (required, set to `true`)
-- `tooltipContent`: Content to display (required, e.g., "My tooltip")
-- `tooltipDirection`: Direction to display (required, e.g., "auto")
-- `tooltipPermanent`: Boolean to make permanent (required, set to `true` or `false`)
+- `[element]_tooltipContentField`: Content to display (required, e.g., "My tooltip")
+- `[element]_tooltipDirectionField`: Direction to display (required, e.g., "auto")
+- `[element]_tooltipPermanentField`: Boolean to make permanent (required, set to `true` or `false`)
 
 For markers with custom icons:
 
