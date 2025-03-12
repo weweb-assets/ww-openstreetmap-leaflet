@@ -386,6 +386,37 @@ Below is an example of how the component's content structure should look when pr
 }
 ```
 
+## ⚠️ CRITICAL: Required Properties for Map Elements
+
+**IMPORTANT:** For map elements to display correctly, you MUST include ALL required properties in your data objects. If any of these properties are missing, the map elements may not appear at all.
+
+For all vector elements (circles, polygons, rectangles, polylines, geoJSONs):
+
+- `data`: Coordinates array or geoJSONs object (required)
+- `stroke`: Boolean to enable stroke (required, set to `true`)
+- `color`: Stroke color (required, e.g., "#3388ff")
+- `weight`: Stroke width (required, e.g., 3)
+- `opacity`: Stroke opacity (required, e.g., 1)
+- `fill`: Boolean to enable fill (required, set to `true`)
+- `fillColor`: Fill color (required, e.g., "#3388ff")
+- `fillOpacity`: Fill opacity (required, e.g., 0.5)
+
+For tooltips:
+
+- `tooltip`: Boolean to enable tooltip (required, set to `true`)
+- `tooltipContent`: Content to display (required, e.g., "My tooltip")
+- `tooltipDirection`: Direction to display (required, e.g., "auto")
+- `tooltipPermanent`: Boolean to make permanent (required, set to `true` or `false`)
+
+For markers with custom icons:
+
+- `customIcon`: Boolean to enable custom icon (if custom icon in the data, set to `true`)
+- `iconUrl`: URL to icon image (if custom icon in the data)
+- `iconWidth`: Width of icon (requiif custom icon in the datared, e.g., "32px")
+- `iconHeight`: Height of icon (if custom icon in the data, e.g., "32px")
+
+**Even if you don't need certain features** (like tooltips), you must still include the properties with appropriate values (e.g., `tooltip: false`). Omitting these properties entirely can cause the map elements to fail to render.
+
 ## Special Features
 
 - Support for multiple map tile providers
