@@ -1,6 +1,6 @@
 ---
 name: ww-openstreetmap-leaflet
-description: An OpenStreetMap component based on Leaflet.js, supporting map features including markers and circles with customizable styles and tooltips.
+description: An OpenStreetMap component based on Leaflet.js, supporting map features including markers, circles, polygons, and GeoJSON layers with customizable styles and tooltips.
 keywords:
   - map
   - openstreetmap
@@ -8,17 +8,21 @@ keywords:
   - geolocation
   - markers
   - circles
+  - polygons
+  - geojson
 ---
 
 # OpenStreetMap Leaflet Component
 
 ## Component Overview
 
-A map component based on Leaflet.js that enables displaying interactive maps with markers and circles. Key features include:
+A map component based on Leaflet.js that enables displaying interactive maps with markers, circles, polygons, and GeoJSON. Key features include:
 
 - Interactive OpenStreetMap maps with various tile providers
 - Custom markers with optional custom icons
 - Circles with customizable radius and styling
+- Polygons with customizable styling
+- GeoJSON support for complex geographic data
 - Tooltip support for all map elements
 - Comprehensive styling options for all features
 - Responsive design that adapts to container size
@@ -62,13 +66,17 @@ Field mappings tell the component where to find specific properties in your data
 
 ```json
 "markerDataField": "['data']",
-"circles_colorField": "['color']"
+"circles_colorField": "['color']",
+"polygonDataField": "['data']",
+"geoJSONsDataField": "['data']"
 ```
 
 This means:
 
 - Look for coordinates in a property called `data` in each marker object
 - Look for circle stroke color in a property called `color` in each circle object
+- Look for polygon coordinates in a property called `data` in each polygon object
+- Look for GeoJSON data in a property called `data` in each GeoJSON object
 
 ## ⚠️ CRITICAL: Variable Data Structure Requirements
 
@@ -83,6 +91,8 @@ The examples below show the EXACT format required for:
 
 - Marker variable data (required for all markers to display correctly)
 - Circle variable data (required for all circles to display correctly)
+- Polygon variable data (required for all polygons to display correctly)
+- GeoJSON variable data (required for all GeoJSON layers to display correctly)
 
 **COPY THESE EXAMPLES EXACTLY** and only change the specific values (coordinates, colors, etc.) while keeping all property names and structure identical.
 
@@ -113,6 +123,16 @@ Below is a comprehensive example showing both component configuration and the ma
     "circles": {
       "__wwtype": "f",
       "code": "variables['89d75e62-d069-4861-b08d-17a46b96ec33']",
+      "defaultValue": []
+    },
+    "polygons": {
+      "__wwtype": "f",
+      "code": "variables['c3e7a2d8-f5b1-42e9-9a83-87c6149b31c9']",
+      "defaultValue": []
+    },
+    "geoJSONs": {
+      "__wwtype": "f",
+      "code": "variables['d9f4e6a1-b2c3-45d7-8f9e-1a2b3c4d5e6f']",
       "defaultValue": []
     },
 
@@ -148,7 +168,49 @@ Below is a comprehensive example showing both component configuration and the ma
     // Tooltip field mappings
     "circles_tooltipContentField": "['tooltipContent']",
     "circles_tooltipDirectionField": "['tooltipDirection']",
-    "circles_tooltipPermanentField": "['tooltipPermanent']"
+    "circles_tooltipPermanentField": "['tooltipPermanent']",
+
+    // === POLYGONS FIELD MAPPINGS ===
+    // Data field mapping
+    "polygonDataField": "['data']",
+    // Style field mappings
+    "polygons_strokeField": "['stroke']",
+    "polygons_colorField": "['color']",
+    "polygons_weightField": "['weight']",
+    "polygons_opacityField": "['opacity']",
+    "polygons_lineCapField": "['lineCap']",
+    "polygons_lineJoinField": "['lineJoin']",
+    "polygons_dashArrayField": "['dashArray']",
+    "polygons_dashOffsetField": "['dashOffset']",
+    "polygons_fillField": "['fill']",
+    "polygons_fillColorField": "['fillColor']",
+    "polygons_fillOpacityField": "['fillOpacity']",
+    "polygons_fillRuleField": "['fillRule']",
+    // Tooltip field mappings
+    "polygons_tooltipContentField": "['tooltipContent']",
+    "polygons_tooltipDirectionField": "['tooltipDirection']",
+    "polygons_tooltipPermanentField": "['tooltipPermanent']",
+
+    // === GEOJSON FIELD MAPPINGS ===
+    // Data field mapping
+    "geoJSONsDataField": "['data']",
+    // Style field mappings
+    "geoJSONs_strokeField": "['stroke']",
+    "geoJSONs_colorField": "['color']",
+    "geoJSONs_weightField": "['weight']",
+    "geoJSONs_opacityField": "['opacity']",
+    "geoJSONs_lineCapField": "['lineCap']",
+    "geoJSONs_lineJoinField": "['lineJoin']",
+    "geoJSONs_dashArrayField": "['dashArray']",
+    "geoJSONs_dashOffsetField": "['dashOffset']",
+    "geoJSONs_fillField": "['fill']",
+    "geoJSONs_fillColorField": "['fillColor']",
+    "geoJSONs_fillOpacityField": "['fillOpacity']",
+    "geoJSONs_fillRuleField": "['fillRule']",
+    // Tooltip field mappings
+    "geoJSONs_tooltipContentField": "['tooltipContent']",
+    "geoJSONs_tooltipDirectionField": "['tooltipDirection']",
+    "geoJSONs_tooltipPermanentField": "['tooltipPermanent']"
   }
 }
 ```
@@ -159,6 +221,8 @@ Below is a comprehensive example showing both component configuration and the ma
 
 - The variable `variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']` (markers) MUST contain an array of objects with ALL the properties shown in the Markers Variable Example below.
 - The variable `variables['89d75e62-d069-4861-b08d-17a46b96ec33']` (circles) MUST contain an array of objects with ALL the properties shown in the Circles Variable Example below.
+- The variable `variables['c3e7a2d8-f5b1-42e9-9a83-87c6149b31c9']` (polygons) MUST contain an array of objects with ALL the properties shown in the Polygons Variable Example below.
+- The variable `variables['d9f4e6a1-b2c3-45d7-8f9e-1a2b3c4d5e6f']` (geoJSONs) MUST contain an array of objects with ALL the properties shown in the GeoJSON Variable Example below.
 
 If the data in your variables does not exactly match these formats, with all required properties and correct property names, **the component will silently fail to render the map elements without any error messages**. This mapping between the variable binding and the data format is PRIMORDIAL for the component to function correctly.
 
@@ -262,6 +326,165 @@ Your variables must contain data with properties that exactly match your field m
 ];
 ```
 
+#### Polygons Variable Example
+
+```javascript
+[
+  {
+    // Required for polygonDataField
+    data: [
+      [48.86, 2.34],
+      [48.85, 2.35],
+      [48.85, 2.33],
+      [48.87, 2.33],
+    ], // Array of [lat, lng] coordinates forming the polygon
+
+    // Required for polygons_strokeField and related style mappings
+    stroke: true,
+    color: "#3388ff", // Stroke color
+    weight: 3, // Stroke width in pixels
+    opacity: 1, // Stroke opacity (0-1)
+
+    // Required for line styling field mappings
+    lineCap: "round", // "butt", "round", or "square"
+    lineJoin: "round", // "miter", "round", or "bevel"
+    dashArray: null, // For dashed lines, e.g., "5, 5" or null
+    dashOffset: null, // Dash pattern offset or null
+
+    // Required for polygons_fillField and related style mappings
+    fill: true,
+    fillColor: "#3388ff", // Fill color
+    fillOpacity: 0.2, // Fill opacity (0-1)
+    fillRule: "evenodd", // "nonzero" or "evenodd"
+
+    // Required for tooltip field mappings
+    tooltip: true,
+    tooltipContent: "Paris District",
+    tooltipDirection: "top", // "auto", "top", "bottom", "left", or "right"
+    tooltipPermanent: false, // Whether tooltip is always visible
+  },
+  {
+    // Second polygon with different properties
+    data: [
+      [51.51, -0.12],
+      [51.5, -0.13],
+      [51.52, -0.14],
+      [51.53, -0.11],
+    ],
+
+    stroke: true,
+    color: "#ff3333",
+    weight: 2,
+    opacity: 0.8,
+
+    lineCap: "round",
+    lineJoin: "round",
+    dashArray: "5, 5", // Example of a dashed line
+    dashOffset: null,
+
+    fill: true,
+    fillColor: "#ff3333",
+    fillOpacity: 0.1,
+    fillRule: "evenodd",
+
+    tooltip: true,
+    tooltipContent: "London District",
+    tooltipDirection: "auto",
+    tooltipPermanent: false,
+  },
+];
+```
+
+#### GeoJSON Variable Example
+
+```javascript
+[
+  {
+    // Required for geoJSONsDataField - Complete GeoJSON object
+    data: {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [2.3522, 48.8566], // Note: GeoJSON uses [longitude, latitude] format
+          },
+          properties: {
+            name: "Paris",
+          },
+        },
+      ],
+    },
+
+    // Required for geoJSONs_strokeField and related style mappings
+    stroke: true,
+    color: "#3388ff", // Stroke color
+    weight: 3, // Stroke width in pixels
+    opacity: 1, // Stroke opacity (0-1)
+
+    // Required for line styling field mappings
+    lineCap: "round", // "butt", "round", or "square"
+    lineJoin: "round", // "miter", "round", or "bevel"
+    dashArray: null, // For dashed lines, e.g., "5, 5" or null
+    dashOffset: null, // Dash pattern offset or null
+
+    // Required for geoJSONs_fillField and related style mappings
+    fill: true,
+    fillColor: "#3388ff", // Fill color
+    fillOpacity: 0.2, // Fill opacity (0-1)
+    fillRule: "evenodd", // "nonzero" or "evenodd"
+
+    // Required for tooltip field mappings
+    tooltip: true,
+    tooltipContent: "Paris GeoJSON",
+    tooltipDirection: "top", // "auto", "top", "bottom", "left", or "right"
+    tooltipPermanent: false, // Whether tooltip is always visible
+  },
+  {
+    // Second GeoJSON with different properties
+    data: {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: [
+              [-0.1278, 51.5074], // London
+              [2.3522, 48.8566], // Paris
+            ],
+          },
+          properties: {
+            name: "London to Paris",
+          },
+        },
+      ],
+    },
+
+    stroke: true,
+    color: "#ff3333",
+    weight: 2,
+    opacity: 0.8,
+
+    lineCap: "round",
+    lineJoin: "round",
+    dashArray: "5, 5", // Example of a dashed line
+    dashOffset: null,
+
+    fill: true,
+    fillColor: "#ff3333",
+    fillOpacity: 0.1,
+    fillRule: "evenodd",
+
+    tooltip: true,
+    tooltipContent: "London to Paris Route",
+    tooltipDirection: "auto",
+    tooltipPermanent: false,
+  },
+];
+```
+
 **IMPORTANT:** Even if you set some features to `false` (like `tooltip: false` or `customIcon: false`), you must still include ALL the related properties in your data objects.
 
 ## ⚠️ Critical Implementation Requirements
@@ -286,6 +509,22 @@ You must include ALL field mappings for each map element type you use:
 - Fill: `circles_fillField`, `circles_fillColorField`, `circles_fillOpacityField`, `circles_fillRuleField`
 - Tooltip: `circles_tooltipContentField`, `circles_tooltipDirectionField`, `circles_tooltipPermanentField`
 
+#### For Polygons
+
+- Data: `polygonDataField`
+- Stroke: `polygons_strokeField`, `polygons_colorField`, `polygons_weightField`, `polygons_opacityField`
+- Line styling (optional): `polygons_lineCapField`, `polygons_lineJoinField`, `polygons_dashArrayField`, `polygons_dashOffsetField`
+- Fill: `polygons_fillField`, `polygons_fillColorField`, `polygons_fillOpacityField`, `polygons_fillRuleField`
+- Tooltip: `polygons_tooltipContentField`, `polygons_tooltipDirectionField`, `polygons_tooltipPermanentField`
+
+#### For GeoJSON
+
+- Data: `geoJSONsDataField`
+- Stroke: `geoJSONs_strokeField`, `geoJSONs_colorField`, `geoJSONs_weightField`, `geoJSONs_opacityField`
+- Line styling (optional): `geoJSONs_lineCapField`, `geoJSONs_lineJoinField`, `geoJSONs_dashArrayField`, `geoJSONs_dashOffsetField`
+- Fill: `geoJSONs_fillField`, `geoJSONs_fillColorField`, `geoJSONs_fillOpacityField`, `geoJSONs_fillRuleField`
+- Tooltip: `geoJSONs_tooltipContentField`, `geoJSONs_tooltipDirectionField`, `geoJSONs_tooltipPermanentField`
+
 ### Required Data Properties
 
 Your data objects MUST include properties for ALL field mappings you configure:
@@ -304,22 +543,40 @@ Your data objects MUST include properties for ALL field mappings you configure:
 - Fill properties: `fill`, `fillColor`, `fillOpacity`, `fillRule`
 - Tooltip (if enabled): `tooltip`, `tooltipContent`, `tooltipDirection`, `tooltipPermanent`
 
+#### For Polygons
+
+- Coordinates: `data` property with array of [latitude, longitude] arrays forming the polygon
+- Stroke properties: `stroke`, `color`, `weight`, `opacity`
+- Line styling (if needed): `lineCap`, `lineJoin`, `dashArray`, `dashOffset`
+- Fill properties: `fill`, `fillColor`, `fillOpacity`, `fillRule`
+- Tooltip (if enabled): `tooltip`, `tooltipContent`, `tooltipDirection`, `tooltipPermanent`
+
+#### For GeoJSON
+
+- GeoJSON data: `data` property containing a complete GeoJSON object
+- Stroke properties: `stroke`, `color`, `weight`, `opacity`
+- Line styling (if needed): `lineCap`, `lineJoin`, `dashArray`, `dashOffset`
+- Fill properties: `fill`, `fillColor`, `fillOpacity`, `fillRule`
+- Tooltip (if enabled): `tooltip`, `tooltipContent`, `tooltipDirection`, `tooltipPermanent`
+
 ### Common Implementation Errors
 
 - **Missing field mappings**: Include all required field mappings even if you don't use all features
 - **Missing data properties**: Include all properties in your data that correspond to your field mappings
 - **Mismatched property names**: Property names in data must match exactly what your field mapping expects
-- **Incorrect data types**: Coordinates must be [lat, lng] arrays, radius must be a number, etc.
+- **Incorrect data types**: Coordinates must be [lat, lng] arrays (except in GeoJSON where it's [lng, lat]), radius must be a number, etc.
 - **Empty default values**: Always provide proper default values in your variable binding
 
 **NOTE:** Even if you don't use certain features (like tooltips), you must still include the corresponding properties in your data with appropriate values (e.g., `tooltip: false`).
 
 ## Best Practices
 
-- **Coordinate format**: Latitude first, longitude second: `[lat, lng]`
+- **Coordinate format**: For markers, circles, and polygons: Latitude first, longitude second: `[lat, lng]`. For GeoJSON: Longitude first, latitude second: `[lng, lat]`
 - **Zoom levels**: Use 0-4 for world/continent view, 5-10 for country/region, 11-15 for city/district, 16+ for streets/buildings
 - **Custom markers**: Keep icon images small (32x32px is recommended) for better performance
 - **Circle radius**: Express in meters, adjust based on zoom level (larger for zoomed-out views)
+- **Polygon complexity**: Keep polygon coordinates to a reasonable amount for better performance
+- **GeoJSON size**: Keep GeoJSON data compact and focused on what you need to display
 - **Styling consistency**: Use similar styling options for related map elements
 - **Testing**: Test at different zoom levels and viewport sizes
 - **Provider config**: Some tile providers require API keys through the providerConfiguration property
@@ -333,4 +590,5 @@ Your data objects MUST include properties for ALL field mappings you configure:
 - Line caps can be "butt", "round", or "square"
 - Line joins can be "miter", "round", or "bevel"
 - Fill rules can be "nonzero" or "evenodd"
+- GeoJSON follows the [GeoJSON specification](https://geojson.org/)
 - The component is responsive and will adjust to container size changes

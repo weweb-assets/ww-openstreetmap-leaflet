@@ -1,5 +1,7 @@
 import circle from "./configs/circle";
 import marker from "./configs/marker";
+import geoJSON from "./configs/geojson";
+import polygon from "./configs/polygon";
 
 export default {
   editor: {
@@ -43,6 +45,46 @@ export default {
         "circles_tooltipContentField",
         "circles_tooltipDirectionField",
         "circles_tooltipPermanentField",
+      ],
+      [
+        "polygonTitle",
+        "polygons",
+        "polygonDataField",
+        "polygons_strokeField",
+        "polygons_colorField",
+        "polygons_weightField",
+        "polygons_opacityField",
+        "polygons_lineCapField",
+        "polygons_lineJoinField",
+        "polygons_dashArrayField",
+        "polygons_dashOffsetField",
+        "polygons_fillField",
+        "polygons_fillColorField",
+        "polygons_fillOpacityField",
+        "polygons_fillRuleField",
+        "polygons_tooltipContentField",
+        "polygons_tooltipDirectionField",
+        "polygons_tooltipPermanentField",
+      ],
+      [
+        "geoJSONTitle",
+        "geoJSONs",
+        "geoJSONsDataField",
+        "geoJSONs_strokeField",
+        "geoJSONs_colorField",
+        "geoJSONs_weightField",
+        "geoJSONs_opacityField",
+        "geoJSONs_lineCapField",
+        "geoJSONs_lineJoinField",
+        "geoJSONs_dashArrayField",
+        "geoJSONs_dashOffsetField",
+        "geoJSONs_fillField",
+        "geoJSONs_fillColorField",
+        "geoJSONs_fillOpacityField",
+        "geoJSONs_fillRuleField",
+        "geoJSONs_tooltipContentField",
+        "geoJSONs_tooltipDirectionField",
+        "geoJSONs_tooltipPermanentField",
       ],
     ],
   },
@@ -290,5 +332,7 @@ export default {
     },
     ...marker,
     ...circle,
+    ...polygon,
+    ...geoJSON,
   },
 };

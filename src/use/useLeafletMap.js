@@ -296,6 +296,152 @@ export default function useLeafletMap(
     }
   };
 
+  const addPolygons = () => {
+    try {
+      clearLayers(polygonLayers);
+
+      if (!Array.isArray(content.polygons) || !content.polygons.length) return;
+
+      content.polygons.forEach((polygonData) => {
+        if (!polygonData) return;
+
+        const fields = polygonFields(content, polygonData);
+
+        const {
+          data,
+          tooltip,
+          tooltipContent,
+          tooltipDirection,
+          tooltipPermanent,
+          ...styles
+        } =
+          boundStates && boundStates.polygons.value
+            ? {
+                data: fields.polygonDataField,
+                tooltip:
+                  typeof fields.polygons_tooltipContentField === "string" &&
+                  fields.polygons_tooltipContentField.length,
+                tooltipContent: fields.polygons_tooltipContentField,
+                tooltipDirection: fields.polygons_tooltipDirectionField,
+                tooltipPermanent: fields.polygons_tooltipPermanentField,
+                ...generateVectorStyles(fields, "polygons"),
+              }
+            : polygonData;
+
+        if (!data || !data.length) return;
+
+        let polygonInstance = L.polygon(data, { ...styles }).addTo(map);
+
+        if (
+          tooltip &&
+          typeof tooltipContent === "string" &&
+          tooltipContent.length
+        ) {
+          polygonInstance.bindTooltip(tooltipContent, {
+            permanent: tooltipPermanent,
+            direction: tooltipDirection,
+          });
+        }
+
+        polygonLayers.value.push(polygonInstance);
+
+        // Add event listeners
+        polygonInstance.on("click", (e) =>
+          fireEvent("shape:click", {
+            type: "polygon",
+            shape: polygonData,
+            latlng: e.latlng,
+          })
+        );
+        if (content.editableShapes) {
+          polygonInstance.on("edit", (e) =>
+            fireEvent("shape:edit", {
+              type: "polygon",
+              shape: polygonData,
+              latlng: e.latlng,
+            })
+          );
+        }
+      });
+    } catch (error) {
+      console.error("Error adding polygons:", error);
+    }
+  };
+
+  const addGeoJSONLayers = () => {
+    try {
+      clearLayers(geoJsonLayers);
+
+      if (!Array.isArray(content.geoJSONs) || !content.geoJSONs.length) return;
+
+      content.geoJSONs.forEach((geoJSON) => {
+        if (!geoJSON) return;
+
+        const fields = geoJSONFields(content, geoJSON);
+
+        const {
+          data,
+          tooltip,
+          tooltipContent,
+          tooltipDirection,
+          tooltipPermanent,
+          ...styles
+        } =
+          boundStates && boundStates.geoJSONs.value
+            ? {
+                data: fields.geoJSONsDataField,
+                tooltip:
+                  typeof fields.geoJSONs_tooltipContentField === "string" &&
+                  fields.geoJSONs_tooltipContentField.length,
+                tooltipContent: fields.geoJSONs_tooltipContentField,
+                tooltipDirection: fields.geoJSONs_tooltipDirectionField,
+                tooltipPermanent: fields.geoJSONs_tooltipPermanentField,
+                ...generateVectorStyles(fields, "geoJSONs"),
+              }
+            : geoJSON;
+
+        if (!data) return;
+
+        const layer = L.geoJson(data, {
+          style: () => ({ ...styles }),
+        }).addTo(map);
+
+        if (
+          tooltip &&
+          typeof tooltipContent === "string" &&
+          tooltipContent.length
+        ) {
+          layer.bindTooltip(tooltipContent, {
+            permanent: tooltipPermanent,
+            direction: tooltipDirection,
+          });
+        }
+
+        geoJsonLayers.value.push(layer);
+
+        // Add event listeners
+        layer.on("click", (e) =>
+          fireEvent("shape:click", {
+            type: "geoJSON",
+            shape: geoJSON,
+            latlng: e.latlng,
+          })
+        );
+        if (content.editableShapes) {
+          layer.on("edit", (e) =>
+            fireEvent("shape:edit", {
+              type: "geoJSON",
+              shape: geoJSON,
+              latlng: e.latlng,
+            })
+          );
+        }
+      });
+    } catch (error) {
+      console.error("Error adding GeoJSON layers:", error);
+    }
+  };
+
   watch(() => content, initializeMap, { deep: true });
 
   watch(
