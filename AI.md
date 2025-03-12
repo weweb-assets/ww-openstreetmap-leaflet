@@ -46,25 +46,6 @@ The field mapping properties are crucial for the component to correctly interpre
 
 These mappings must match the structure of your data objects in the bound variables.
 
-## ⚠️ CRITICAL: EXACT PROPERTY MATCHING REQUIRED
-
-**EXTREMELY IMPORTANT:** There is a strict 1:1 relationship between field mappings and data properties. For every field mapping you define, the EXACT corresponding property MUST EXIST in your variable data objects.
-
-For example:
-
-- If you define `circles_colorField: "['color']"`, then EVERY object in your circles variable MUST have a `color` property
-- If you define `markers_tooltipContentField: "['tooltipContent']"`, then EVERY object in your markers variable MUST have a `tooltipContent` property
-
-**This is non-negotiable.** If any mapped property is missing from your data objects, the map elements will NOT display. The component performs strict property lookups and will fail silently if properties are missing.
-
-When generating data for this component, you MUST ensure that:
-
-1. Every field mapping has a corresponding property in your data objects
-2. Property names match EXACTLY (case-sensitive)
-3. All required properties are included in EVERY object in your data arrays
-
-**No exceptions are possible.** The component will not display elements with missing properties.
-
 ## Data Structure Requirements
 
 For each map element type, your variable data must follow these structures:
@@ -376,6 +357,7 @@ Below is an example of how the component's content structure should look when pr
     "geoJSONsDataField": "['data']",
 
     // Style field mappings for circles
+    // **EXTREMELY CRITICAL**: All theses properties must be present in the data to ensure correct mapping
     "circles_strokeField": "['stroke']",
     "circles_colorField": "['color']",
     "circles_weightField": "['weight']",
@@ -388,6 +370,7 @@ Below is an example of how the component's content structure should look when pr
     "circles_tooltipPermanentField": "['tooltipPermanent']",
 
     // Style field mappings for polygons
+    // **EXTREMELY CRITICAL**: All theses properties must be present in the data to ensure correct mapping
     "polygons_strokeField": "['stroke']",
     "polygons_colorField": "['color']",
     "polygons_weightField": "['weight']",
@@ -426,7 +409,7 @@ For example, if you're using circles, you must include:
 
 Even if you don't need tooltips, you must still include the tooltip field mappings. The same applies to all other map element types.
 
-Additionally, your data objects in the bound variables must include ALL the corresponding properties. Missing properties will cause elements to fail to render.
+**EXTREMELY CRITICAL**: Your data objects in the bound variables must include ALL the corresponding properties. Missing properties will cause elements to fail to render.
 
 ### ⚠️ CRITICAL: Variable Data MUST Match Field Mappings EXACTLY
 
@@ -524,3 +507,8 @@ For markers with custom icons:
 - Provider configuration is required for some tile providers
 - The component is fully responsive and will adjust to container size changes
 - For large datasets, consider loading data incrementally or using clustering techniques
+
+## Critical Reminders
+
+- **Always include all required properties** even if you don't need them (set them to `false` or appropriate default values). Include them in the mapped data if necessary
+- **Verify all field mappings** when using dynamic data binding - ensure that if an element (markers, circles, polygons, etc.) is defined, ALL required field mappings must be present and ALL corresponding data must exist in the bound variable. Missing mappings or data will cause elements to fail to render properly.
