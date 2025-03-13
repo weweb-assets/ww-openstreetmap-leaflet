@@ -1,9 +1,6 @@
-import geoJSON from "./configs/geojson";
-import polyline from "./configs/polyline";
-import polygon from "./configs/polygon";
-import rectangle from "./configs/rectangle";
-import circle from "./configs/circle";
 import marker from "./configs/marker";
+import circle from "./configs/circle";
+import polygon from "./configs/polygon";
 
 export default {
   editor: {
@@ -68,70 +65,147 @@ export default {
         "polygons_tooltipDirectionField",
         "polygons_tooltipPermanentField",
       ],
-      [
-        "rectangleTitle",
-        "rectangles",
-        "rectangleDataField",
-        "rectangles_strokeField",
-        "rectangles_colorField",
-        "rectangles_weightField",
-        "rectangles_opacityField",
-        "rectangles_lineCapField",
-        "rectangles_lineJoinField",
-        "rectangles_dashArrayField",
-        "rectangles_dashOffsetField",
-        "rectangles_fillField",
-        "rectangles_fillColorField",
-        "rectangles_fillOpacityField",
-        "rectangles_fillRuleField",
-        "rectangles_tooltipContentField",
-        "rectangles_tooltipDirectionField",
-        "rectangles_tooltipPermanentField",
-      ],
-      [
-        "polylineTitle",
-        "polylines",
-        "polylineDataField",
-        "smoothFactorField",
-        "noClipField",
-        "polylines_strokeField",
-        "polylines_colorField",
-        "polylines_weightField",
-        "polylines_opacityField",
-        "polylines_lineCapField",
-        "polylines_lineJoinField",
-        "polylines_dashArrayField",
-        "polylines_dashOffsetField",
-        "polylines_fillField",
-        "polylines_fillColorField",
-        "polylines_fillOpacityField",
-        "polylines_fillRuleField",
-        "polylines_tooltipContentField",
-        "polylines_tooltipDirectionField",
-        "polylines_tooltipPermanentField",
-      ],
-      [
-        "geoJSONTitle",
-        "geoJSONs",
-        "geoJSONDataField",
-        "geoJSONs_strokeField",
-        "geoJSONs_colorField",
-        "geoJSONs_weightField",
-        "geoJSONs_opacityField",
-        "geoJSONs_lineCapField",
-        "geoJSONs_lineJoinField",
-        "geoJSONs_dashArrayField",
-        "geoJSONs_dashOffsetField",
-        "geoJSONs_fillField",
-        "geoJSONs_fillColorField",
-        "geoJSONs_fillOpacityField",
-        "geoJSONs_fillRuleField",
-        "geoJSONs_TooltipContentField",
-        "geoJSONs_TooltipDirectionField",
-        "geoJSONs_TooltipPermanentField",
-      ],
     ],
   },
+  triggerEvents: [
+    {
+      name: "map:load",
+      label: { en: "On map load" },
+    },
+    {
+      name: "map:click",
+      label: { en: "On map click" },
+      event: {
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+        originalEvent: { x: 0, y: 0 },
+      },
+    },
+    {
+      name: "map:zoom",
+      label: { en: "On map zoom" },
+      event: {
+        zoom: 13,
+      },
+    },
+    {
+      name: "map:move",
+      label: { en: "On map move" },
+      event: {
+        center: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+        bounds: {
+          _northEast: { lat: 48.86, lng: 2.37 },
+          _southWest: { lat: 48.83, lng: 2.33 },
+        },
+      },
+    },
+    {
+      name: "map:dragstart",
+      label: { en: "On map drag start" },
+      event: {
+        center: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "map:dragend",
+      label: { en: "On map drag end" },
+      event: {
+        center: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "marker:click",
+      label: { en: "On marker click" },
+      event: {
+        marker: {
+          data: [48.84872727506581, 2.351657694024656],
+          rawData: {},
+        },
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+        originalEvent: { x: 0, y: 0 },
+      },
+    },
+    {
+      name: "marker:dragstart",
+      label: { en: "On marker drag start" },
+      event: {
+        marker: {
+          data: [48.84872727506581, 2.351657694024656],
+          rawData: {},
+        },
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "marker:drag",
+      label: { en: "On marker drag" },
+      event: {
+        marker: {
+          data: [48.84872727506581, 2.351657694024656],
+          rawData: {},
+        },
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "marker:dragend",
+      label: { en: "On marker drag end" },
+      event: {
+        marker: {
+          data: [48.84872727506581, 2.351657694024656],
+          rawData: {},
+        },
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "shape:click",
+      label: { en: "On shape click" },
+      event: {
+        type: "circle",
+        shape: {},
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+    {
+      name: "shape:edit",
+      label: { en: "On shape edit" },
+      event: {
+        type: "circle",
+        shape: {},
+        latlng: {
+          lat: 48.84872727506581,
+          lng: 2.351657694024656,
+        },
+      },
+    },
+  ],
   properties: {
     tileLayer: {
       label: {
@@ -236,10 +310,7 @@ export default {
       defaultValue: true,
     },
     ...marker,
-    ...geoJSON,
-    ...polyline,
-    ...polygon,
-    ...rectangle,
     ...circle,
+    ...polygon,
   },
 };
