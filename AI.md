@@ -109,18 +109,15 @@ Below is a comprehensive example showing both component configuration and the ma
     // Map elements bound to variables
     "markers": {
       "__wwtype": "f",
-      "code": "variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']",
-      "defaultValue": []
+      "code": "variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']"
     },
     "circles": {
       "__wwtype": "f",
-      "code": "variables['89d75e62-d069-4861-b08d-17a46b96ec33']",
-      "defaultValue": []
+      "code": "variables['89d75e62-d069-4861-b08d-17a46b96ec33']"
     },
     "polygons": {
       "__wwtype": "f",
-      "code": "variables['c3e7a2d8-f5b1-42e9-9a83-87c6149b31c9']",
-      "defaultValue": []
+      "code": "variables['c3e7a2d8-f5b1-42e9-9a83-87c6149b31c9']"
     },
 
     // === MARKERS FIELD MAPPINGS ===
