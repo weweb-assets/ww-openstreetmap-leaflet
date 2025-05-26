@@ -9,7 +9,6 @@ import default_shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
 import { markerFields, circleFields, polygonFields } from "./fields.js";
 
-// Utility function for coordinate validation
 const isValidCoordinate = (lat, lng) => {
   return (
     !isNaN(lat) &&
@@ -104,12 +103,10 @@ export default function useLeafletMap(
         return;
       }
 
-      // Validate and parse coordinates with fallbacks
       const lat = content.lat !== undefined ? parseFloat(content.lat) : 0;
       const lng = content.lng !== undefined ? parseFloat(content.lng) : 0;
       const zoom = content.zoom !== undefined ? parseInt(content.zoom) : 1;
 
-      // Enhanced coordinate validation including special values
       const isValidLat = (value) => {
         return !isNaN(value) && isFinite(value) && value >= -90 && value <= 90;
       };
@@ -147,7 +144,6 @@ export default function useLeafletMap(
       const validLng = isValidLng(lng) ? lng : 0;
       const validZoom = isValidZoom(zoom) ? zoom : 1;
 
-      // Create map with error handling
       map = L.map(mapContainer, {
         center: [validLat, validLng],
         zoom: validZoom,
@@ -156,7 +152,6 @@ export default function useLeafletMap(
         attributionControl: content.attributionControl !== false,
       });
 
-      // Add tile layer with error handling
       let tileLayer;
       try {
         const tileLayerName = content.tileLayer || "OpenStreetMap.Mapnik";
@@ -169,7 +164,6 @@ export default function useLeafletMap(
         tileLayer.addTo(map);
       } catch (tileError) {
         console.error("Error creating tile layer:", tileError);
-        // Fallback to basic OpenStreetMap if provider fails
         try {
           tileLayer = _L.tileLayer(
             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -183,7 +177,6 @@ export default function useLeafletMap(
         }
       }
 
-      // Add map event listeners
       map.on("load", () => fireEvent("map:load"));
       map.on("click", (e) =>
         fireEvent("map:click", {
@@ -205,7 +198,6 @@ export default function useLeafletMap(
         fireEvent("map:dragend", { center: map.getCenter() })
       );
 
-      // Add layers with individual error handling
       try {
         addMarkers();
       } catch (markerError) {
@@ -225,7 +217,6 @@ export default function useLeafletMap(
       }
     } catch (error) {
       console.error("Map initialization error:", error);
-      // Don't re-throw the error to prevent crashes
       map = null;
     }
   };
@@ -276,13 +267,11 @@ export default function useLeafletMap(
                 }
               : markerData;
 
-          // Validate marker data
           if (!data || !Array.isArray(data) || data.length !== 2) {
             console.warn(`Invalid marker data at index ${index}:`, data);
             return;
           }
 
-          // Validate coordinates with enhanced checks
           const lat = parseFloat(data[0]);
           const lng = parseFloat(data[1]);
 
@@ -338,7 +327,6 @@ export default function useLeafletMap(
 
           markerLayers.value.push(markerInstance);
 
-          // Add event listeners
           markerInstance.on("click", (e) =>
             fireEvent("marker:click", {
               marker: markerData,
@@ -410,13 +398,11 @@ export default function useLeafletMap(
                 }
               : circleData;
 
-          // Validate circle data
           if (!data || !Array.isArray(data) || data.length !== 2) {
             console.warn(`Invalid circle data at index ${index}:`, data);
             return;
           }
 
-          // Validate coordinates with enhanced checks
           const lat = parseFloat(data[0]);
           const lng = parseFloat(data[1]);
 
@@ -429,7 +415,6 @@ export default function useLeafletMap(
             return;
           }
 
-          // Enhanced radius validation
           const validRadius = parseFloat(radius);
           if (
             isNaN(validRadius) ||
@@ -444,9 +429,7 @@ export default function useLeafletMap(
             return;
           }
 
-          // Check for extremely large radius values that might cause performance issues
           if (validRadius > 10000000) {
-            // 10,000 km
             console.warn(
               `Circle radius at index ${index} is very large (${validRadius}m). This might cause performance issues.`
             );
@@ -467,7 +450,6 @@ export default function useLeafletMap(
 
           circleLayers.value.push(circleInstance);
 
-          // Add event listeners
           circleInstance.on("click", (e) =>
             fireEvent("shape:click", {
               type: "circle",
@@ -531,13 +513,11 @@ export default function useLeafletMap(
                 }
               : polygonData;
 
-          // Validate polygon data
           if (!data || !Array.isArray(data) || data.length === 0) {
             console.warn(`Invalid polygon data at index ${index}:`, data);
             return;
           }
 
-          // Enhanced polygon coordinate validation
           const isValidPolygon = data.every((coord, coordIndex) => {
             if (!Array.isArray(coord) || coord.length !== 2) {
               console.warn(
@@ -569,7 +549,6 @@ export default function useLeafletMap(
             return;
           }
 
-          // Ensure polygon has at least 3 points
           if (data.length < 3) {
             console.warn(
               `Polygon at index ${index} has insufficient points (${data.length}). Minimum 3 required.`
@@ -592,7 +571,6 @@ export default function useLeafletMap(
 
           polygonLayers.value.push(polygonInstance);
 
-          // Add event listeners
           polygonInstance.on("click", (e) =>
             fireEvent("shape:click", {
               type: "polygon",
@@ -621,7 +599,6 @@ export default function useLeafletMap(
   const resizeMap = () => {
     try {
       if (map) {
-        // Use Leaflet's built-in method to handle container size changes
         map.invalidateSize();
       }
     } catch (error) {
