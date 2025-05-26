@@ -6,6 +6,12 @@ export const basePath = {
     bindable: true,
     type: "OnOff",
     defaultValue: true,
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "boolean",
+      tooltip: "A boolean that controls stroke visibility: `true` or `false`",
+    },
+    /* wwEditor:end */
   },
   color: {
     label: { en: "Color" },
@@ -21,12 +27,33 @@ export const basePath = {
     ) => {
       return specific__array.item && !specific__array.item.stroke;
     },
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "string",
+      tooltip: 'A string that defines the stroke color: `"#3388ff"`',
+    },
+    /* wwEditor:end */
   },
   weight: {
     label: { en: "Weight" },
     bindable: true,
     type: "Number",
     defaultValue: 3,
+    hidden: (
+      content,
+      sidepanelContent,
+      boundProperties,
+      wwProps_,
+      specific__array
+    ) => {
+      return specific__array.item && !specific__array.item.stroke;
+    },
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "number",
+      tooltip: "A number that defines the stroke weight: `3`",
+    },
+    /* wwEditor:end */
   },
   opacity: {
     label: { en: "Opacity" },
@@ -38,6 +65,21 @@ export const basePath = {
       max: 1,
       step: 0.1,
     },
+    hidden: (
+      content,
+      sidepanelContent,
+      boundProperties,
+      wwProps_,
+      specific__array
+    ) => {
+      return specific__array.item && !specific__array.item.stroke;
+    },
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "number",
+      tooltip: "A number that defines the stroke opacity (0-1): `1`",
+    },
+    /* wwEditor:end */
   },
   lineCap: {
     label: { en: "Line Cap" },
@@ -51,6 +93,22 @@ export const basePath = {
       ],
     },
     defaultValue: "round",
+    hidden: (
+      content,
+      sidepanelContent,
+      boundProperties,
+      wwProps_,
+      specific__array
+    ) => {
+      return specific__array.item && !specific__array.item.stroke;
+    },
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "string",
+      tooltip:
+        'A string that defines the line cap style: `"butt"`, `"round"`, or `"square"`',
+    },
+    /* wwEditor:end */
   },
   lineJoin: {
     label: { en: "Line Join" },
@@ -64,24 +122,77 @@ export const basePath = {
       ],
     },
     defaultValue: "round",
+    hidden: (
+      content,
+      sidepanelContent,
+      boundProperties,
+      wwProps_,
+      specific__array
+    ) => {
+      return specific__array.item && !specific__array.item.stroke;
+    },
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "string",
+      tooltip:
+        'A string that defines the line join style: `"miter"`, `"round"`, or `"bevel"`',
+    },
+    /* wwEditor:end */
   },
   dashArray: {
     label: { en: "Dash Array" },
     bindable: true,
     type: "Text",
     defaultValue: null,
+    hidden: (
+      content,
+      sidepanelContent,
+      boundProperties,
+      wwProps_,
+      specific__array
+    ) => {
+      return specific__array.item && !specific__array.item.stroke;
+    },
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "string",
+      tooltip:
+        'A string that defines the dash array pattern: `"5,10"` or `null`',
+    },
+    /* wwEditor:end */
   },
   dashOffset: {
     label: { en: "Dash Offset" },
     bindable: true,
     type: "Text",
     defaultValue: null,
+    hidden: (
+      content,
+      sidepanelContent,
+      boundProperties,
+      wwProps_,
+      specific__array
+    ) => {
+      return specific__array.item && !specific__array.item.stroke;
+    },
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "string",
+      tooltip: 'A string that defines the dash offset: `"5"` or `null`',
+    },
+    /* wwEditor:end */
   },
   fill: {
     label: { en: "Fill" },
     bindable: true,
     type: "OnOff",
     defaultValue: true,
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "boolean",
+      tooltip: "A boolean that controls fill visibility: `true` or `false`",
+    },
+    /* wwEditor:end */
   },
   fillColor: {
     label: { en: "Fill Color" },
@@ -97,6 +208,12 @@ export const basePath = {
     ) => {
       return specific__array.item && !specific__array.item.fill;
     },
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "string",
+      tooltip: 'A string that defines the fill color: `"#3388ff"`',
+    },
+    /* wwEditor:end */
   },
   fillOpacity: {
     label: { en: "Fill Opacity" },
@@ -108,6 +225,21 @@ export const basePath = {
       max: 1,
       step: 0.1,
     },
+    hidden: (
+      content,
+      sidepanelContent,
+      boundProperties,
+      wwProps_,
+      specific__array
+    ) => {
+      return specific__array.item && !specific__array.item.fill;
+    },
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "number",
+      tooltip: "A number that defines the fill opacity (0-1): `0.3`",
+    },
+    /* wwEditor:end */
   },
   fillRule: {
     label: { en: "Fill Rule" },
@@ -120,6 +252,22 @@ export const basePath = {
       ],
     },
     defaultValue: "evenodd",
+    hidden: (
+      content,
+      sidepanelContent,
+      boundProperties,
+      wwProps_,
+      specific__array
+    ) => {
+      return specific__array.item && !specific__array.item.fill;
+    },
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "string",
+      tooltip:
+        'A string that defines the fill rule: `"nonzero"` or `"evenodd"`',
+    },
+    /* wwEditor:end */
   },
 };
 

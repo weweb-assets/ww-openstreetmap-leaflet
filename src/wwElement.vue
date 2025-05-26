@@ -50,6 +50,7 @@ export default {
     /* wwEditor:end */
 
     let mapInstance = null;
+    let resizeMapFunction = null;
     const mapContainer = ref(true);
 
     function debounce(func, wait) {
@@ -65,28 +66,50 @@ export default {
     }
 
     async function initMap() {
-      componentKey.value += 1;
-      await nextTick();
+      try {
+        componentKey.value += 1;
+        await nextTick();
 
-      const { map } = useLeafletMap(
-        mapContainer.value,
-        props.content,
-        boundStates,
-        emit
-      );
+        // Validate container exists
+        if (!mapContainer.value) {
+          console.warn("Map container not available, skipping initialization");
+          return;
+        }
 
-      mapInstance = map;
+        const { map, resizeMap } = useLeafletMap(
+          mapContainer.value,
+          props.content,
+          boundStates,
+          emit
+        );
+
+        mapInstance = map;
+        resizeMapFunction = resizeMap;
+      } catch (error) {
+        console.error("Error initializing map component:", error);
+        // Reset instances on error
+        mapInstance = null;
+        resizeMapFunction = null;
+      }
     }
 
-    const debouncedInitMap = debounce(initMap, 1000);
+    const debouncedResizeMap = debounce(() => {
+      try {
+        if (resizeMapFunction && mapInstance) {
+          resizeMapFunction();
+        }
+      } catch (error) {
+        console.warn("Error during map resize:", error);
+      }
+    }, 100);
 
     onMounted(() => {
       initMap();
 
       const resizeObserver = new ResizeObserver((entries) => {
         for (let entry of entries) {
-          if (entry.contentRect) {
-            debouncedInitMap();
+          if (entry.contentRect && mapInstance) {
+            debouncedResizeMap();
           }
         }
       });

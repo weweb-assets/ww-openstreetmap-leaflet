@@ -39,6 +39,12 @@ export default {
               propertyHelp: {
                 tooltip: POLYGON_DATA_HELP,
               },
+              /* wwEditor:start */
+              bindingValidation: {
+                type: "array",
+                tooltip: POLYGON_DATA_HELP,
+              },
+              /* wwEditor:end */
             },
             ...polygon,
             ...tooltipConfig,
@@ -70,6 +76,13 @@ export default {
     },
     defaultValue: [],
     bindable: true,
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "array",
+      tooltip:
+        "An array of polygon objects with data, stroke, color, weight, opacity, fill, fillColor, fillOpacity, and tooltip properties",
+    },
+    /* wwEditor:end */
   },
   polygonDataField: {
     hidden: (content, sidepanelContent, boundProps) =>

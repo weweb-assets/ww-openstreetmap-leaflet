@@ -6,6 +6,12 @@ export const tooltipConfig = {
     type: "OnOff",
     bindable: true,
     defaultValue: false,
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "boolean",
+      tooltip: "A boolean that controls tooltip visibility: `true` or `false`",
+    },
+    /* wwEditor:end */
   },
   tooltipContent: {
     label: { en: "Tooltip content" },
@@ -22,6 +28,13 @@ export const tooltipConfig = {
     defaultValue: "",
     responsive: true,
     bindable: true,
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "string",
+      tooltip:
+        'A string that defines the tooltip content: `"<b>Hello world!</b><br>I am a tooltip"`',
+    },
+    /* wwEditor:end */
   },
   tooltipDirection: {
     label: { en: "Tooltip direction" },
@@ -46,6 +59,13 @@ export const tooltipConfig = {
       return !specific__array.item || !specific__array.item.tooltip;
     },
     defaultValue: "auto",
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "string",
+      tooltip:
+        'A string that defines the tooltip direction: `"auto"`, `"top"`, `"bottom"`, `"right"`, or `"left"`',
+    },
+    /* wwEditor:end */
   },
   tooltipPermanent: {
     label: { en: "Permanent" },
@@ -61,6 +81,12 @@ export const tooltipConfig = {
       return !specific__array.item || !specific__array.item.tooltip;
     },
     defaultValue: false,
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "boolean",
+      tooltip: "A boolean that controls tooltip permanence: `true` or `false`",
+    },
+    /* wwEditor:end */
   },
 };
 

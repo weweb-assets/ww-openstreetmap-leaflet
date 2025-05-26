@@ -19,6 +19,12 @@ const circle = {
       min: 0,
       step: 1,
     },
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "number",
+      tooltip: "A number that defines the circle radius in meters: `5000`",
+    },
+    /* wwEditor:end */
   },
   // Add other circle-specific configurations here
 };
@@ -49,6 +55,12 @@ export default {
               propertyHelp: {
                 tooltip: CIRCLE_DATA_HELP,
               },
+              /* wwEditor:start */
+              bindingValidation: {
+                type: "array",
+                tooltip: CIRCLE_DATA_HELP,
+              },
+              /* wwEditor:end */
             },
             ...circle,
             ...tooltipConfig,
@@ -76,6 +88,13 @@ export default {
     },
     defaultValue: [],
     bindable: true,
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "array",
+      tooltip:
+        "An array of circle objects with data, radius, stroke, color, weight, opacity, fill, fillColor, fillOpacity, and tooltip properties",
+    },
+    /* wwEditor:end */
   },
   circleDataField: {
     hidden: (content, sidepanelContent, boundProps) =>

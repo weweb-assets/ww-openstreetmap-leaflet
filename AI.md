@@ -1,446 +1,253 @@
 ---
 name: ww-openstreetmap-leaflet
-description: An OpenStreetMap component based on Leaflet.js, supporting map features including markers, circles, and polygons with customizable styles and tooltips.
+description: An interactive OpenStreetMap component based on Leaflet.js, supporting markers, circles, and polygons with customizable styles, tooltips, and comprehensive event handling.
 keywords:
-  - map
-  - openstreetmap
-  - leaflet
-  - geolocation
-  - markers
-  - circles
-  - polygons
+  [
+    map,
+    openstreetmap,
+    leaflet,
+    geolocation,
+    markers,
+    circles,
+    polygons,
+    interactive map,
+    mapping,
+    coordinates,
+  ]
 ---
 
-# OpenStreetMap Leaflet Component
+#### ww-openstreetmap-leaflet
 
-## Component Overview
+**_Purpose:_**
+An interactive map component built on Leaflet.js that displays OpenStreetMap tiles with support for markers, circles, and polygons. Features comprehensive styling options, tooltip support, and extensive event handling for creating rich mapping experiences.
 
-A map component based on Leaflet.js that enables displaying interactive maps with markers, circles, and polygons. Key features include:
+**_Features:_**
 
-- Interactive OpenStreetMap maps with various tile providers
-- Custom markers with optional custom icons
-- Circles with customizable radius and styling
-- Polygons with customizable styling
-- Tooltip support for all map elements
-- Comprehensive styling options for all features
-- Support for both static and variable-bound data
+- Interactive OpenStreetMap with multiple tile provider support
+- Custom markers with optional custom icons and tooltips
+- Circles with customizable radius, styling, and tooltips
+- Polygons with customizable styling and tooltips
+- Comprehensive event system for map and element interactions
+- Field mapping system for dynamic data binding
+- Responsive design with automatic resizing
+- Extensive styling options for all map elements
+- Support for both static configuration and variable-bound data
 
-## Configuration Basics
+**_Properties:_**
 
-### Base Map Configuration
+**Base Map Configuration:**
 
-| Property                | Type    | Description                                        | Default                  |
-| ----------------------- | ------- | -------------------------------------------------- | ------------------------ |
-| `tileLayer`             | string  | Map tile provider name                             | `"OpenStreetMap.Mapnik"` |
-| `providerConfiguration` | object  | Configuration for providers requiring registration | `{}`                     |
-| `lat`                   | string  | Initial latitude                                   | `"46.603354"`            |
-| `lng`                   | string  | Initial longitude                                  | `"1.888334"`             |
-| `zoom`                  | number  | Initial zoom level (0-20)                          | `4`                      |
-| `zoomControl`           | boolean | Show zoom controls                                 | `true`                   |
-| `attributionControl`    | boolean | Show attribution                                   | `true`                   |
+- tileLayer: string - Map tile provider name. Default: `"OpenStreetMap.Mapnik"`. See [Leaflet Providers](https://leaflet-extras.github.io/leaflet-providers/preview/) for options
+- providerConfiguration: object - Configuration for providers requiring API keys. Default: `{}`
+- lat: string - Initial map latitude. Default: `"46.603354"`
+- lng: string - Initial map longitude. Default: `"1.888334"`
+- zoom: number - Initial zoom level (0-20). Default: `4`
+- zoomControl: boolean - Show zoom controls. Default: `true`
+- attributionControl: boolean - Show attribution. Default: `true`
 
-## Variable Binding Setup
+**Markers Configuration:**
 
-To use dynamic data with this component, follow these two critical steps:
+- markers: Array<object> - Array of marker objects. Default: `[]`
+- markerDataField: string - Field mapping for marker coordinates. Example: `"['data']"`
+- markerIconUrlField: string - Field mapping for custom icon URL. Example: `"['iconUrl']"`
+- markerIconWidthField: string - Field mapping for icon width. Example: `"['iconWidth']"`
+- markerIconHeightField: string - Field mapping for icon height. Example: `"['iconHeight']"`
+- markers_tooltipContentField: string - Field mapping for tooltip content. Example: `"['tooltipContent']"`
+- markers_tooltipDirectionField: string - Field mapping for tooltip direction. Example: `"['tooltipDirection']"`
+- markers_tooltipPermanentField: string - Field mapping for permanent tooltip. Example: `"['tooltipPermanent']"`
 
-### 1. Create Variable Bindings
+**Circles Configuration:**
 
-Bind each map element type to a variable with this structure:
+- circles: Array<object> - Array of circle objects. Default: `[]`
+- circleDataField: string - Field mapping for circle coordinates. Example: `"['data']"`
+- circleRadiusField: string - Field mapping for circle radius. Example: `"['radius']"`
+- circles_strokeField: string - Field mapping for stroke visibility. Example: `"['stroke']"`
+- circles_colorField: string - Field mapping for stroke color. Example: `"['color']"`
+- circles_weightField: string - Field mapping for stroke weight. Example: `"['weight']"`
+- circles_opacityField: string - Field mapping for stroke opacity. Example: `"['opacity']"`
+- circles_lineCapField: string - Field mapping for line cap style. Example: `"['lineCap']"`
+- circles_lineJoinField: string - Field mapping for line join style. Example: `"['lineJoin']"`
+- circles_dashArrayField: string - Field mapping for dash array. Example: `"['dashArray']"`
+- circles_dashOffsetField: string - Field mapping for dash offset. Example: `"['dashOffset']"`
+- circles_fillField: string - Field mapping for fill visibility. Example: `"['fill']"`
+- circles_fillColorField: string - Field mapping for fill color. Example: `"['fillColor']"`
+- circles_fillOpacityField: string - Field mapping for fill opacity. Example: `"['fillOpacity']"`
+- circles_fillRuleField: string - Field mapping for fill rule. Example: `"['fillRule']"`
+- circles_tooltipContentField: string - Field mapping for tooltip content. Example: `"['tooltipContent']"`
+- circles_tooltipDirectionField: string - Field mapping for tooltip direction. Example: `"['tooltipDirection']"`
+- circles_tooltipPermanentField: string - Field mapping for permanent tooltip. Example: `"['tooltipPermanent']"`
 
-```json
-"markers": {
-    "__wwtype": "f",
-    "code": "variables['your-variable-id']",
-    "defaultValue": []
-}
-```
+**Polygons Configuration:**
 
-### 2. Configure Field Mappings
+- polygons: Array<object> - Array of polygon objects. Default: `[]`
+- polygonDataField: string - Field mapping for polygon coordinates. Example: `"['data']"`
+- polygons_strokeField: string - Field mapping for stroke visibility. Example: `"['stroke']"`
+- polygons_colorField: string - Field mapping for stroke color. Example: `"['color']"`
+- polygons_weightField: string - Field mapping for stroke weight. Example: `"['weight']"`
+- polygons_opacityField: string - Field mapping for stroke opacity. Example: `"['opacity']"`
+- polygons_lineCapField: string - Field mapping for line cap style. Example: `"['lineCap']"`
+- polygons_lineJoinField: string - Field mapping for line join style. Example: `"['lineJoin']"`
+- polygons_dashArrayField: string - Field mapping for dash array. Example: `"['dashArray']"`
+- polygons_dashOffsetField: string - Field mapping for dash offset. Example: `"['dashOffset']"`
+- polygons_fillField: string - Field mapping for fill visibility. Example: `"['fill']"`
+- polygons_fillColorField: string - Field mapping for fill color. Example: `"['fillColor']"`
+- polygons_fillOpacityField: string - Field mapping for fill opacity. Example: `"['fillOpacity']"`
+- polygons_fillRuleField: string - Field mapping for fill rule. Example: `"['fillRule']"`
+- polygons_tooltipContentField: string - Field mapping for tooltip content. Example: `"['tooltipContent']"`
+- polygons_tooltipDirectionField: string - Field mapping for tooltip direction. Example: `"['tooltipDirection']"`
+- polygons_tooltipPermanentField: string - Field mapping for permanent tooltip. Example: `"['tooltipPermanent']"`
 
-Field mappings tell the component where to find specific properties in your data:
+**_Events:_**
 
-```json
-"markerDataField": "['data']",
-"circles_colorField": "['color']",
-"polygonDataField": "['data']"
-```
+- map:load: Triggered when map finishes loading. Payload: `{}`
+- map:click: Triggered when map is clicked. Payload: `{ latlng: { lat: number, lng: number }, originalEvent: Event }`
+- map:zoom: Triggered when map zoom changes. Payload: `{ zoom: number }`
+- map:move: Triggered when map is moved. Payload: `{ center: { lat: number, lng: number }, bounds: object }`
+- map:dragstart: Triggered when map drag starts. Payload: `{ center: { lat: number, lng: number } }`
+- map:dragend: Triggered when map drag ends. Payload: `{ center: { lat: number, lng: number } }`
+- marker:click: Triggered when marker is clicked. Payload: `{ marker: object, latlng: { lat: number, lng: number }, originalEvent: Event }`
+- marker:dragstart: Triggered when marker drag starts. Payload: `{ marker: object, latlng: { lat: number, lng: number } }`
+- marker:drag: Triggered during marker drag. Payload: `{ marker: object, latlng: { lat: number, lng: number } }`
+- marker:dragend: Triggered when marker drag ends. Payload: `{ marker: object, latlng: { lat: number, lng: number } }`
+- shape:click: Triggered when circle or polygon is clicked. Payload: `{ type: "circle"|"polygon", shape: object, latlng: { lat: number, lng: number } }`
+- shape:edit: Triggered when circle or polygon is edited. Payload: `{ type: "circle"|"polygon", shape: object, latlng: { lat: number, lng: number } }`
 
-This means:
+**_Example:_**
 
-- Look for coordinates in a property called `data` in each marker object
-- Look for circle stroke color in a property called `color` in each circle object
-- Look for polygon coordinates in a property called `data` in each polygon object
+- Basic map with markers
 
-## ⚠️ CRITICAL: Variable Data Structure Requirements
+<elements>
+{"uid":"map-basic","tag":"ww-openstreetmap-leaflet","name":"Interactive Map","props":{"lat":"48.8566","lng":"2.3522","zoom":10,"tileLayer":"OpenStreetMap.Mapnik","zoomControl":true,"attributionControl":true,"markers":{"js":"return variables['markers-data']"},"markerDataField":"['coordinates']","markerIconUrlField":"['icon']","markerIconWidthField":"['iconWidth']","markerIconHeightField":"['iconHeight']","markers_tooltipContentField":"['tooltip']","markers_tooltipDirectionField":"['tooltipDirection']","markers_tooltipPermanentField":"['tooltipPermanent']"},"events":[{"trigger":"marker:click","name":"Handle marker click","js":"console.log('Marker clicked:', event.marker)"}]}
+</elements>
 
-**THE MOST IMPORTANT ASPECT OF THIS COMPONENT:** Your variables MUST contain data formatted EXACTLY as shown in the examples below. This connection between field mappings and data structure is absolutely critical:
+- Map with circles and polygons
 
-1. The component uses field mappings (like `markerDataField: "['data']"`) to look for specific properties in your variable data
-2. Your variable data MUST include ALL properties that correspond to ALL field mappings
-3. The property names must EXACTLY match what is specified in the field mappings
-4. Missing properties or mismatched names will cause the component to silently fail with NO error messages
+<elements>
+{"uid":"map-advanced","tag":"ww-openstreetmap-leaflet","name":"Advanced Map","props":{"lat":"40.7128","lng":"-74.0060","zoom":8,"circles":{"js":"return variables['circles-data']"},"polygons":{"js":"return variables['polygons-data']"},"circleDataField":"['center']","circleRadiusField":"['radius']","circles_colorField":"['strokeColor']","circles_fillColorField":"['fillColor']","circles_tooltipContentField":"['description']","polygonDataField":"['coordinates']","polygons_colorField":"['borderColor']","polygons_fillColorField":"['areaColor']","polygons_tooltipContentField":"['name']"},"events":[{"trigger":"shape:click","name":"Handle shape click","js":"console.log('Shape clicked:', event.type, event.shape)"}]}
+</elements>
 
-The examples below show the EXACT format required for:
+**_Variable Data Structure Requirements:_**
 
-- Marker variable data (required for all markers to display correctly)
-- Circle variable data (required for all circles to display correctly)
-- Polygon variable data (required for all polygons to display correctly)
+**CRITICAL:** Your variables MUST contain data formatted EXACTLY as shown below. The component uses field mappings to look for specific properties in your data. Missing properties or mismatched names will cause silent failures.
 
-**COPY THESE EXAMPLES EXACTLY** and only change the specific values (coordinates, colors, etc.) while keeping all property names and structure identical.
-
-## Complete Implementation Example
-
-Below is a comprehensive example showing both component configuration and the matching data structure:
-
-### Component Configuration
-
-```json
-{
-  "default": {
-    // Base map configuration
-    "lat": "46.603354",
-    "lng": "1.888334",
-    "zoom": 7,
-    "tileLayer": "OpenStreetMap.Mapnik",
-    "zoomControl": true,
-    "attributionControl": true,
-    "providerConfiguration": "{}",
-
-    // Map elements bound to variables
-    "markers": {
-      "__wwtype": "f",
-      "code": "variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']"
-    },
-    "circles": {
-      "__wwtype": "f",
-      "code": "variables['89d75e62-d069-4861-b08d-17a46b96ec33']"
-    },
-    "polygons": {
-      "__wwtype": "f",
-      "code": "variables['c3e7a2d8-f5b1-42e9-9a83-87c6149b31c9']"
-    },
-
-    // === MARKERS FIELD MAPPINGS ===
-    // Data field mapping
-    "markerDataField": "['data']",
-    // Icon field mappings
-    "markerIconUrlField": "['iconUrl']",
-    "markerIconWidthField": "['iconWidth']",
-    "markerIconHeightField": "['iconHeight']",
-    // Tooltip field mappings
-    "markers_tooltipContentField": "['tooltipContent']",
-    "markers_tooltipDirectionField": "['tooltipDirection']",
-    "markers_tooltipPermanentField": "['tooltipPermanent']",
-
-    // === CIRCLES FIELD MAPPINGS ===
-    // Data and radius field mappings
-    "circleDataField": "['data']",
-    "circleRadiusField": "['radius']",
-    // Style field mappings
-    "circles_strokeField": "['stroke']",
-    "circles_colorField": "['color']",
-    "circles_weightField": "['weight']",
-    "circles_opacityField": "['opacity']",
-    "circles_lineCapField": "['lineCap']",
-    "circles_lineJoinField": "['lineJoin']",
-    "circles_dashArrayField": "['dashArray']",
-    "circles_dashOffsetField": "['dashOffset']",
-    "circles_fillField": "['fill']",
-    "circles_fillColorField": "['fillColor']",
-    "circles_fillOpacityField": "['fillOpacity']",
-    "circles_fillRuleField": "['fillRule']",
-    // Tooltip field mappings
-    "circles_tooltipContentField": "['tooltipContent']",
-    "circles_tooltipDirectionField": "['tooltipDirection']",
-    "circles_tooltipPermanentField": "['tooltipPermanent']",
-
-    // === POLYGONS FIELD MAPPINGS ===
-    // Data field mapping
-    "polygonDataField": "['data']",
-    // Style field mappings
-    "polygons_strokeField": "['stroke']",
-    "polygons_colorField": "['color']",
-    "polygons_weightField": "['weight']",
-    "polygons_opacityField": "['opacity']",
-    "polygons_lineCapField": "['lineCap']",
-    "polygons_lineJoinField": "['lineJoin']",
-    "polygons_dashArrayField": "['dashArray']",
-    "polygons_dashOffsetField": "['dashOffset']",
-    "polygons_fillField": "['fill']",
-    "polygons_fillColorField": "['fillColor']",
-    "polygons_fillOpacityField": "['fillOpacity']",
-    "polygons_fillRuleField": "['fillRule']",
-    // Tooltip field mappings
-    "polygons_tooltipContentField": "['tooltipContent']",
-    "polygons_tooltipDirectionField": "['tooltipDirection']",
-    "polygons_tooltipPermanentField": "['tooltipPermanent']"
-  }
-}
-```
-
-**EXTREMELY IMPORTANT:** The variable data referenced in the configuration above MUST EXACTLY match the format shown in the examples below. For instance:
-
-- The variable `variables['b0bf44f7-f0a4-44b0-abe9-a65019b80c0a']` (markers) MUST contain an array of objects with ALL the properties needed.
-- The variable `variables['89d75e62-d069-4861-b08d-17a46b96ec33']` (circles) MUST contain an array of objects with ALL the properties needed.
-- The variable `variables['c3e7a2d8-f5b1-42e9-9a83-87c6149b31c9']` (polygons) MUST contain an array of objects with ALL the properties needed.
-
-If the data in your variables does not exactly match these formats, with all required properties and correct property names, **the component will silently fail to render the map elements without any error messages**. This mapping between the variable binding and the data format is PRIMORDIAL for the component to function correctly.
-
-### Required Data Structure
-
-So, your variables must contain data with properties that exactly match your field mappings. Below are comprehensive examples including ALL required properties:
-
-#### Markers Variable Example
+**Markers Variable Example:**
 
 ```javascript
 [
   {
-    // Required for markerDataField
-    data: [48.8566, 2.3522], // [latitude, longitude]
-
-    // Required for custom icon field mappings
+    coordinates: [48.8566, 2.3522], // [latitude, longitude] - REQUIRED
     customIcon: true,
-    iconUrl: "https://example.com/marker-icon.png",
+    icon: "https://example.com/marker.png",
     iconWidth: "32px",
     iconHeight: "32px",
-
-    // Required for tooltip field mappings
     tooltip: true,
     tooltipContent: "Paris - The City of Light",
-    tooltipDirection: "top", // "auto", "top", "bottom", "left", or "right"
-    tooltipPermanent: false,
-  },
-  {
-    // Second marker with different properties
-    data: [51.5074, -0.1278],
-    customIcon: false, // Will use default icon
-    iconUrl: "", // Not needed when customIcon is false, but include it anyway
-    iconWidth: "32px", // Still include even if customIcon is false
-    iconHeight: "32px", // Still include even if customIcon is false
-    tooltip: true,
-    tooltipContent: "London",
-    tooltipDirection: "bottom",
+    tooltipDirection: "top", // "auto", "top", "bottom", "left", "right"
     tooltipPermanent: false,
   },
 ];
 ```
 
-#### Circles Variable Example
+**Circles Variable Example:**
 
 ```javascript
 [
   {
-    // Required for circleDataField and circleRadiusField
-    data: [48.8566, 2.3522], // [latitude, longitude]
-    radius: 5000, // radius in meters
-
-    // Required for circles_strokeField and related style mappings
+    center: [48.8566, 2.3522], // [latitude, longitude] - REQUIRED
+    radius: 5000, // radius in meters - REQUIRED
     stroke: true,
-    color: "#3388ff", // Stroke color
-    weight: 3, // Stroke width in pixels
-    opacity: 1, // Stroke opacity (0-1)
-
-    // Required for line styling field mappings
-    lineCap: "round", // "butt", "round", or "square"
-    lineJoin: "round", // "miter", "round", or "bevel"
-    dashArray: null, // For dashed lines, e.g., "5, 5" or null
-    dashOffset: null, // Dash pattern offset or null
-
-    // Required for circles_fillField and related style mappings
-    fill: true,
-    fillColor: "#3388ff", // Fill color
-    fillOpacity: 0.2, // Fill opacity (0-1)
-    fillRule: "evenodd", // "nonzero" or "evenodd"
-
-    // Required for tooltip field mappings
-    tooltip: true,
-    tooltipContent: "5km Radius around Paris",
-    tooltipDirection: "top", // "auto", "top", "bottom", "left", or "right"
-    tooltipPermanent: false, // Whether tooltip is always visible
-  },
-  {
-    // Second circle with different properties
-    data: [51.5074, -0.1278],
-    radius: 10000,
-
-    stroke: true,
-    color: "#ff3333",
-    weight: 2,
-    opacity: 0.8,
-
-    lineCap: "round",
-    lineJoin: "round",
-    dashArray: "5, 5", // Example of a dashed line
+    strokeColor: "#3388ff",
+    weight: 3,
+    opacity: 1,
+    lineCap: "round", // "butt", "round", "square"
+    lineJoin: "round", // "miter", "round", "bevel"
+    dashArray: null, // "5,5" for dashed lines or null
     dashOffset: null,
-
     fill: true,
-    fillColor: "#ff3333",
-    fillOpacity: 0.1,
-    fillRule: "evenodd",
-
+    fillColor: "#3388ff",
+    fillOpacity: 0.2,
+    fillRule: "evenodd", // "nonzero", "evenodd"
     tooltip: true,
-    tooltipContent: "10km Radius around London",
+    description: "5km radius around Paris",
     tooltipDirection: "auto",
     tooltipPermanent: false,
   },
 ];
 ```
 
-#### Polygons Variable Example
+**Polygons Variable Example:**
 
 ```javascript
 [
   {
-    // Required for polygonDataField
-    data: [
+    coordinates: [
+      // Array of [lat, lng] coordinates - REQUIRED
       [48.86, 2.34],
       [48.85, 2.35],
       [48.85, 2.33],
       [48.87, 2.33],
-    ], // Array of [lat, lng] coordinates forming the polygon
-
-    // Required for polygons_strokeField and related style mappings
-    stroke: true,
-    color: "#3388ff", // Stroke color
-    weight: 3, // Stroke width in pixels
-    opacity: 1, // Stroke opacity (0-1)
-
-    // Required for line styling field mappings
-    lineCap: "round", // "butt", "round", or "square"
-    lineJoin: "round", // "miter", "round", or "bevel"
-    dashArray: null, // For dashed lines, e.g., "5, 5" or null
-    dashOffset: null, // Dash pattern offset or null
-
-    // Required for polygons_fillField and related style mappings
-    fill: true,
-    fillColor: "#3388ff", // Fill color
-    fillOpacity: 0.2, // Fill opacity (0-1)
-    fillRule: "evenodd", // "nonzero" or "evenodd"
-
-    // Required for tooltip field mappings
-    tooltip: true,
-    tooltipContent: "Paris District",
-    tooltipDirection: "top", // "auto", "top", "bottom", "left", or "right"
-    tooltipPermanent: false, // Whether tooltip is always visible
-  },
-  {
-    // Second polygon with different properties
-    data: [
-      [51.51, -0.12],
-      [51.5, -0.13],
-      [51.52, -0.14],
-      [51.53, -0.11],
     ],
-
     stroke: true,
-    color: "#ff3333",
-    weight: 2,
-    opacity: 0.8,
-
+    borderColor: "#3388ff",
+    weight: 3,
+    opacity: 1,
     lineCap: "round",
     lineJoin: "round",
-    dashArray: "5, 5", // Example of a dashed line
+    dashArray: null,
     dashOffset: null,
-
     fill: true,
-    fillColor: "#ff3333",
-    fillOpacity: 0.1,
+    areaColor: "#3388ff",
+    fillOpacity: 0.2,
     fillRule: "evenodd",
-
     tooltip: true,
-    tooltipContent: "London District",
-    tooltipDirection: "auto",
+    name: "Paris District",
+    tooltipDirection: "top",
     tooltipPermanent: false,
   },
 ];
 ```
 
-**IMPORTANT:** Even if you set some features to `false` (like `tooltip: false` or `customIcon: false`), you must still include ALL the related properties in your data objects.
+**_Notes:_**
 
-## ⚠️ Critical Implementation Requirements
+**CRITICAL:** Field mappings and data structure must match exactly. For example, if `markerDataField` is `"['coordinates']"`, your marker data MUST have a `coordinates` property.
 
-The component performs strict property lookups with no fallbacks or error messages. Missing required properties will cause elements to silently fail to render.
+**CRITICAL:** Coordinates must always be in [latitude, longitude] format as arrays of numbers.
 
-### Required Field Mappings
+**CRITICAL:** All field mappings must be provided even if features are disabled. Include all properties in your data objects.
 
-You must include ALL field mappings for each map element type you use:
+**CRITICAL:** Radius for circles is in meters. Use appropriate values based on your zoom level.
 
-#### For Markers
+**CRITICAL:** Polygons require at least 3 coordinate points to be valid.
 
-- Data: `markerDataField`
-- Icon (if using custom icons): `markerIconUrlField`, `markerIconWidthField`, `markerIconHeightField`
-- Tooltip: `markers_tooltipContentField`, `markers_tooltipDirectionField`, `markers_tooltipPermanentField`
+**CRITICAL:** Tooltip directions: "auto", "top", "bottom", "left", "right"
 
-#### For Circles
+**CRITICAL:** Line caps: "butt", "round", "square"
 
-- Data: `circleDataField`, `circleRadiusField`
-- Stroke: `circles_strokeField`, `circles_colorField`, `circles_weightField`, `circles_opacityField`
-- Line styling (optional): `circles_lineCapField`, `circles_lineJoinField`, `circles_dashArrayField`, `circles_dashOffsetField`
-- Fill: `circles_fillField`, `circles_fillColorField`, `circles_fillOpacityField`, `circles_fillRuleField`
-- Tooltip: `circles_tooltipContentField`, `circles_tooltipDirectionField`, `circles_tooltipPermanentField`
+**CRITICAL:** Line joins: "miter", "round", "bevel"
 
-#### For Polygons
+**CRITICAL:** Fill rules: "nonzero", "evenodd"
 
-- Data: `polygonDataField`
-- Stroke: `polygons_strokeField`, `polygons_colorField`, `polygons_weightField`, `polygons_opacityField`
-- Line styling (optional): `polygons_lineCapField`, `polygons_lineJoinField`, `polygons_dashArrayField`, `polygons_dashOffsetField`
-- Fill: `polygons_fillField`, `polygons_fillColorField`, `polygons_fillOpacityField`, `polygons_fillRuleField`
-- Tooltip: `polygons_tooltipContentField`, `polygons_tooltipDirectionField`, `polygons_tooltipPermanentField`
+**CRITICAL:** The component performs strict property lookups with no fallbacks. Missing required properties cause silent failures.
 
-### Required Data Properties
+**_Complete Content Example:_**
 
-Your data objects MUST include properties for ALL field mappings you configure:
-
-#### For Markers
-
-- Coordinates: `data` property with [latitude, longitude] array
-- Custom icon (if enabled): `customIcon`, `iconUrl`, `iconWidth`, `iconHeight`
-- Tooltip (if enabled): `tooltip`, `tooltipContent`, `tooltipDirection`, `tooltipPermanent`
-
-#### For Circles
-
-- Coordinates and size: `data` property with [latitude, longitude] array, `radius` in meters
-- Stroke properties: `stroke`, `color`, `weight`, `opacity`
-- Line styling (if needed): `lineCap`, `lineJoin`, `dashArray`, `dashOffset`
-- Fill properties: `fill`, `fillColor`, `fillOpacity`, `fillRule`
-- Tooltip (if enabled): `tooltip`, `tooltipContent`, `tooltipDirection`, `tooltipPermanent`
-
-#### For Polygons
-
-- Coordinates: `data` property with array of [latitude, longitude] arrays forming the polygon
-- Stroke properties: `stroke`, `color`, `weight`, `opacity`
-- Line styling (if needed): `lineCap`, `lineJoin`, `dashArray`, `dashOffset`
-- Fill properties: `fill`, `fillColor`, `fillOpacity`, `fillRule`
-- Tooltip (if enabled): `tooltip`, `tooltipContent`, `tooltipDirection`, `tooltipPermanent`
-
-### Common Implementation Errors
-
-- **Missing field mappings**: Include all required field mappings even if you don't use all features
-- **Missing data properties**: Include all properties in your data that correspond to your field mappings
-- **Mismatched property names**: Property names in data must match exactly what your field mapping expects
-- **Incorrect data types**: Coordinates must be [lat, lng] arrays, radius must be a number, etc.
-- **Empty default values**: Always provide proper default values in your variable binding
-
-**NOTE:** Even if you don't use certain features (like tooltips), you must still include the corresponding properties in your data with appropriate values (e.g., `tooltip: false`).
-
-## Best Practices
-
-- **Coordinate format**: Latitude first, longitude second: `[lat, lng]`
-- **Zoom levels**: Use 0-4 for world/continent view, 5-10 for country/region, 11-15 for city/district, 16+ for streets/buildings
-- **Custom markers**: Keep icon images small (32x32px is recommended) for better performance
-- **Circle radius**: Express in meters, adjust based on zoom level (larger for zoomed-out views)
-- **Polygon complexity**: Keep polygon coordinates to a reasonable amount for better performance
-- **Styling consistency**: Use similar styling options for related map elements
-- **Testing**: Test at different zoom levels and viewport sizes
-- **Provider config**: Some tile providers require API keys through the providerConfiguration property
-
-## Technical Notes
-
-- The component builds on [Leaflet.js](https://leafletjs.com/) and [Leaflet Providers](https://github.com/leaflet-extras/leaflet-providers)
-- Tooltip direction can be "auto", "top", "bottom", "left", or "right"
-- Stroke weight refers to the line width in pixels
-- Opacity values range from 0 (transparent) to 1 (opaque)
-- Line caps can be "butt", "round", or "square"
-- Line joins can be "miter", "round", or "bevel"
-- Fill rules can be "nonzero" or "evenodd"
-- The component is responsive and will adjust to container size changes
+```json
+{"uid":"3bcf3c29-f34e-4bcb-b2ac-162bd161c762","name":null,"wwObjectBaseId":"4596ca43-6a5d-4e9f-85f4-34bf992f2b91","libraryComponentBaseId":null,
+"parentSectionId":"1eeec653-b87d-4d99-a32f-631e666d035d","parentLibraryComponentId":null,"\_state":{"style":{"default":{"align":"center","width":"80%","height":"unset",
+"customCss":{"aspect-ratio":1},"textAlign":"center","aspectRatio":1}},"states":[],"interactions":[]},"content":{"default":{"lat":"40.7128","lng":"-74.0060","zoom":4,
+"circles":null,"markers":{"code":"variables['ddd1d461-65c4-48f9-b240-9546ee5e24d4']","**wwtype":"f"},"polygons":{"code":"variables
+['966d6af1-ad8d-4359-9e6f-11d9807836f8']","**wwtype":"f","defaultValue":[{"data":[[37,-109.05],[41,-109.03],[41,-102.05],[37,-102.04]],"full":true,"color":"#3388ff",
+"stroke":true,"weight":3,"lineCap":"round","opacity":1,"tooltip":false,"fillRule":"evenodd","lineJoin":"round","dashArray":null,"fillColor":"#3388ff","dashOffset":null,
+"fillOpacity":0.2,"tooltipContent":"<b>Hello world!</b><br>I am a tooltip","tooltipDirection":"auto","tooltipPermanent":false}]},"tileLayer":"OpenStreetMap.DE",
+"zoomControl":true,"circleDataField":"['data']","markerDataField":"['data']","polygonDataField":"['data']","circleRadiusField":"['radius']","circles_fillField":"['fill']
+","attributionControl":true,"circles_colorField":"['color']","markerIconUrlField":"['iconUrl']","polygons_fillField":"['fill']","circles_strokeField":"['stroke']",
+"circles_weightField":"['weight']","polygons_colorField":"['color']","circles_lineCapField":"['lineCap']","circles_opacityField":"['opacity']","markerIconWidthField":"
+['iconWidth']","polygons_strokeField":"['stroke']","polygons_weightField":"['weight']","circles_fillRuleField":"['fillRule']","circles_lineJoinField":"['lineJoin']",
+"markerIconHeightField":"['iconHeight']","polygons_lineCapField":"['lineCap']","polygons_opacityField":"['opacity']","providerConfiguration":"{}",
+"circles_dashArrayField":"['dashArray']","circles_fillColorField":"['fillColor']","polygons_fillRuleField":"['fillRule']","polygons_lineJoinField":"['lineJoin']",
+"circles_dashOffsetField":"['dashOffset']","polygons_dashArrayField":"['dashArray']","polygons_fillColorField":"['fillColor']","circles_fillOpacityField":"
+['fillOpacity']","polygons_dashOffsetField":"['dashOffset']","polygons_fillOpacityField":"['fillOpacity']","circles_tooltipContentField":"['tooltipContent']",
+"markers_tooltipContentField":"['tooltipContent']","polygons_tooltipContentField":"['tooltipContent']","circles_tooltipDirectionField":"['tooltipDirection']",
+"circles_tooltipPermanentField":"['tooltipPermanent']","markers_tooltipDirectionField":"['tooltipDirection']","markers_tooltipPermanentField":"['tooltipPermanent']",
+"polygons_tooltipDirectionField":"['tooltipDirection']","polygons_tooltipPermanentField":"['tooltipPermanent']"}}}
+```

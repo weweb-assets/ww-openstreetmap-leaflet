@@ -9,6 +9,20 @@ import default_shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
 import { markerFields, circleFields, polygonFields } from "./fields.js";
 
+// Utility function for coordinate validation
+const isValidCoordinate = (lat, lng) => {
+  return (
+    !isNaN(lat) &&
+    !isNaN(lng) &&
+    isFinite(lat) &&
+    isFinite(lng) &&
+    lat >= -90 &&
+    lat <= 90 &&
+    lng >= -180 &&
+    lng <= 180
+  );
+};
+
 const generateVectorStyles = (fields, vector) => {
   return {
     stroke: fields[`${vector}_strokeField`],
@@ -55,33 +69,119 @@ export default function useLeafletMap(
 
   const initializeMap = () => {
     try {
+      // Validate map container exists and is a valid DOM element
+      if (!mapContainer) {
+        console.warn("Map container is not defined");
+        return;
+      }
+
+      // Check if container is a DOM element or has the necessary properties
+      if (
+        typeof mapContainer === "object" &&
+        !mapContainer.nodeType &&
+        !mapContainer.jquery
+      ) {
+        console.warn("Map container is not a valid DOM element");
+        return;
+      }
+
+      // Clean up existing map instance
       if (map) {
-        map.remove();
+        try {
+          map.remove();
+        } catch (cleanupError) {
+          console.warn(
+            "Error cleaning up previous map instance:",
+            cleanupError
+          );
+        }
+        map = null;
       }
 
-      const lat = parseFloat(content.lat);
-      const lng = parseFloat(content.lng);
-      const zoom = parseInt(content.zoom);
-
-      if (isNaN(lat) || isNaN(lng) || isNaN(zoom)) {
-        throw new Error("Invalid coordinates or zoom level");
+      // Validate content object
+      if (!content || typeof content !== "object") {
+        console.error("Invalid content configuration");
+        return;
       }
 
+      // Validate and parse coordinates with fallbacks
+      const lat = content.lat !== undefined ? parseFloat(content.lat) : 0;
+      const lng = content.lng !== undefined ? parseFloat(content.lng) : 0;
+      const zoom = content.zoom !== undefined ? parseInt(content.zoom) : 1;
+
+      // Enhanced coordinate validation including special values
+      const isValidLat = (value) => {
+        return !isNaN(value) && isFinite(value) && value >= -90 && value <= 90;
+      };
+
+      const isValidLng = (value) => {
+        return (
+          !isNaN(value) && isFinite(value) && value >= -180 && value <= 180
+        );
+      };
+
+      const isValidZoom = (value) => {
+        return !isNaN(value) && isFinite(value) && value >= 0 && value <= 20;
+      };
+
+      // Validate coordinates are within valid ranges
+      if (!isValidLat(lat)) {
+        console.error(
+          "Invalid latitude value:",
+          content.lat,
+          "- using default 0"
+        );
+      }
+      if (!isValidLng(lng)) {
+        console.error(
+          "Invalid longitude value:",
+          content.lng,
+          "- using default 0"
+        );
+      }
+      if (!isValidZoom(zoom)) {
+        console.error("Invalid zoom value:", content.zoom, "- using default 1");
+      }
+
+      const validLat = isValidLat(lat) ? lat : 0;
+      const validLng = isValidLng(lng) ? lng : 0;
+      const validZoom = isValidZoom(zoom) ? zoom : 1;
+
+      // Create map with error handling
       map = L.map(mapContainer, {
-        center: [lat, lng],
-        zoom: zoom,
-        zoomControl: content.zoomControl,
+        center: [validLat, validLng],
+        zoom: validZoom,
+        zoomControl: content.zoomControl !== false,
         markerZoomAnimation: true,
-        attributionControl: content.attributionControl,
+        attributionControl: content.attributionControl !== false,
       });
 
-      const tileLayer = _L.tileLayer.provider(content.tileLayer);
+      // Add tile layer with error handling
+      let tileLayer;
+      try {
+        const tileLayerName = content.tileLayer || "OpenStreetMap.Mapnik";
+        tileLayer = _L.tileLayer.provider(tileLayerName);
 
-      tileLayer.on("tileerror", (error) => {
-        console.error("Tile loading error:", error);
-      });
+        tileLayer.on("tileerror", (error) => {
+          console.warn("Tile loading error:", error);
+        });
 
-      tileLayer.addTo(map);
+        tileLayer.addTo(map);
+      } catch (tileError) {
+        console.error("Error creating tile layer:", tileError);
+        // Fallback to basic OpenStreetMap if provider fails
+        try {
+          tileLayer = _L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+              attribution: "© OpenStreetMap contributors",
+            }
+          );
+          tileLayer.addTo(map);
+        } catch (fallbackError) {
+          console.error("Failed to load fallback tile layer:", fallbackError);
+        }
+      }
 
       // Add map event listeners
       map.on("load", () => fireEvent("map:load"));
@@ -105,12 +205,28 @@ export default function useLeafletMap(
         fireEvent("map:dragend", { center: map.getCenter() })
       );
 
-      addMarkers();
-      addCircles();
-      addPolygons();
+      // Add layers with individual error handling
+      try {
+        addMarkers();
+      } catch (markerError) {
+        console.error("Error adding markers:", markerError);
+      }
+
+      try {
+        addCircles();
+      } catch (circleError) {
+        console.error("Error adding circles:", circleError);
+      }
+
+      try {
+        addPolygons();
+      } catch (polygonError) {
+        console.error("Error adding polygons:", polygonError);
+      }
     } catch (error) {
       console.error("Map initialization error:", error);
-      throw error;
+      // Don't re-throw the error to prevent crashes
+      map = null;
     }
   };
 
@@ -118,107 +234,136 @@ export default function useLeafletMap(
     try {
       clearLayers(markerLayers);
 
+      if (!map) {
+        console.warn("Map not initialized, skipping markers");
+        return;
+      }
+
       if (!Array.isArray(content.markers) || !content.markers.length) return;
 
-      content.markers.forEach((markerData) => {
-        if (!markerData) return;
+      content.markers.forEach((markerData, index) => {
+        try {
+          if (!markerData) return;
 
-        const fields = markerFields(content, markerData);
+          const fields = markerFields(content, markerData);
 
-        const {
-          data,
-          customIcon,
-          iconUrl,
-          iconWidth,
-          iconHeight,
-          tooltip,
-          tooltipContent,
-          tooltipDirection,
-          tooltipPermanent,
-        } =
-          boundStates && boundStates.markers.value
-            ? {
-                data: fields.markerDataField,
-                customIcon:
-                  typeof fields.markerIconUrlField === "string" &&
-                  fields.markerIconUrlField.length,
-                iconUrl: fields.markerIconUrlField,
-                iconWidth: fields.markerIconWidthField,
-                iconHeight: fields.markerIconHeightField,
-                tooltip:
-                  typeof fields.markers_tooltipContentField === "string" &&
-                  fields.markers_tooltipContentField.length,
-                tooltipContent: fields.markers_tooltipContentField,
-                tooltipDirection: fields.markers_tooltipDirectionField,
-                tooltipPermanent: fields.markers_tooltipPermanentField,
-              }
-            : markerData;
+          const {
+            data,
+            customIcon,
+            iconUrl,
+            iconWidth,
+            iconHeight,
+            tooltip,
+            tooltipContent,
+            tooltipDirection,
+            tooltipPermanent,
+          } =
+            boundStates && boundStates.markers.value
+              ? {
+                  data: fields.markerDataField,
+                  customIcon:
+                    typeof fields.markerIconUrlField === "string" &&
+                    fields.markerIconUrlField.length,
+                  iconUrl: fields.markerIconUrlField,
+                  iconWidth: fields.markerIconWidthField,
+                  iconHeight: fields.markerIconHeightField,
+                  tooltip:
+                    typeof fields.markers_tooltipContentField === "string" &&
+                    fields.markers_tooltipContentField.length,
+                  tooltipContent: fields.markers_tooltipContentField,
+                  tooltipDirection: fields.markers_tooltipDirectionField,
+                  tooltipPermanent: fields.markers_tooltipPermanentField,
+                }
+              : markerData;
 
-        if (!data || data.length !== 2) return;
+          // Validate marker data
+          if (!data || !Array.isArray(data) || data.length !== 2) {
+            console.warn(`Invalid marker data at index ${index}:`, data);
+            return;
+          }
 
-        let markerInstance, icon;
-        if (
-          customIcon &&
-          iconUrl &&
-          typeof iconUrl === "string" &&
-          iconUrl.length
-        ) {
-          icon = new L.Icon({
-            iconUrl: iconUrl.startsWith("designs/")
-              ? `${wwLib.wwUtils.getCdnPrefix()}${iconUrl}`
-              : iconUrl,
-            iconSize: [
-              wwLib.wwUtils.getLengthUnit(iconWidth)[0],
-              wwLib.wwUtils.getLengthUnit(iconHeight)[0],
-            ],
-          });
+          // Validate coordinates with enhanced checks
+          const lat = parseFloat(data[0]);
+          const lng = parseFloat(data[1]);
 
-          markerInstance = L.marker(data, { icon }).addTo(map);
-        } else {
-          delete L.Icon.Default.prototype._getIconUrl;
+          if (!isValidCoordinate(lat, lng)) {
+            console.warn(
+              `Invalid marker coordinates at index ${index}:`,
+              data,
+              `(lat: ${lat}, lng: ${lng})`
+            );
+            return;
+          }
 
-          L.Icon.Default.mergeOptions({
-            iconRetinaUrl: default_iconRetinaUrl,
-            iconUrl: default_iconUrl,
-            shadowUrl: default_shadowUrl,
-          });
+          let markerInstance, icon;
+          if (
+            customIcon &&
+            iconUrl &&
+            typeof iconUrl === "string" &&
+            iconUrl.length
+          ) {
+            icon = new L.Icon({
+              iconUrl: iconUrl.startsWith("designs/")
+                ? `${wwLib.wwUtils.getCdnPrefix()}${iconUrl}`
+                : iconUrl,
+              iconSize: [
+                wwLib.wwUtils.getLengthUnit(iconWidth)[0],
+                wwLib.wwUtils.getLengthUnit(iconHeight)[0],
+              ],
+            });
 
-          markerInstance = L.marker(data).addTo(map);
+            markerInstance = L.marker(data, { icon }).addTo(map);
+          } else {
+            delete L.Icon.Default.prototype._getIconUrl;
+
+            L.Icon.Default.mergeOptions({
+              iconRetinaUrl: default_iconRetinaUrl,
+              iconUrl: default_iconUrl,
+              shadowUrl: default_shadowUrl,
+            });
+
+            markerInstance = L.marker(data).addTo(map);
+          }
+
+          if (
+            tooltip &&
+            typeof tooltipContent === "string" &&
+            tooltipContent.length
+          ) {
+            markerInstance.bindTooltip(tooltipContent, {
+              permanent: tooltipPermanent,
+              direction: tooltipDirection,
+            });
+          }
+
+          markerLayers.value.push(markerInstance);
+
+          // Add event listeners
+          markerInstance.on("click", (e) =>
+            fireEvent("marker:click", {
+              marker: markerData,
+              latlng: e.latlng,
+              originalEvent: e,
+            })
+          );
+          markerInstance.on("dragstart", (e) =>
+            fireEvent("marker:dragstart", {
+              marker: markerData,
+              latlng: e.latlng,
+            })
+          );
+          markerInstance.on("drag", (e) =>
+            fireEvent("marker:drag", { marker: markerData, latlng: e.latlng })
+          );
+          markerInstance.on("dragend", (e) =>
+            fireEvent("marker:dragend", {
+              marker: markerData,
+              latlng: e.latlng,
+            })
+          );
+        } catch (markerError) {
+          console.warn(`Error adding marker at index ${index}:`, markerError);
         }
-
-        if (
-          tooltip &&
-          typeof tooltipContent === "string" &&
-          tooltipContent.length
-        ) {
-          markerInstance.bindTooltip(tooltipContent, {
-            permanent: tooltipPermanent,
-            direction: tooltipDirection,
-          });
-        }
-
-        markerLayers.value.push(markerInstance);
-
-        // Add event listeners
-        markerInstance.on("click", (e) =>
-          fireEvent("marker:click", {
-            marker: markerData,
-            latlng: e.latlng,
-            originalEvent: e,
-          })
-        );
-        markerInstance.on("dragstart", (e) =>
-          fireEvent("marker:dragstart", {
-            marker: markerData,
-            latlng: e.latlng,
-          })
-        );
-        markerInstance.on("drag", (e) =>
-          fireEvent("marker:drag", { marker: markerData, latlng: e.latlng })
-        );
-        markerInstance.on("dragend", (e) =>
-          fireEvent("marker:dragend", { marker: markerData, latlng: e.latlng })
-        );
       });
     } catch (error) {
       console.error("Error adding markers:", error);
@@ -228,69 +373,119 @@ export default function useLeafletMap(
   const addCircles = () => {
     try {
       clearLayers(circleLayers);
+
+      if (!map) {
+        console.warn("Map not initialized, skipping circles");
+        return;
+      }
+
       if (!Array.isArray(content.circles) || !content.circles.length) return;
 
-      content.circles.forEach((circleData) => {
-        if (!circleData) return;
+      content.circles.forEach((circleData, index) => {
+        try {
+          if (!circleData) return;
 
-        const fields = circleFields(content, circleData);
+          const fields = circleFields(content, circleData);
 
-        const {
-          data,
-          radius,
-          tooltip,
-          tooltipContent,
-          tooltipDirection,
-          tooltipPermanent,
-          ...styles
-        } =
-          boundStates && boundStates.circles.value
-            ? {
-                data: fields.circleDataField,
-                radius: fields.circleRadiusField,
-                tooltip:
-                  typeof fields.circles_tooltipContentField === "string" &&
-                  fields.circles_tooltipContentField.length,
-                tooltipContent: fields.circles_tooltipContentField,
-                tooltipDirection: fields.circles_tooltipDirectionField,
-                tooltipPermanent: fields.circles_tooltipPermanentField,
-                ...generateVectorStyles(fields, "circles"),
-              }
-            : circleData;
+          const {
+            data,
+            radius,
+            tooltip,
+            tooltipContent,
+            tooltipDirection,
+            tooltipPermanent,
+            ...styles
+          } =
+            boundStates && boundStates.circles.value
+              ? {
+                  data: fields.circleDataField,
+                  radius: fields.circleRadiusField,
+                  tooltip:
+                    typeof fields.circles_tooltipContentField === "string" &&
+                    fields.circles_tooltipContentField.length,
+                  tooltipContent: fields.circles_tooltipContentField,
+                  tooltipDirection: fields.circles_tooltipDirectionField,
+                  tooltipPermanent: fields.circles_tooltipPermanentField,
+                  ...generateVectorStyles(fields, "circles"),
+                }
+              : circleData;
 
-        if (!data || !data.length) return;
+          // Validate circle data
+          if (!data || !Array.isArray(data) || data.length !== 2) {
+            console.warn(`Invalid circle data at index ${index}:`, data);
+            return;
+          }
 
-        let circleInstance = L.circle(data, { ...styles, radius }).addTo(map);
+          // Validate coordinates with enhanced checks
+          const lat = parseFloat(data[0]);
+          const lng = parseFloat(data[1]);
 
-        if (
-          tooltip &&
-          typeof tooltipContent === "string" &&
-          tooltipContent.length
-        ) {
-          circleInstance.bindTooltip(tooltipContent, {
-            permanent: tooltipPermanent,
-            direction: tooltipDirection,
-          });
-        }
+          if (!isValidCoordinate(lat, lng)) {
+            console.warn(
+              `Invalid circle coordinates at index ${index}:`,
+              data,
+              `(lat: ${lat}, lng: ${lng})`
+            );
+            return;
+          }
 
-        circleLayers.value.push(circleInstance);
+          // Enhanced radius validation
+          const validRadius = parseFloat(radius);
+          if (
+            isNaN(validRadius) ||
+            !isFinite(validRadius) ||
+            validRadius <= 0
+          ) {
+            console.warn(
+              `Invalid circle radius at index ${index}:`,
+              radius,
+              `(parsed: ${validRadius})`
+            );
+            return;
+          }
 
-        // Add event listeners
-        circleInstance.on("click", (e) =>
-          fireEvent("shape:click", {
-            type: "circle",
-            shape: circleData,
-            latlng: e.latlng,
-          })
-        );
-        if (content.editableShapes) {
-          circleInstance.on("edit", (e) =>
-            fireEvent("shape:edit", {
+          // Check for extremely large radius values that might cause performance issues
+          if (validRadius > 10000000) {
+            // 10,000 km
+            console.warn(
+              `Circle radius at index ${index} is very large (${validRadius}m). This might cause performance issues.`
+            );
+          }
+
+          let circleInstance = L.circle(data, { ...styles, radius }).addTo(map);
+
+          if (
+            tooltip &&
+            typeof tooltipContent === "string" &&
+            tooltipContent.length
+          ) {
+            circleInstance.bindTooltip(tooltipContent, {
+              permanent: tooltipPermanent,
+              direction: tooltipDirection,
+            });
+          }
+
+          circleLayers.value.push(circleInstance);
+
+          // Add event listeners
+          circleInstance.on("click", (e) =>
+            fireEvent("shape:click", {
               type: "circle",
               shape: circleData,
               latlng: e.latlng,
             })
           );
+          if (content.editableShapes) {
+            circleInstance.on("edit", (e) =>
+              fireEvent("shape:edit", {
+                type: "circle",
+                shape: circleData,
+                latlng: e.latlng,
+              })
+            );
+          }
+        } catch (circleError) {
+          console.warn(`Error adding circle at index ${index}:`, circleError);
         }
       });
     } catch (error) {
@@ -302,71 +497,135 @@ export default function useLeafletMap(
     try {
       clearLayers(polygonLayers);
 
+      if (!map) {
+        console.warn("Map not initialized, skipping polygons");
+        return;
+      }
+
       if (!Array.isArray(content.polygons) || !content.polygons.length) return;
 
-      content.polygons.forEach((polygonData) => {
-        if (!polygonData) return;
+      content.polygons.forEach((polygonData, index) => {
+        try {
+          if (!polygonData) return;
 
-        const fields = polygonFields(content, polygonData);
+          const fields = polygonFields(content, polygonData);
 
-        const {
-          data,
-          tooltip,
-          tooltipContent,
-          tooltipDirection,
-          tooltipPermanent,
-          ...styles
-        } =
-          boundStates && boundStates.polygons.value
-            ? {
-                data: fields.polygonDataField,
-                tooltip:
-                  typeof fields.polygons_tooltipContentField === "string" &&
-                  fields.polygons_tooltipContentField.length,
-                tooltipContent: fields.polygons_tooltipContentField,
-                tooltipDirection: fields.polygons_tooltipDirectionField,
-                tooltipPermanent: fields.polygons_tooltipPermanentField,
-                ...generateVectorStyles(fields, "polygons"),
-              }
-            : polygonData;
+          const {
+            data,
+            tooltip,
+            tooltipContent,
+            tooltipDirection,
+            tooltipPermanent,
+            ...styles
+          } =
+            boundStates && boundStates.polygons.value
+              ? {
+                  data: fields.polygonDataField,
+                  tooltip:
+                    typeof fields.polygons_tooltipContentField === "string" &&
+                    fields.polygons_tooltipContentField.length,
+                  tooltipContent: fields.polygons_tooltipContentField,
+                  tooltipDirection: fields.polygons_tooltipDirectionField,
+                  tooltipPermanent: fields.polygons_tooltipPermanentField,
+                  ...generateVectorStyles(fields, "polygons"),
+                }
+              : polygonData;
 
-        if (!data || !data.length) return;
+          // Validate polygon data
+          if (!data || !Array.isArray(data) || data.length === 0) {
+            console.warn(`Invalid polygon data at index ${index}:`, data);
+            return;
+          }
 
-        let polygonInstance = L.polygon(data, { ...styles }).addTo(map);
+          // Enhanced polygon coordinate validation
+          const isValidPolygon = data.every((coord, coordIndex) => {
+            if (!Array.isArray(coord) || coord.length !== 2) {
+              console.warn(
+                `Invalid polygon coordinate structure at index ${index}, coordinate ${coordIndex}:`,
+                coord
+              );
+              return false;
+            }
 
-        if (
-          tooltip &&
-          typeof tooltipContent === "string" &&
-          tooltipContent.length
-        ) {
-          polygonInstance.bindTooltip(tooltipContent, {
-            permanent: tooltipPermanent,
-            direction: tooltipDirection,
+            const lat = parseFloat(coord[0]);
+            const lng = parseFloat(coord[1]);
+
+            if (!isValidCoordinate(lat, lng)) {
+              console.warn(
+                `Invalid polygon coordinate values at index ${index}, coordinate ${coordIndex}:`,
+                coord,
+                `(lat: ${lat}, lng: ${lng})`
+              );
+              return false;
+            }
+
+            return true;
           });
-        }
 
-        polygonLayers.value.push(polygonInstance);
+          if (!isValidPolygon) {
+            console.warn(
+              `Skipping polygon at index ${index} due to invalid coordinates`
+            );
+            return;
+          }
 
-        // Add event listeners
-        polygonInstance.on("click", (e) =>
-          fireEvent("shape:click", {
-            type: "polygon",
-            shape: polygonData,
-            latlng: e.latlng,
-          })
-        );
-        if (content.editableShapes) {
-          polygonInstance.on("edit", (e) =>
-            fireEvent("shape:edit", {
+          // Ensure polygon has at least 3 points
+          if (data.length < 3) {
+            console.warn(
+              `Polygon at index ${index} has insufficient points (${data.length}). Minimum 3 required.`
+            );
+            return;
+          }
+
+          let polygonInstance = L.polygon(data, { ...styles }).addTo(map);
+
+          if (
+            tooltip &&
+            typeof tooltipContent === "string" &&
+            tooltipContent.length
+          ) {
+            polygonInstance.bindTooltip(tooltipContent, {
+              permanent: tooltipPermanent,
+              direction: tooltipDirection,
+            });
+          }
+
+          polygonLayers.value.push(polygonInstance);
+
+          // Add event listeners
+          polygonInstance.on("click", (e) =>
+            fireEvent("shape:click", {
               type: "polygon",
               shape: polygonData,
               latlng: e.latlng,
             })
           );
+          if (content.editableShapes) {
+            polygonInstance.on("edit", (e) =>
+              fireEvent("shape:edit", {
+                type: "polygon",
+                shape: polygonData,
+                latlng: e.latlng,
+              })
+            );
+          }
+        } catch (polygonError) {
+          console.warn(`Error adding polygon at index ${index}:`, polygonError);
         }
       });
     } catch (error) {
       console.error("Error adding polygons:", error);
+    }
+  };
+
+  const resizeMap = () => {
+    try {
+      if (map) {
+        // Use Leaflet's built-in method to handle container size changes
+        map.invalidateSize();
+      }
+    } catch (error) {
+      console.warn("Error resizing map:", error);
     }
   };
 
@@ -380,5 +639,5 @@ export default function useLeafletMap(
     { immediate: true }
   );
 
-  return { map };
+  return { map, resizeMap };
 }

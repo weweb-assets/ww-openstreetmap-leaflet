@@ -32,6 +32,12 @@ export default {
                 tooltip: MARKER_DATA_HELP,
               },
               defaultValue: [2.333333, 48.866667],
+              /* wwEditor:start */
+              bindingValidation: {
+                type: "array",
+                tooltip: MARKER_DATA_HELP,
+              },
+              /* wwEditor:end */
             },
             customIcon: {
               label: { en: "Custom marker" },
@@ -39,6 +45,13 @@ export default {
               defaultValue: false,
               bindable: true,
               propertyHelp: `See icon documentation here: https://leafletjs.com/reference.html#icon`,
+              /* wwEditor:start */
+              bindingValidation: {
+                type: "boolean",
+                tooltip:
+                  "A boolean that controls custom icon usage: `true` or `false`",
+              },
+              /* wwEditor:end */
             },
             iconUrl: {
               label: { en: "Marker image" },
@@ -53,6 +66,13 @@ export default {
               ) => {
                 return specific__array.item && !specific__array.item.customIcon;
               },
+              /* wwEditor:start */
+              bindingValidation: {
+                type: "string",
+                tooltip:
+                  'A string that defines the marker icon URL: `"https://example.com/icon.png"`',
+              },
+              /* wwEditor:end */
             },
             iconWidth: {
               type: "Length",
@@ -74,6 +94,13 @@ export default {
               },
               responsive: true,
               bindable: true,
+              /* wwEditor:start */
+              bindingValidation: {
+                type: "string",
+                tooltip:
+                  'A string that defines the marker icon width: `"32px"`',
+              },
+              /* wwEditor:end */
             },
             iconHeight: {
               type: "Length",
@@ -95,6 +122,13 @@ export default {
               },
               responsive: true,
               bindable: true,
+              /* wwEditor:start */
+              bindingValidation: {
+                type: "string",
+                tooltip:
+                  'A string that defines the marker icon height: `"32px"`',
+              },
+              /* wwEditor:end */
             },
             ...tooltipConfig,
           },
@@ -116,6 +150,13 @@ export default {
     },
     defaultValue: [],
     bindable: true,
+    /* wwEditor:start */
+    bindingValidation: {
+      type: "array",
+      tooltip:
+        "An array of marker objects with data, customIcon, iconUrl, iconWidth, iconHeight, and tooltip properties",
+    },
+    /* wwEditor:end */
   },
   markerDataField: {
     hidden: (content, sidepanelContent, boundProps) =>

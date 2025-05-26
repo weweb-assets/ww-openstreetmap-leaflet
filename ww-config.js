@@ -302,12 +302,26 @@ export default {
       type: "OnOff",
       section: "settings",
       defaultValue: true,
+      /* wwEditor:start */
+      bindingValidation: {
+        type: "boolean",
+        tooltip:
+          "A boolean that controls zoom control visibility: `true` or `false`",
+      },
+      /* wwEditor:end */
     },
     attributionControl: {
       label: { en: "Show attribution" },
       type: "OnOff",
       section: "settings",
       defaultValue: true,
+      /* wwEditor:start */
+      bindingValidation: {
+        type: "boolean",
+        tooltip:
+          "A boolean that controls attribution control visibility: `true` or `false`",
+      },
+      /* wwEditor:end */
     },
     ...marker,
     ...circle,
