@@ -71,6 +71,7 @@ export default {
     {
       name: "map:load",
       label: { en: "On map load" },
+        description: "Run when the map finishes loading.",
     },
     {
       name: "map:click",
@@ -82,6 +83,7 @@ export default {
         },
         originalEvent: { x: 0, y: 0 },
       },
+        description: "Run when the map is clicked.",
     },
     {
       name: "map:zoom",
@@ -89,6 +91,7 @@ export default {
       event: {
         zoom: 13,
       },
+        description: "Run when map zoom changes.",
     },
     {
       name: "map:move",
@@ -103,6 +106,7 @@ export default {
           _southWest: { lat: 48.83, lng: 2.33 },
         },
       },
+        description: "Run when the map view moves.",
     },
     {
       name: "map:dragstart",
@@ -113,6 +117,7 @@ export default {
           lng: 2.351657694024656,
         },
       },
+        description: "Run when map dragging starts.",
     },
     {
       name: "map:dragend",
@@ -123,6 +128,7 @@ export default {
           lng: 2.351657694024656,
         },
       },
+        description: "Run when map dragging ends.",
     },
     {
       name: "marker:click",
@@ -138,6 +144,7 @@ export default {
         },
         originalEvent: { x: 0, y: 0 },
       },
+        description: "Run when a marker is clicked.",
     },
     {
       name: "marker:dragstart",
@@ -152,6 +159,7 @@ export default {
           lng: 2.351657694024656,
         },
       },
+        description: "Run when marker dragging starts.",
     },
     {
       name: "marker:drag",
@@ -166,6 +174,7 @@ export default {
           lng: 2.351657694024656,
         },
       },
+        description: "Run while a marker is being dragged.",
     },
     {
       name: "marker:dragend",
@@ -180,6 +189,7 @@ export default {
           lng: 2.351657694024656,
         },
       },
+        description: "Run when marker dragging ends.",
     },
     {
       name: "shape:click",
@@ -192,6 +202,7 @@ export default {
           lng: 2.351657694024656,
         },
       },
+        description: "Run when a shape is clicked.",
     },
     {
       name: "shape:edit",
@@ -204,6 +215,7 @@ export default {
           lng: 2.351657694024656,
         },
       },
+        description: "Run when a shape is edited.",
     },
   ],
   properties: {
