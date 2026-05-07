@@ -2,7 +2,7 @@
   <div
     class="ww-leaflet"
     :class="{ editing: isEditing }"
-    :style="{ height: content.height || '400px' }"
+    :style="{ height: containerHeight }"
     ref="mapContainer"
   ></div>
 </template>
@@ -29,19 +29,67 @@ function deepToRaw(value) {
   return value;
 }
 
-function buildTileLayer(config) {
-  const cfg = deepToRaw(config) || {};
-  const options = cfg.options || {};
-  if (cfg.provider) {
-    return L.tileLayer.provider(cfg.provider, options);
-  }
-  if (cfg.url) {
-    return L.tileLayer(cfg.url, options);
-  }
+const TILE_TYPE = "tileLayer";
+const CONTROL_TYPES = new Set(["scaleControl", "layersControl"]);
+
+function buildTile(descriptor) {
+  const d = deepToRaw(descriptor) || {};
+  const opts = d.options || {};
+  if (d.provider) return L.tileLayer.provider(d.provider, opts);
+  if (d.url) return L.tileLayer(d.url, opts);
   return L.tileLayer.provider("OpenStreetMap.Mapnik");
 }
 
-function buildLayer(descriptor) {
+function passesFilter(feature, filter) {
+  if (!filter || !filter.property) return true;
+  const v = feature?.properties?.[filter.property];
+  switch (filter.operator || "eq") {
+    case "eq": return v === filter.value;
+    case "neq": return v !== filter.value;
+    case "gt": return v > filter.value;
+    case "lt": return v < filter.value;
+    default: return true;
+  }
+}
+
+function buildGeoJson(d, attachClickHandler) {
+  if (!d || !d.data) return null;
+  const popupProp = d.popupProperty || "name";
+  const opts = {};
+  if (d.style) opts.style = d.style;
+  if (d.swapCoords) opts.coordsToLatLng = ([lng, lat]) => L.latLng(lat, lng);
+  if (d.pointToLayer === "circleMarker") {
+    opts.pointToLayer = (_, latlng) => L.circleMarker(latlng, d.style || {});
+  } else if (d.pointToLayer === "marker") {
+    opts.pointToLayer = (_, latlng) => L.marker(latlng);
+  }
+  if (d.onEachFeature === "bindPopup" || d.onEachFeature === "bindTooltip") {
+    opts.onEachFeature = (feature, layer) => {
+      const text = feature?.properties?.[popupProp];
+      if (text == null) return;
+      if (d.onEachFeature === "bindPopup") layer.bindPopup(String(text));
+      else layer.bindTooltip(String(text));
+    };
+  }
+  if (d.filter && d.filter.property) opts.filter = (f) => passesFilter(f, d.filter);
+
+  const layer = L.geoJSON(d.data, opts);
+  if (attachClickHandler) {
+    layer.eachLayer((sub) => {
+      sub.on("click", (e) => {
+        attachClickHandler({
+          id: sub.feature?.id ?? d.id ?? null,
+          type: "geoJSON",
+          latlng: e.latlng ? { lat: e.latlng.lat, lng: e.latlng.lng } : null,
+          properties: sub.feature?.properties || {},
+        });
+      });
+    });
+  }
+  return layer;
+}
+
+function buildOverlay(descriptor, attachClickHandler) {
   const d = deepToRaw(descriptor);
   if (!d || !d.type) return null;
   const opts = d.options || {};
@@ -75,62 +123,63 @@ function buildLayer(descriptor) {
       if (!d.url || !Array.isArray(d.bounds)) return null;
       layer = L.imageOverlay(d.url, d.bounds, opts);
       break;
+    case "geoJSON":
+      return buildGeoJson(d, attachClickHandler);
+    case "markerClusterGroup": {
+      const group = L.markerClusterGroup(opts);
+      const children = Array.isArray(d.children) ? d.children : [];
+      for (const child of children) {
+        const childLayer = buildOverlay(child, attachClickHandler);
+        if (childLayer) group.addLayer(childLayer);
+      }
+      return group;
+    }
     default:
       return null;
   }
   if (d.popup) layer.bindPopup(String(d.popup));
   if (d.tooltip) layer.bindTooltip(String(d.tooltip));
+  if (attachClickHandler) {
+    layer.on("click", (e) => {
+      attachClickHandler({
+        id: d.id ?? null,
+        type: d.type,
+        latlng: e.latlng ? { lat: e.latlng.lat, lng: e.latlng.lng } : null,
+        properties: d.properties || {},
+      });
+    });
+  }
   return layer;
 }
 
-function passesFilter(feature, filter) {
-  if (!filter || !filter.property) return true;
-  const val = feature?.properties?.[filter.property];
-  const op = filter.operator || "eq";
-  switch (op) {
-    case "eq": return val === filter.value;
-    case "neq": return val !== filter.value;
-    case "gt": return val > filter.value;
-    case "lt": return val < filter.value;
-    default: return true;
+function buildControl(d) {
+  if (!d || !d.type) return null;
+  switch (d.type) {
+    case "scaleControl":
+      return L.control.scale({
+        position: d.position || "bottomleft",
+        metric: d.metric !== false,
+        imperial: !!d.imperial,
+        maxWidth: d.maxWidth || 100,
+      });
+    case "layersControl": {
+      const baseLayers = {};
+      const overlays = {};
+      for (const [label, desc] of Object.entries(d.baseLayers || {})) {
+        baseLayers[label] = buildTile(desc);
+      }
+      for (const [label, desc] of Object.entries(d.overlays || {})) {
+        const built = buildOverlay(desc);
+        if (built) overlays[label] = built;
+      }
+      return L.control.layers(baseLayers, overlays, {
+        position: d.position || "topright",
+        collapsed: d.collapsed !== false,
+      });
+    }
+    default:
+      return null;
   }
-}
-
-function buildGeoJsonLayer(config) {
-  const cfg = deepToRaw(config);
-  if (!cfg || !cfg.data) return null;
-  const popupProp = cfg.popupProperty || "name";
-  const opts = {};
-  if (cfg.style) opts.style = cfg.style;
-  if (cfg.swapCoords) {
-    opts.coordsToLatLng = ([lng, lat]) => L.latLng(lat, lng);
-  }
-  if (cfg.pointToLayer === "circleMarker") {
-    opts.pointToLayer = (feature, latlng) => L.circleMarker(latlng, cfg.style || {});
-  } else if (cfg.pointToLayer === "marker") {
-    opts.pointToLayer = (feature, latlng) => L.marker(latlng);
-  }
-  if (cfg.onEachFeature === "bindPopup" || cfg.onEachFeature === "bindTooltip") {
-    opts.onEachFeature = (feature, layer) => {
-      const text = feature?.properties?.[popupProp];
-      if (text == null) return;
-      if (cfg.onEachFeature === "bindPopup") layer.bindPopup(String(text));
-      else layer.bindTooltip(String(text));
-    };
-  }
-  if (cfg.filter && cfg.filter.property) {
-    opts.filter = (feature) => passesFilter(feature, cfg.filter);
-  }
-  return L.geoJSON(cfg.data, opts);
-}
-
-function pointFeatureCount(geoJson) {
-  const data = geoJson?.data;
-  if (!data) return 0;
-  const features = data.type === "FeatureCollection" ? data.features : [data];
-  return (features || []).filter(
-    (f) => f?.geometry?.type === "Point" || f?.geometry?.type === "MultiPoint"
-  ).length;
 }
 
 function boundsToObject(b) {
@@ -155,19 +204,19 @@ export default {
   setup(props, { emit }) {
     const mapContainer = ref(null);
     let mapInstance = null;
-    let baseTileLayer = null;
-    let layerGroup = null;
-    let clusterGroup = null;
-    let geoJsonLayer = null;
-    const layerById = new Map();
-    let activeControls = {};
     let resizeObserver = null;
-    let lastTileSignature = "";
+    // entry: { layer, signature, kind: 'tile' | 'overlay' | 'control' }
+    const entries = new Map();
 
     const currentCenter = ref({ lat: 0, lng: 0 });
     const currentZoom = ref(0);
     const currentBounds = ref({ north: 0, south: 0, east: 0, west: 0 });
     const isReady = ref(false);
+
+    const containerHeight = computed(() => {
+      const h = props.content?.map?.height;
+      return typeof h === "string" && h.length ? h : "400px";
+    });
 
     const isEditing = computed(() => {
       /* wwEditor:start */
@@ -184,214 +233,62 @@ export default {
       emit("trigger-event", { name, event });
     }
 
-    function tileSignature(cfg) {
-      const c = deepToRaw(cfg) || {};
-      return JSON.stringify({ provider: c.provider, url: c.url, options: c.options || {} });
+    function onLayerClick(payload) {
+      fire("layer:click", payload);
     }
 
-    function applyTileLayer() {
-      const sig = tileSignature(props.content.tileLayer);
-      if (sig === lastTileSignature && baseTileLayer) return;
-      if (baseTileLayer) {
-        mapInstance.removeLayer(baseTileLayer);
-        baseTileLayer = null;
-      }
-      try {
-        baseTileLayer = buildTileLayer(props.content.tileLayer);
-        baseTileLayer.addTo(mapInstance);
-        lastTileSignature = sig;
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.warn("[ww-openstreetmap-leaflet] tile layer error:", err);
-        baseTileLayer = L.tileLayer.provider("OpenStreetMap.Mapnik").addTo(mapInstance);
-        lastTileSignature = "";
-      }
+    function entryKind(type) {
+      if (type === TILE_TYPE) return "tile";
+      if (CONTROL_TYPES.has(type)) return "control";
+      return "overlay";
     }
 
-    function getMarkerHost() {
-      return props.content.enableMarkerCluster ? clusterGroup : layerGroup;
+    function buildEntry(desc) {
+      const kind = entryKind(desc.type);
+      let layer = null;
+      if (kind === "tile") layer = buildTile(desc);
+      else if (kind === "control") layer = buildControl(desc);
+      else layer = buildOverlay(desc, onLayerClick);
+      return layer ? { layer, kind } : null;
     }
 
-    function isMarkerLike(type) {
-      return type === "marker" || type === "circleMarker";
+    function attachEntry(entry) {
+      if (entry.kind === "control") entry.layer.addTo(mapInstance);
+      else entry.layer.addTo(mapInstance);
     }
 
-    function attachLayerEvents(descriptor, layer) {
-      layer.on("click", (e) => {
-        fire("layer:click", {
-          id: descriptor.id,
-          type: descriptor.type,
-          latlng: e.latlng ? { lat: e.latlng.lat, lng: e.latlng.lng } : null,
-          properties: descriptor.properties || {},
-        });
-      });
+    function detachEntry(entry) {
+      if (entry.kind === "control") mapInstance.removeControl(entry.layer);
+      else mapInstance.removeLayer(entry.layer);
     }
 
     function applyLayers() {
-      const next = Array.isArray(props.content.layers)
-        ? props.content.layers
+      const list = Array.isArray(props.content.layers)
+        ? deepToRaw(props.content.layers)
         : [];
       const nextById = new Map();
-      for (const desc of next) {
-        const raw = deepToRaw(desc);
-        if (raw && raw.id) nextById.set(raw.id, raw);
+      for (const desc of list) {
+        if (desc && desc.id) nextById.set(desc.id, desc);
       }
 
-      // Remove layers that are gone or whose serialized shape changed.
-      for (const [id, entry] of layerById) {
+      // Remove entries gone or whose serialized shape changed.
+      for (const [id, entry] of entries) {
         const newDesc = nextById.get(id);
         if (!newDesc || JSON.stringify(newDesc) !== entry.signature) {
-          const host = entry.isMarker && clusterGroup && entry.fromCluster
-            ? clusterGroup
-            : layerGroup;
-          host.removeLayer(entry.layer);
-          layerById.delete(id);
+          detachEntry(entry);
+          entries.delete(id);
         }
       }
 
-      // Add new or updated layers.
+      // Add new or updated entries.
       for (const [id, desc] of nextById) {
-        if (layerById.has(id)) continue;
-        const layer = buildLayer(desc);
-        if (!layer) continue;
-        attachLayerEvents(desc, layer);
-        const isMarker = isMarkerLike(desc.type);
-        const host = isMarker ? getMarkerHost() : layerGroup;
-        host.addLayer(layer);
-        layerById.set(id, {
-          layer,
-          isMarker,
-          fromCluster: isMarker && !!props.content.enableMarkerCluster,
-          signature: JSON.stringify(desc),
-        });
+        if (entries.has(id)) continue;
+        const built = buildEntry(desc);
+        if (!built) continue;
+        attachEntry(built);
+        built.signature = JSON.stringify(desc);
+        entries.set(id, built);
       }
-    }
-
-    function applyGeoJson() {
-      if (geoJsonLayer) {
-        mapInstance.removeLayer(geoJsonLayer);
-        geoJsonLayer = null;
-      }
-      const cfg = props.content.geoJSON;
-      if (!cfg || !cfg.data) return;
-
-      // If clustering is on AND the geoJSON points should go to a cluster,
-      // we still render via L.geoJSON but parented to clusterGroup for points.
-      const useClusterForPoints =
-        props.content.enableMarkerCluster &&
-        cfg.pointToLayer === "marker" &&
-        pointFeatureCount(cfg) > 0;
-
-      const built = buildGeoJsonLayer(cfg);
-      if (!built) return;
-
-      built.eachLayer((subLayer) => {
-        subLayer.on("click", (e) => {
-          fire("layer:click", {
-            id: subLayer.feature?.id ?? null,
-            type: "geoJSON",
-            latlng: e.latlng ? { lat: e.latlng.lat, lng: e.latlng.lng } : null,
-            properties: subLayer.feature?.properties || {},
-          });
-        });
-      });
-
-      if (useClusterForPoints) {
-        clusterGroup.addLayer(built);
-        geoJsonLayer = built;
-      } else {
-        built.addTo(mapInstance);
-        geoJsonLayer = built;
-      }
-    }
-
-    function applyControls() {
-      const cfg = deepToRaw(props.content.controls) || {};
-
-      // Zoom
-      if (activeControls.zoom) {
-        mapInstance.removeControl(activeControls.zoom);
-        activeControls.zoom = null;
-      }
-      if (cfg.zoom?.enabled !== false) {
-        activeControls.zoom = L.control
-          .zoom({ position: cfg.zoom?.position || "topleft" })
-          .addTo(mapInstance);
-      }
-
-      // Attribution
-      if (activeControls.attribution) {
-        mapInstance.removeControl(activeControls.attribution);
-        activeControls.attribution = null;
-      }
-      if (cfg.attribution?.enabled !== false) {
-        activeControls.attribution = L.control
-          .attribution({ prefix: cfg.attribution?.prefix })
-          .addTo(mapInstance);
-      }
-
-      // Scale
-      if (activeControls.scale) {
-        mapInstance.removeControl(activeControls.scale);
-        activeControls.scale = null;
-      }
-      if (cfg.scale?.enabled) {
-        activeControls.scale = L.control
-          .scale({
-            position: cfg.scale.position || "bottomleft",
-            metric: cfg.scale.metric !== false,
-            imperial: !!cfg.scale.imperial,
-            maxWidth: cfg.scale.maxWidth || 100,
-          })
-          .addTo(mapInstance);
-      }
-
-      // Layers control
-      if (activeControls.layers) {
-        mapInstance.removeControl(activeControls.layers);
-        activeControls.layers = null;
-      }
-      if (cfg.layers?.enabled) {
-        const baseLayers = {};
-        const overlays = {};
-        for (const [label, desc] of Object.entries(cfg.layers.baseLayers || {})) {
-          baseLayers[label] = buildTileLayer(desc);
-        }
-        for (const [label, desc] of Object.entries(cfg.layers.overlays || {})) {
-          const built = buildLayer(desc);
-          if (built) overlays[label] = built;
-        }
-        activeControls.layers = L.control
-          .layers(baseLayers, overlays, {
-            position: cfg.layers.position || "topright",
-            collapsed: cfg.layers.collapsed !== false,
-          })
-          .addTo(mapInstance);
-      }
-    }
-
-    function rebuildClustering() {
-      // Detach all marker-like layers, recreate the cluster/layerGroup pair, reattach.
-      if (clusterGroup) {
-        mapInstance.removeLayer(clusterGroup);
-        clusterGroup = null;
-      }
-      if (props.content.enableMarkerCluster) {
-        clusterGroup = L.markerClusterGroup();
-        clusterGroup.addTo(mapInstance);
-      }
-      // Move existing marker-like layers into the new host.
-      for (const [, entry] of layerById) {
-        if (!entry.isMarker) continue;
-        const host = props.content.enableMarkerCluster ? clusterGroup : layerGroup;
-        // Layer might already be attached via the previous host.
-        try { layerGroup.removeLayer(entry.layer); } catch (e) { /* noop */ }
-        if (clusterGroup) { try { clusterGroup.removeLayer(entry.layer); } catch (e) { /* noop */ } }
-        host.addLayer(entry.layer);
-        entry.fromCluster = !!props.content.enableMarkerCluster;
-      }
-      // Re-render geoJSON to pick up the new clustering setting.
-      applyGeoJson();
     }
 
     function emitMoveEnd() {
@@ -401,25 +298,25 @@ export default {
       currentCenter.value = { lat: c.lat, lng: c.lng };
       currentZoom.value = z;
       currentBounds.value = b;
-      fire("map:moveend", { center: { lat: c.lat, lng: c.lng }, zoom: z, bounds: b });
+      fire("map:moveend", {
+        center: { lat: c.lat, lng: c.lng },
+        zoom: z,
+        bounds: b,
+      });
+    }
+
+    function buildMapOptions() {
+      const opts = deepToRaw(props.content.map) || {};
+      // `height` is wrapper-only — strip before forwarding to Leaflet.
+      const { height, ...leafletOpts } = opts;
+      return leafletOpts;
     }
 
     function initMap() {
       if (mapInstance) return;
-      const opts = deepToRaw(props.content.mapOptions) || {};
-      // Disable Leaflet's default zoomControl — we handle it via `controls`.
-      mapInstance = L.map(mapContainer.value, { ...opts, zoomControl: false, attributionControl: false });
+      mapInstance = L.map(mapContainer.value, buildMapOptions());
 
-      layerGroup = L.layerGroup().addTo(mapInstance);
-      if (props.content.enableMarkerCluster) {
-        clusterGroup = L.markerClusterGroup();
-        clusterGroup.addTo(mapInstance);
-      }
-
-      applyTileLayer();
-      applyControls();
       applyLayers();
-      applyGeoJson();
 
       mapInstance.on("click", (e) => {
         fire("map:click", {
@@ -451,12 +348,12 @@ export default {
         mapInstance.remove();
         mapInstance = null;
       }
-      layerById.clear();
+      entries.clear();
     });
 
-    // Watchers — avoid `mapOptions.center/zoom` triggering full recreate.
+    // Map view watchers — center/zoom apply via setView (no full recreate).
     watch(
-      () => [props.content.mapOptions?.center, props.content.mapOptions?.zoom],
+      () => [props.content.map?.center, props.content.map?.zoom],
       ([center, zoom]) => {
         if (!mapInstance) return;
         if (Array.isArray(center) && center.length === 2 && typeof zoom === "number") {
@@ -471,32 +368,9 @@ export default {
     );
 
     watch(
-      () => props.content.tileLayer,
-      () => { if (mapInstance) applyTileLayer(); },
-      { deep: true }
-    );
-
-    watch(
       () => props.content.layers,
       () => { if (mapInstance) applyLayers(); },
       { deep: true }
-    );
-
-    watch(
-      () => props.content.geoJSON,
-      () => { if (mapInstance) applyGeoJson(); },
-      { deep: true }
-    );
-
-    watch(
-      () => props.content.controls,
-      () => { if (mapInstance) applyControls(); },
-      { deep: true }
-    );
-
-    watch(
-      () => props.content.enableMarkerCluster,
-      () => { if (mapInstance) rebuildClustering(); }
     );
 
     // Methods exposed as WeWeb actions.
@@ -537,6 +411,7 @@ export default {
     return {
       mapContainer,
       isEditing,
+      containerHeight,
       currentCenter,
       currentZoom,
       currentBounds,

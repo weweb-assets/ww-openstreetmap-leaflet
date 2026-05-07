@@ -4,49 +4,58 @@ WeWeb element wrapping [Leaflet](https://leafletjs.com/) + [OpenStreetMap](https
 
 ## Philosophy
 
-This element mirrors Leaflet's native API 1:1 instead of exposing a no-code DSL. Each prop maps directly to a Leaflet primitive, and the snippets in the official Leaflet docs paste in unchanged.
+Two props only — `map` and `layers`. Each prop maps directly to how you'd write Leaflet by hand:
+
+```js
+const map = L.map(el, mapOptions);   // → `map` prop
+L.tileLayer.provider('…').addTo(map); // ┐
+L.marker([…]).addTo(map);             // │
+L.geoJSON(data).addTo(map);           // ├─→ `layers` prop (array)
+L.control.scale().addTo(map);         // │
+L.markerClusterGroup().addTo(map);    // ┘
+```
+
+Snippets from the official Leaflet docs paste in unchanged.
 
 ## Properties
 
-| Prop | Type | Maps to |
-|---|---|---|
-| `height` | CSS length | container `height` (required — Leaflet has no intrinsic height) |
-| `mapOptions` | Object | [`L.map(el, options)`](https://leafletjs.com/reference.html#map-option) — `center`, `zoom`, `minZoom`, `maxZoom`, `dragging`, `scrollWheelZoom`, `doubleClickZoom`, `touchZoom`, `keyboard`, `boxZoom`, `worldCopyJump`, ... |
-| `tileLayer` | Object | `{ provider }` → [`L.tileLayer.provider(name)`](https://github.com/leaflet-extras/leaflet-providers) **OR** `{ url, options }` → [`L.tileLayer(url, options)`](https://leafletjs.com/reference.html#tilelayer) |
-| `layers` | Array | declarative descriptors — see below |
-| `geoJSON` | Object | [`L.geoJSON(data, options)`](https://leafletjs.com/reference.html#geojson) |
-| `controls` | Object | `zoom`, `attribution`, `scale`, `layers` — each [`L.control.*`](https://leafletjs.com/reference.html#control) |
-| `enableMarkerCluster` | Boolean | wraps markers in [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) |
+### `map`
 
-### `layers` items
-
-Each item: `{ id, type, ...payload, options?, popup?, tooltip? }`. The `id` enables incremental diffing.
-
-| `type` | Payload | Maps to |
-|---|---|---|
-| `marker` | `latlng: [lat, lng]` | `L.marker(latlng, options)` |
-| `circleMarker` | `latlng: [lat, lng]` | `L.circleMarker(latlng, options)` |
-| `circle` | `latlng: [lat, lng]`, `options.radius` (m) | `L.circle(latlng, options)` |
-| `polygon` | `latlngs: [[lat,lng], ...]` | `L.polygon(latlngs, options)` |
-| `polyline` | `latlngs: [[lat,lng], ...]` | `L.polyline(latlngs, options)` |
-| `rectangle` | `bounds: [[s,w],[n,e]]` | `L.rectangle(bounds, options)` |
-| `imageOverlay` | `url`, `bounds: [[s,w],[n,e]]` | `L.imageOverlay(url, bounds, options)` |
-
-### `geoJSON` shape
+Object passed to `L.map(el, options)` plus a wrapper-only `height`.
 
 ```js
 {
-  data: <FeatureCollection | Feature>,    // required
-  style: { color, weight, opacity, fillColor, fillOpacity },
-  pointToLayer: 'marker' | 'circleMarker',
-  onEachFeature: 'bindPopup' | 'bindTooltip',
-  popupProperty: 'name',                  // feature.properties[key] used by bind*
-  filter: { property, value, operator },  // operator: 'eq'|'neq'|'gt'|'lt'
-  swapCoords: false,                      // true if your data is [lng, lat]
+  height: '400px',                  // REQUIRED — CSS length
+  center: [46.603354, 1.888334],    // REQUIRED
+  zoom: 4,                          // REQUIRED
+  // optional Leaflet Map options:
+  minZoom, maxZoom, maxBounds,
+  zoomControl, attributionControl,
+  dragging, scrollWheelZoom, doubleClickZoom, touchZoom,
+  keyboard, boxZoom, worldCopyJump, inertia, …
 }
 ```
 
-Callbacks are exposed as named enum values (no user-supplied JS code) to keep the surface declarative and safe.
+### `layers`
+
+Array of everything that goes on the map. Order = render order. Every item has `{ id, type, ...payload }`. The `id` enables incremental diffing.
+
+| `type` | Payload | Maps to |
+|---|---|---|
+| `tileLayer` | `{ provider }` *or* `{ url, options }` | `L.tileLayer.provider(name)` / `L.tileLayer(url, options)` |
+| `marker` / `circleMarker` | `latlng: [lat, lng]`, `options?`, `popup?`, `tooltip?` | `L.marker(latlng, options)` / `L.circleMarker(...)` |
+| `circle` | `latlng`, `options.radius` (m) | `L.circle(latlng, options)` |
+| `polygon` / `polyline` | `latlngs: [[lat,lng], ...]`, `options?` | `L.polygon(latlngs, options)` / `L.polyline(...)` |
+| `rectangle` | `bounds: [[s,w],[n,e]]`, `options?` | `L.rectangle(bounds, options)` |
+| `imageOverlay` | `url`, `bounds: [[s,w],[n,e]]`, `options?` | `L.imageOverlay(url, bounds, options)` |
+| `geoJSON` | `data, style?, pointToLayer?, onEachFeature?, popupProperty?, filter?, swapCoords?` | `L.geoJSON(data, options)` |
+| `markerClusterGroup` | `options?, children: [<marker descriptors>]` | `L.markerClusterGroup(options).addLayer(child).addLayer(child)…` |
+| `scaleControl` | `position?, metric?, imperial?, maxWidth?` | `L.control.scale(options)` |
+| `layersControl` | `position?, collapsed?, baseLayers, overlays?` | `L.control.layers(baseLayers, overlays, options)` |
+
+### GeoJSON callbacks (declarative, no `eval`)
+
+`pointToLayer`: `'marker'` | `'circleMarker'`. `onEachFeature`: `'bindPopup'` | `'bindTooltip'`. `popupProperty` selects which feature property to display (default `'name'`). `filter`: `{ property, value, operator? }`. `swapCoords: true` if your data uses GeoJSON `[lng, lat]`.
 
 ## Triggers
 
@@ -65,56 +74,58 @@ Callbacks are exposed as named enum values (no user-supplied JS code) to keep th
 
 `setView(lat, lng, zoom)` · `flyTo(lat, lng, zoom, duration?)` · `panTo(lat, lng)` · `setZoom(zoom)` · `fitBounds(north, south, east, west, padding?)` · `locate(enableHighAccuracy?, timeout?)` · `invalidateSize()`.
 
-## Example — basic Paris map
+## Examples
+
+### Basic Paris map
 
 ```js
-mapOptions: { center: [48.85, 2.35], zoom: 12 }
-tileLayer:  { provider: 'OpenStreetMap.Mapnik' }
-layers:     [{ id: 'paris', type: 'marker', latlng: [48.85, 2.35], popup: 'Paris' }]
-height:     '500px'
+map:    { height: '500px', center: [48.85, 2.35], zoom: 12 }
+layers: [{ id: 'base', type: 'tileLayer', provider: 'OpenStreetMap.Mapnik' }]
 ```
 
-## Example — clustered markers from a variable
+### Clustered markers from a `cities` variable
 
 ```js
-mapOptions: { center: [40, -98], zoom: 4 }
-tileLayer:  { provider: 'CartoDB.Positron' }
-layers:     cities.map(c => ({
-              id: c.id,
-              type: 'marker',
-              latlng: [c.lat, c.lng],
-              popup: c.name,
-            }))
-enableMarkerCluster: true
+map: { height: '600px', center: [46.6, 1.9], zoom: 5 }
+layers: [
+  { id: 'base', type: 'tileLayer', provider: 'OpenStreetMap.Mapnik' },
+  {
+    id: 'cluster',
+    type: 'markerClusterGroup',
+    children: cities.map(c => ({
+      id: c.id, type: 'marker', latlng: [c.lat, c.lng], popup: c.name,
+    })),
+  },
+]
 ```
 
-## Example — GeoJSON polygons with hover popup
+### GeoJSON polygons + scale control
 
 ```js
-geoJSON: {
-  data: countriesFeatureCollection,
-  style: { color: '#3388ff', weight: 1, fillOpacity: 0.3 },
-  onEachFeature: 'bindPopup',
-  popupProperty: 'name',
-}
+map: { height: '600px', center: [20, 0], zoom: 2 }
+layers: [
+  { id: 'base',    type: 'tileLayer', provider: 'CartoDB.Positron' },
+  {
+    id: 'countries', type: 'geoJSON', data: countriesFeatureCollection,
+    style: { color: '#3388ff', weight: 1, fillOpacity: 0.3 },
+    onEachFeature: 'bindPopup', popupProperty: 'name',
+  },
+  { id: 'scale', type: 'scaleControl', position: 'bottomleft', metric: true },
+]
 ```
 
 ## Gotchas
 
-- **Coordinates use `[lat, lng]`** (Leaflet convention), **not** GeoJSON `[lng, lat]`.
-- **Container height is required** — Leaflet has no intrinsic height. The `height` prop applies `height: <value>`; never omit it.
-- **GeoJSON with inverted coords** — set `swapCoords: true` to feed Leaflet `[lng, lat]` data.
+- **Coordinates use `[lat, lng]`** — Leaflet convention, not GeoJSON `[lng, lat]`.
+- **`map.height` is required** — Leaflet has no intrinsic height.
+- **Always include a `tileLayer`** as the first item of `layers`, otherwise the background is empty.
+- **Stable `id` per layer** — required for diffing.
 - **OSM tile usage policy** — for production, prefer `CartoDB.*` or providers with explicit terms.
 
-## Installation
+## Install / build
 
 ```sh
 npm i
-npm run serve
-```
-
-## Build
-
-```sh
-npm run build --name=ww-openstreetmap-leaflet
+npm run serve              # dev server
+npm run build name=ww-openstreetmap-leaflet type=wwobject
 ```
