@@ -145,6 +145,32 @@ export default {
         zoom: 4,
       },
       bindable: true,
+      options: {
+        item: {
+          center: {
+            label: { en: "Center [lat, lng]" },
+            type: "Array",
+            defaultValue: [46.603354, 1.888334],
+            bindable: true,
+            options: { item: { type: "Number", defaultValue: 0 } },
+          },
+          zoom: {
+            label: { en: "Zoom" },
+            type: "Number",
+            defaultValue: 4,
+            bindable: true,
+            options: { min: 0, max: 20, step: 1 },
+          },
+          minZoom: { label: { en: "Min zoom" }, type: "Number", bindable: true },
+          maxZoom: { label: { en: "Max zoom" }, type: "Number", bindable: true },
+          dragging: { label: { en: "Dragging" }, type: "OnOff", defaultValue: true, bindable: true },
+          scrollWheelZoom: { label: { en: "Scroll wheel zoom" }, type: "OnOff", defaultValue: true, bindable: true },
+          doubleClickZoom: { label: { en: "Double click zoom" }, type: "OnOff", defaultValue: true, bindable: true },
+          touchZoom: { label: { en: "Touch zoom" }, type: "OnOff", defaultValue: true, bindable: true },
+          keyboard: { label: { en: "Keyboard" }, type: "OnOff", defaultValue: true, bindable: true },
+          boxZoom: { label: { en: "Box zoom" }, type: "OnOff", defaultValue: true, bindable: true },
+        },
+      },
       /* wwEditor:start */
       propertyHelp: {
         tooltip:
@@ -166,6 +192,29 @@ export default {
         provider: "OpenStreetMap.Mapnik",
       },
       bindable: true,
+      options: {
+        item: {
+          provider: {
+            label: { en: "Provider" },
+            type: "Text",
+            defaultValue: "OpenStreetMap.Mapnik",
+            bindable: true,
+            options: { placeholder: "OpenStreetMap.Mapnik" },
+          },
+          url: {
+            label: { en: "Custom URL" },
+            type: "Text",
+            bindable: true,
+            options: { placeholder: "https://{s}.tile.example/{z}/{x}/{y}.png" },
+          },
+          options: {
+            label: { en: "Options" },
+            type: "Object",
+            bindable: true,
+            options: { item: {} },
+          },
+        },
+      },
       /* wwEditor:start */
       propertyHelp: {
         tooltip:
@@ -181,10 +230,50 @@ export default {
 
     layers: {
       label: { en: "Layers" },
-      type: "Object",
+      type: "Array",
       section: "settings",
       defaultValue: [],
       bindable: true,
+      options: {
+        getItemLabel(item, index) {
+          return item?.id ? `${item.type || "layer"} · ${item.id}` : `Layer ${index + 1}`;
+        },
+        movable: true,
+        expandable: true,
+        item: {
+          type: "Object",
+          defaultValue: { id: "", type: "marker", latlng: [0, 0] },
+          options: {
+            item: {
+              id: { label: { en: "Id" }, type: "Text", bindable: true, options: { placeholder: "unique-id" } },
+              type: {
+                label: { en: "Type" },
+                type: "TextSelect",
+                defaultValue: "marker",
+                options: {
+                  options: [
+                    { value: "marker", label: "Marker" },
+                    { value: "circleMarker", label: "Circle marker" },
+                    { value: "circle", label: "Circle" },
+                    { value: "polygon", label: "Polygon" },
+                    { value: "polyline", label: "Polyline" },
+                    { value: "rectangle", label: "Rectangle" },
+                    { value: "imageOverlay", label: "Image overlay" },
+                  ],
+                },
+                bindable: true,
+              },
+              latlng: { label: { en: "Latlng [lat, lng]" }, type: "Array", bindable: true, options: { item: { type: "Number", defaultValue: 0 } } },
+              latlngs: { label: { en: "Latlngs (polygon/polyline)" }, type: "Array", bindable: true, options: { item: { type: "Array", options: { item: { type: "Number", defaultValue: 0 } } } } },
+              bounds: { label: { en: "Bounds [[s,w],[n,e]]" }, type: "Array", bindable: true, options: { item: { type: "Array", options: { item: { type: "Number", defaultValue: 0 } } } } },
+              url: { label: { en: "URL (imageOverlay)" }, type: "Text", bindable: true },
+              options: { label: { en: "Options" }, type: "Object", bindable: true, options: { item: {} } },
+              popup: { label: { en: "Popup HTML" }, type: "Text", bindable: true, options: { placeholder: "<b>Title</b>" } },
+              tooltip: { label: { en: "Tooltip text" }, type: "Text", bindable: true },
+            },
+          },
+        },
+      },
       /* wwEditor:start */
       propertyHelp: {
         tooltip:
@@ -202,8 +291,39 @@ export default {
       label: { en: "GeoJSON" },
       type: "Object",
       section: "settings",
-      defaultValue: null,
+      defaultValue: {},
       bindable: true,
+      options: {
+        item: {
+          data: { label: { en: "Data (FeatureCollection)" }, type: "Object", bindable: true, options: { item: {} } },
+          style: { label: { en: "Style" }, type: "Object", bindable: true, options: { item: {} } },
+          pointToLayer: {
+            label: { en: "Point to layer" },
+            type: "TextSelect",
+            options: {
+              options: [
+                { value: "marker", label: "Marker" },
+                { value: "circleMarker", label: "Circle marker" },
+              ],
+            },
+            bindable: true,
+          },
+          onEachFeature: {
+            label: { en: "On each feature" },
+            type: "TextSelect",
+            options: {
+              options: [
+                { value: "bindPopup", label: "Bind popup" },
+                { value: "bindTooltip", label: "Bind tooltip" },
+              ],
+            },
+            bindable: true,
+          },
+          popupProperty: { label: { en: "Popup property key" }, type: "Text", defaultValue: "name", bindable: true },
+          filter: { label: { en: "Filter" }, type: "Object", bindable: true, options: { item: {} } },
+          swapCoords: { label: { en: "Swap coords [lng,lat] → [lat,lng]" }, type: "OnOff", defaultValue: false, bindable: true },
+        },
+      },
       /* wwEditor:start */
       propertyHelp: {
         tooltip:
@@ -226,6 +346,14 @@ export default {
         attribution: { enabled: true },
       },
       bindable: true,
+      options: {
+        item: {
+          zoom: { label: { en: "Zoom" }, type: "Object", bindable: true, options: { item: {} } },
+          attribution: { label: { en: "Attribution" }, type: "Object", bindable: true, options: { item: {} } },
+          scale: { label: { en: "Scale" }, type: "Object", bindable: true, options: { item: {} } },
+          layers: { label: { en: "Layers switcher" }, type: "Object", bindable: true, options: { item: {} } },
+        },
+      },
       /* wwEditor:start */
       propertyHelp: {
         tooltip:
