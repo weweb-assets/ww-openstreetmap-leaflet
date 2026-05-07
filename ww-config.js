@@ -1,7 +1,3 @@
-import marker from "./configs/marker";
-import circle from "./configs/circle";
-import polygon from "./configs/polygon";
-
 export default {
   editor: {
     label: {
@@ -9,308 +5,252 @@ export default {
     },
     icon: "map",
     customSettingsPropertiesOrder: [
-      "tileLayer",
-      "providerConfiguration",
-      ["lat", "lng", "zoom"],
-      ["zoomControl", "attributionControl"],
-      [
-        "markerTitle",
-        "markers",
-        "markerDataField",
-        "markerIconUrlField",
-        "markerIconWidthField",
-        "markerIconHeightField",
-        "markers_tooltipContentField",
-        "markers_tooltipDirectionField",
-        "markers_tooltipPermanentField",
-      ],
-      [
-        "circleTitle",
-        "circles",
-        "circleDataField",
-        "circleRadiusField",
-        "circles_strokeField",
-        "circles_colorField",
-        "circles_weightField",
-        "circles_opacityField",
-        "circles_lineCapField",
-        "circles_lineJoinField",
-        "circles_dashArrayField",
-        "circles_dashOffsetField",
-        "circles_fillField",
-        "circles_fillColorField",
-        "circles_fillOpacityField",
-        "circles_fillRuleField",
-        "circles_tooltipContentField",
-        "circles_tooltipDirectionField",
-        "circles_tooltipPermanentField",
-      ],
-      [
-        "polygonTitle",
-        "polygons",
-        "polygonDataField",
-        "polygons_strokeField",
-        "polygons_colorField",
-        "polygons_weightField",
-        "polygons_opacityField",
-        "polygons_lineCapField",
-        "polygons_lineJoinField",
-        "polygons_dashArrayField",
-        "polygons_dashOffsetField",
-        "polygons_fillField",
-        "polygons_fillColorField",
-        "polygons_fillOpacityField",
-        "polygons_fillRuleField",
-        "polygons_tooltipContentField",
-        "polygons_tooltipDirectionField",
-        "polygons_tooltipPermanentField",
-      ],
+      ["height"],
+      ["mapOptions"],
+      ["tileLayer"],
+      ["layers"],
+      ["geoJSON"],
+      ["controls"],
+      ["enableMarkerCluster"],
     ],
   },
+
   triggerEvents: [
     {
-      name: "map:load",
-      label: { en: "On map load" },
+      name: "map:ready",
+      label: { en: "On map ready" },
+      event: {},
     },
     {
       name: "map:click",
       label: { en: "On map click" },
       event: {
-        latlng: {
-          lat: 48.84872727506581,
-          lng: 2.351657694024656,
-        },
-        originalEvent: { x: 0, y: 0 },
+        lat: 48.84872727506581,
+        lng: 2.351657694024656,
+        containerPoint: { x: 0, y: 0 },
       },
     },
     {
-      name: "map:zoom",
-      label: { en: "On map zoom" },
+      name: "map:moveend",
+      label: { en: "On map move end" },
       event: {
+        center: { lat: 48.84872727506581, lng: 2.351657694024656 },
         zoom: 13,
+        bounds: { north: 48.86, south: 48.83, east: 2.37, west: 2.33 },
       },
     },
     {
-      name: "map:move",
-      label: { en: "On map move" },
+      name: "layer:click",
+      label: { en: "On layer click" },
       event: {
-        center: {
-          lat: 48.84872727506581,
-          lng: 2.351657694024656,
-        },
-        bounds: {
-          _northEast: { lat: 48.86, lng: 2.37 },
-          _southWest: { lat: 48.83, lng: 2.33 },
-        },
-      },
-    },
-    {
-      name: "map:dragstart",
-      label: { en: "On map drag start" },
-      event: {
-        center: {
-          lat: 48.84872727506581,
-          lng: 2.351657694024656,
-        },
-      },
-    },
-    {
-      name: "map:dragend",
-      label: { en: "On map drag end" },
-      event: {
-        center: {
-          lat: 48.84872727506581,
-          lng: 2.351657694024656,
-        },
-      },
-    },
-    {
-      name: "marker:click",
-      label: { en: "On marker click" },
-      event: {
-        marker: {
-          data: [48.84872727506581, 2.351657694024656],
-          rawData: {},
-        },
-        latlng: {
-          lat: 48.84872727506581,
-          lng: 2.351657694024656,
-        },
-        originalEvent: { x: 0, y: 0 },
-      },
-    },
-    {
-      name: "marker:dragstart",
-      label: { en: "On marker drag start" },
-      event: {
-        marker: {
-          data: [48.84872727506581, 2.351657694024656],
-          rawData: {},
-        },
-        latlng: {
-          lat: 48.84872727506581,
-          lng: 2.351657694024656,
-        },
-      },
-    },
-    {
-      name: "marker:drag",
-      label: { en: "On marker drag" },
-      event: {
-        marker: {
-          data: [48.84872727506581, 2.351657694024656],
-          rawData: {},
-        },
-        latlng: {
-          lat: 48.84872727506581,
-          lng: 2.351657694024656,
-        },
-      },
-    },
-    {
-      name: "marker:dragend",
-      label: { en: "On marker drag end" },
-      event: {
-        marker: {
-          data: [48.84872727506581, 2.351657694024656],
-          rawData: {},
-        },
-        latlng: {
-          lat: 48.84872727506581,
-          lng: 2.351657694024656,
-        },
-      },
-    },
-    {
-      name: "shape:click",
-      label: { en: "On shape click" },
-      event: {
-        type: "circle",
-        shape: {},
-        latlng: {
-          lat: 48.84872727506581,
-          lng: 2.351657694024656,
-        },
-      },
-    },
-    {
-      name: "shape:edit",
-      label: { en: "On shape edit" },
-      event: {
-        type: "circle",
-        shape: {},
-        latlng: {
-          lat: 48.84872727506581,
-          lng: 2.351657694024656,
-        },
+        id: "marker-1",
+        type: "marker",
+        latlng: { lat: 48.84872727506581, lng: 2.351657694024656 },
+        properties: {},
       },
     },
   ],
+
+  actions: [
+    {
+      label: "Set view",
+      description: "Recenter the map on the given coordinates and zoom level (no animation).",
+      actionName: "setView",
+      args: [
+        { name: "lat", type: "number" },
+        { name: "lng", type: "number" },
+        { name: "zoom", type: "number" },
+      ],
+    },
+    {
+      label: "Fly to",
+      description: "Smooth pan + zoom animation to the given coordinates.",
+      actionName: "flyTo",
+      args: [
+        { name: "lat", type: "number" },
+        { name: "lng", type: "number" },
+        { name: "zoom", type: "number" },
+        { name: "duration", type: "number" },
+      ],
+    },
+    {
+      label: "Pan to",
+      description: "Pan the map to the given coordinates without zooming.",
+      actionName: "panTo",
+      args: [
+        { name: "lat", type: "number" },
+        { name: "lng", type: "number" },
+      ],
+    },
+    {
+      label: "Set zoom",
+      description: "Set the map zoom level.",
+      actionName: "setZoom",
+      args: [{ name: "zoom", type: "number" }],
+    },
+    {
+      label: "Fit bounds",
+      description:
+        "Fit the map view to the given geographic bounds (north/south/east/west in degrees).",
+      actionName: "fitBounds",
+      args: [
+        { name: "north", type: "number" },
+        { name: "south", type: "number" },
+        { name: "east", type: "number" },
+        { name: "west", type: "number" },
+        { name: "padding", type: "number" },
+      ],
+    },
+    {
+      label: "Locate user",
+      description:
+        "Try to detect the user's location and center the map on it. Triggers Leaflet locationfound/locationerror events.",
+      actionName: "locate",
+      args: [
+        { name: "enableHighAccuracy", type: "boolean" },
+        { name: "timeout", type: "number" },
+      ],
+    },
+    {
+      label: "Invalidate size",
+      description:
+        "Force the map to recompute its container size. Call after the surrounding container is resized or revealed.",
+      actionName: "invalidateSize",
+    },
+  ],
+
   properties: {
+    height: {
+      label: { en: "Height" },
+      type: "Text",
+      section: "settings",
+      defaultValue: "400px",
+      bindable: true,
+      options: { placeholder: "400px" },
+      /* wwEditor:start */
+      propertyHelp: {
+        tooltip:
+          "CSS height applied to the map container (e.g. `400px`, `100%`, `60vh`). Required — Leaflet has no intrinsic height; an empty container renders a blank map.",
+      },
+      bindingValidation: { type: "string", tooltip: "A CSS length, e.g. `\"400px\"`" },
+      /* wwEditor:end */
+    },
+
+    mapOptions: {
+      label: { en: "Map options" },
+      type: "Object",
+      section: "settings",
+      defaultValue: {
+        center: [46.603354, 1.888334],
+        zoom: 4,
+      },
+      bindable: true,
+      /* wwEditor:start */
+      propertyHelp: {
+        tooltip:
+          "Object passed directly to `L.map(el, options)`. Mirrors Leaflet's [Map options](https://leafletjs.com/reference.html#map-option). Common keys: `center: [lat, lng]`, `zoom`, `minZoom`, `maxZoom`, `dragging`, `scrollWheelZoom`, `doubleClickZoom`, `touchZoom`, `keyboard`, `boxZoom`, `worldCopyJump`. Coordinates use Leaflet's `[lat, lng]` order (NOT GeoJSON `[lng, lat]`).",
+      },
+      bindingValidation: {
+        type: "object",
+        tooltip:
+          "An object matching Leaflet Map options. Example: `{ center: [48.85, 2.35], zoom: 12, scrollWheelZoom: false }`",
+      },
+      /* wwEditor:end */
+    },
+
     tileLayer: {
-      label: {
-        en: "Tile layer",
-      },
-      type: "Text",
-      bindable: true,
+      label: { en: "Tile layer" },
+      type: "Object",
       section: "settings",
-      defaultValue: "OpenStreetMap.Mapnik",
+      defaultValue: {
+        provider: "OpenStreetMap.Mapnik",
+      },
+      bindable: true,
       /* wwEditor:start */
-      bindingValidation: {
-        validations: [
-          {
-            type: "string",
-          },
-        ],
+      propertyHelp: {
         tooltip:
-          "A providers name: `<a href='https://leaflet-extras.github.io/leaflet-providers/preview/'>https://leaflet-extras.github.io/leaflet-providers/preview/</a>`",
+          "Configures the base tile layer. Two mutually exclusive forms:\n\n- **Provider preset** (recommended) — `{ provider: 'OpenStreetMap.Mapnik', options: {...} }`. Uses [leaflet-providers](https://leaflet-extras.github.io/leaflet-providers/preview/) registry. Free presets that work without API key: `OpenStreetMap.Mapnik`, `OpenStreetMap.HOT`, `CartoDB.Positron`, `CartoDB.DarkMatter`, `CartoDB.Voyager`, `OpenTopoMap`, `Esri.WorldImagery`, `Esri.WorldStreetMap`. Some providers need an API key passed via `options`.\n\n- **Custom URL** — `{ url: 'https://{s}.tile.example.com/{z}/{x}/{y}.png', options: { attribution, maxZoom, ... } }`.",
       },
-      /* wwEditor:end */
-    },
-    providerConfiguration: {
-      label: {
-        en: "Provider configuration",
-      },
-      type: "Script",
-      bindable: true,
-      section: "settings",
-      defaultValue: "{}",
-      /* wwEditor:start */
       bindingValidation: {
-        validations: [
-          {
-            type: "string",
-          },
-        ],
+        type: "object",
         tooltip:
-          "A providers configuration: `<a href='https://github.com/leaflet-extras/leaflet-providers#providers-requiring-registration'>https://github.com/leaflet-extras/leaflet-providers#providers-requiring-registration</a>`",
+          "Object: `{ provider: 'OpenStreetMap.Mapnik' }` OR `{ url: '...', options: { attribution: '...' } }`",
       },
       /* wwEditor:end */
     },
-    lat: {
+
+    layers: {
+      label: { en: "Layers" },
+      type: "Object",
       section: "settings",
-      label: { en: "Latitude origin", fr: "Origine - Latitude" },
-      type: "Text",
-      options: {
-        placeholder: "Latitude",
-      },
-      defaultValue: "46.603354",
+      defaultValue: [],
       bindable: true,
       /* wwEditor:start */
+      propertyHelp: {
+        tooltip:
+          "Array of declarative layer descriptors. Each item: `{ id, type, ... }` where `type` is one of `marker`, `circle`, `circleMarker`, `polygon`, `polyline`, `rectangle`, `imageOverlay`. \n\nShape per type:\n- `marker` / `circleMarker`: `{ id, type, latlng: [lat, lng], options?: {}, popup?: 'string', tooltip?: 'string' }`\n- `circle`: same as marker + `options.radius` in meters\n- `polygon` / `polyline`: `{ id, type, latlngs: [[lat,lng], ...], options?: { color, weight, fill, fillColor, ... } }`\n- `rectangle`: `{ id, type, bounds: [[s,w],[n,e]], options?: {} }`\n- `imageOverlay`: `{ id, type, url, bounds: [[s,w],[n,e]], options?: { opacity } }`\n\nThe unique `id` enables incremental diffing (only changed/added/removed layers are re-rendered). Coordinates use Leaflet `[lat, lng]` order. See [L.marker](https://leafletjs.com/reference.html#marker), [L.circle](https://leafletjs.com/reference.html#circle), [L.polygon](https://leafletjs.com/reference.html#polygon), [L.polyline](https://leafletjs.com/reference.html#polyline) for full options.",
+      },
       bindingValidation: {
-        type: "string",
-        tooltip: 'A string that defines the latitue: `"40.712784"`',
+        type: "array",
+        tooltip:
+          "Array of layer descriptors. Example: `[{ id: 'a', type: 'marker', latlng: [48.85, 2.35], popup: 'Paris' }]`",
       },
       /* wwEditor:end */
     },
-    lng: {
+
+    geoJSON: {
+      label: { en: "GeoJSON" },
+      type: "Object",
       section: "settings",
-      label: { en: "Longitude origin", fr: "Origine - Longitude" },
-      type: "Text",
-      options: {
-        placeholder: "Longitude",
-      },
-      defaultValue: "1.888334",
+      defaultValue: null,
       bindable: true,
       /* wwEditor:start */
+      propertyHelp: {
+        tooltip:
+          "Renders a GeoJSON FeatureCollection (or single Feature) via [L.geoJSON](https://leafletjs.com/reference.html#geojson). Object shape:\n\n- `data`: FeatureCollection or Feature object (required)\n- `style`: static object applied to vector features — `{ color, weight, opacity, fillColor, fillOpacity }`\n- `pointToLayer`: `'marker'` or `'circleMarker'` (how Point geometries are rendered)\n- `onEachFeature`: `'bindPopup'` or `'bindTooltip'` (auto-binds the value of `popupProperty` from each feature's properties)\n- `popupProperty`: feature property key used by `bindPopup`/`bindTooltip` (default: `'name'`)\n- `filter`: `{ property, value, operator? }` — only render features matching this rule (operator: `'eq'` (default), `'neq'`, `'gt'`, `'lt'`)\n- `swapCoords`: `true` if the GeoJSON has standard `[lng, lat]` ordering and you want Leaflet to interpret it correctly (Leaflet supports GeoJSON natively, but use this if your data was inverted)\n\nSet to `null` or omit to disable GeoJSON rendering.",
+      },
       bindingValidation: {
-        type: "string",
-        tooltip: 'A string that defines the longitude: `"15.347554"`',
+        type: "object",
+        tooltip:
+          "GeoJSON config. Example: `{ data: featureCollection, style: { color: 'red' }, onEachFeature: 'bindPopup', popupProperty: 'name' }`",
       },
       /* wwEditor:end */
     },
-    zoom: {
+
+    controls: {
+      label: { en: "Controls" },
+      type: "Object",
       section: "settings",
-      type: "Number",
-      label: { en: "Zoom", fr: "Zoom" },
-      options: {
-        min: 0,
-        max: 20,
-        step: 1,
+      defaultValue: {
+        zoom: { enabled: true, position: "topleft" },
+        attribution: { enabled: true },
       },
-      defaultValue: 4,
       bindable: true,
       /* wwEditor:start */
+      propertyHelp: {
+        tooltip:
+          "Native Leaflet controls. Object keys are control names, each value an object `{ enabled, position, ...specific }`.\n\n- `zoom`: `{ enabled, position }` — zoom +/- buttons. Position: `topleft|topright|bottomleft|bottomright`.\n- `attribution`: `{ enabled, prefix }` — attribution badge (legal in production for OSM).\n- `scale`: `{ enabled, position, metric, imperial, maxWidth }` — distance scale bar.\n- `layers`: `{ enabled, position, collapsed, baseLayers, overlays }` — base layer / overlay switcher. `baseLayers` and `overlays` are objects mapping label → layer descriptor (same shape as `layers[]` items, or `{ provider, url, options }` for tile layers).\n\nSee [L.control](https://leafletjs.com/reference.html#control).",
+      },
       bindingValidation: {
-        type: "number",
-        tooltip: "A number that defines the zoom: `11`",
+        type: "object",
+        tooltip:
+          "Controls config. Example: `{ zoom: { enabled: true, position: 'topright' }, scale: { enabled: true, metric: true } }`",
       },
       /* wwEditor:end */
     },
-    zoomControl: {
-      label: { en: "Zoom control" },
+
+    enableMarkerCluster: {
+      label: { en: "Enable marker cluster" },
       type: "OnOff",
       section: "settings",
-      defaultValue: true,
+      defaultValue: false,
+      bindable: true,
+      /* wwEditor:start */
+      propertyHelp: {
+        tooltip:
+          "When ON, all markers (from `layers` and from `geoJSON` Point features) are wrapped in a [Leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster) group. Recommended for >100 markers. Adds spiderfication, zoom-aware grouping, and animated transitions.",
+      },
+      /* wwEditor:end */
     },
-    attributionControl: {
-      label: { en: "Show attribution" },
-      type: "OnOff",
-      section: "settings",
-      defaultValue: true,
-    },
-    ...marker,
-    ...circle,
-    ...polygon,
   },
 };
