@@ -19,7 +19,15 @@ This element wraps Leaflet 1:1 with **two props** — `map` and `layers`. Genera
 
 ## Mandatory rules (priority order)
 
-1. **`map.height` is required.** CSS length, e.g. `"400px"`. Leaflet has no intrinsic height — empty container = blank map.
+1. **`map.height` MUST be set on the map element itself, never delegated to a parent.** The map has zero intrinsic height. Two and only two valid patterns:
+   - **(a) Fixed CSS length directly on the map** — `map.height: "500px"` (or `"60vh"`, `"700px"`). **This is the default — always prefer it.**
+   - **(b) `map.height: "100%"`** — ONLY when the immediate parent has its own explicit non-auto height that chains up to a sized ancestor. If you can't guarantee that, use (a).
+
+   ❌ NEVER wrap the map in a container with `max-height` and leave the map at auto/default — it will be 0px tall.
+   ❌ NEVER rely on flex/grid intrinsic sizing.
+   ❌ NEVER set `map.height` to `"auto"`.
+
+   Default for any new map: `map.height: "500px"` unless the user asks for full-viewport (`"100vh"`) or a parent-relative layout with a sized parent (`"100%"`).
 2. **`map.center` and `map.zoom` are required.** Reasonable seed: `center: [46.603354, 1.888334], zoom: 4`. Use city coords if the prompt names one.
 3. **First item of `layers` should be a `tileLayer`.** Default: `{ id: 'base', type: 'tileLayer', provider: 'OpenStreetMap.Mapnik' }`. Without it the background is empty.
 4. **Coordinates use Leaflet `[lat, lng]` order.** Never `[lng, lat]` (GeoJSON). For incoming GeoJSON with `[lng, lat]`, set `swapCoords: true` on the geoJSON layer.
@@ -88,7 +96,9 @@ layers: [
 
 ## Actions
 
-`setView(lat, lng, zoom)` · `flyTo(lat, lng, zoom, duration?)` · `panTo(lat, lng)` · `setZoom(zoom)` · `fitBounds(north, south, east, west, padding?)` · `locate(enableHighAccuracy?, timeout?)` · `invalidateSize()`.
+`setView(lat, lng, zoom)` · `flyTo(lat, lng, zoom, duration_ms?)` · `panTo(lat, lng)` · `setZoom(zoom)` · `fitBounds(north, south, east, west, padding?)` · `locate(enableHighAccuracy?, timeout_ms?)` · `invalidateSize()`.
+
+**⚠️ Time units:** `flyTo.duration_ms` and `locate.timeout_ms` are in **MILLISECONDS** (web standard, e.g. 1500 = 1.5s). Do NOT pass raw seconds like 1.5 — pass 1500.
 
 ## Tile providers without API key
 

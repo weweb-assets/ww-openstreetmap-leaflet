@@ -54,13 +54,14 @@ export default {
     },
     {
       label: "Fly to",
-      description: "Smooth pan + zoom animation to the given coordinates.",
+      description:
+        "Smooth pan + zoom animation to the given coordinates. `duration` is in MILLISECONDS (e.g. 1500 = 1.5s). Leave empty for Leaflet's distance-based default.",
       actionName: "flyTo",
       args: [
         { name: "lat", type: "number" },
         { name: "lng", type: "number" },
         { name: "zoom", type: "number" },
-        { name: "duration", type: "number" },
+        { name: "duration (ms)", type: "number" },
       ],
     },
     {
@@ -112,7 +113,7 @@ export default {
       type: "RawObject",
       section: "settings",
       defaultValue: {
-        height: "400px",
+        height: "500px",
         center: [46.603354, 1.888334],
         zoom: 4,
       },
@@ -120,7 +121,7 @@ export default {
       /* wwEditor:start */
       propertyHelp: {
         tooltip:
-          "Object passed to `L.map(el, options)` plus one wrapper-only key.\n\n**Required:**\n- `height` — CSS length for the container (e.g. `\"400px\"`, `\"100%\"`, `\"60vh\"`). Leaflet has no intrinsic height — without this the map renders blank.\n- `center: [lat, lng]` — initial center.\n- `zoom` — initial zoom level.\n\n**Optional Leaflet [Map options](https://leafletjs.com/reference.html#map-option):**\n`minZoom`, `maxZoom`, `maxBounds`, `zoomControl`, `attributionControl`, `dragging`, `scrollWheelZoom`, `doubleClickZoom`, `touchZoom`, `keyboard`, `boxZoom`, `worldCopyJump`, `inertia`, …\n\nCoordinates use Leaflet `[lat, lng]` order — NOT GeoJSON `[lng, lat]`.",
+          "Object passed to `L.map(el, options)` plus one wrapper-only key.\n\n**Required:**\n- `height` — CSS length on the map ITSELF (e.g. `\"500px\"`, `\"60vh\"`). The map has no intrinsic height. **Do NOT rely on a parent container** — set the height directly here. Use `\"100%\"` ONLY when the immediate parent has an explicit non-auto height. Default suggestion: `\"500px\"`.\n- `center: [lat, lng]` — initial center.\n- `zoom` — initial zoom level.\n\n**Optional Leaflet [Map options](https://leafletjs.com/reference.html#map-option):**\n`minZoom`, `maxZoom`, `maxBounds`, `zoomControl`, `attributionControl`, `dragging`, `scrollWheelZoom`, `doubleClickZoom`, `touchZoom`, `keyboard`, `boxZoom`, `worldCopyJump`, `inertia`, …\n\nCoordinates use Leaflet `[lat, lng]` order — NOT GeoJSON `[lng, lat]`.",
       },
       bindingValidation: {
         type: "object",

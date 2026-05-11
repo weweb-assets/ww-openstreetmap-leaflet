@@ -1,10 +1,11 @@
 <template>
-  <div
-    class="ww-leaflet"
-    :class="{ editing: isEditing }"
-    :style="{ height: containerHeight }"
-    ref="mapContainer"
-  ></div>
+  <div class="ww-leaflet" :class="{ editing: isEditing }">
+    <div
+      class="ww-leaflet__map"
+      :style="mapContainerStyle"
+      ref="mapContainer"
+    ></div>
+  </div>
 </template>
 
 <script>
@@ -215,8 +216,14 @@ export default {
 
     const containerHeight = computed(() => {
       const h = props.content?.map?.height;
-      return typeof h === "string" && h.length ? h : "400px";
+      return typeof h === "string" && h.length ? h : "500px";
     });
+
+    const mapContainerStyle = computed(() => ({
+      height: containerHeight.value,
+      minHeight: containerHeight.value,
+      width: "100%",
+    }));
 
     const isEditing = computed(() => {
       /* wwEditor:start */
@@ -380,7 +387,12 @@ export default {
     }
     function flyTo(lat, lng, zoom, duration) {
       if (!mapInstance) return;
-      mapInstance.flyTo([lat, lng], zoom, duration ? { duration } : undefined);
+      // `duration` is accepted in milliseconds (web convention); Leaflet wants seconds.
+      const opts =
+        typeof duration === "number" && duration > 0
+          ? { duration: duration / 1000 }
+          : undefined;
+      mapInstance.flyTo([lat, lng], zoom, opts);
     }
     function panTo(lat, lng) {
       if (!mapInstance) return;
@@ -412,6 +424,7 @@ export default {
       mapContainer,
       isEditing,
       containerHeight,
+      mapContainerStyle,
       currentCenter,
       currentZoom,
       currentBounds,
@@ -430,13 +443,17 @@ export default {
 
 <style lang="scss" scoped>
 .ww-leaflet {
+  display: block;
   width: 100%;
-  overflow: hidden;
   /* wwEditor:start */
   &.editing {
     pointer-events: none;
   }
   /* wwEditor:end */
+}
+.ww-leaflet__map {
+  display: block;
+  width: 100%;
 }
 </style>
 
