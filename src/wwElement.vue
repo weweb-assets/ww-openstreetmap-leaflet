@@ -138,8 +138,8 @@ function buildOverlay(descriptor, attachClickHandler) {
     default:
       return null;
   }
-  if (d.popup) layer.bindPopup(String(d.popup));
-  if (d.tooltip) layer.bindTooltip(String(d.tooltip));
+  if (d.popup) layer.bindPopup(String(d.popup), d.popupOptions || undefined);
+  if (d.tooltip) layer.bindTooltip(String(d.tooltip), d.tooltipOptions || undefined);
   if (attachClickHandler) {
     layer.on("click", (e) => {
       attachClickHandler({
