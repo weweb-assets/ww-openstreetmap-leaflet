@@ -9,8 +9,8 @@
     "@weweb/cli": "latest"
   },
   "dependencies": {
-    "leaflet": "^1.9.4",
-    "leaflet-providers": "^1.13.0",
-    "leaflet.markercluster": "^1.5.3"
+    "leaflet": "1.9.4",
+    "leaflet-providers": "1.13.0",
+    "leaflet.markercluster": "1.5.3"
   }
 }

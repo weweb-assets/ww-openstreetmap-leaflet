@@ -214,14 +214,16 @@ export default {
     const currentBounds = ref({ north: 0, south: 0, east: 0, west: 0 });
     const isReady = ref(false);
 
+    // Height is owned by the WeWeb editor's styling panel (Sizing > Height).
+    // The inner Leaflet container fills 100% of the styled wrapper. `map.height`
+    // remains an optional manual override, but is no longer surfaced to the AI.
     const containerHeight = computed(() => {
       const h = props.content?.map?.height;
-      return typeof h === "string" && h.length ? h : "500px";
+      return typeof h === "string" && h.length ? h : "100%";
     });
 
     const mapContainerStyle = computed(() => ({
       height: containerHeight.value,
-      minHeight: containerHeight.value,
       width: "100%",
     }));
 

@@ -113,7 +113,6 @@ export default {
       type: "RawObject",
       section: "settings",
       defaultValue: {
-        height: "500px",
         center: [46.603354, 1.888334],
         zoom: 4,
       },
@@ -121,7 +120,7 @@ export default {
       /* wwEditor:start */
       propertyHelp: {
         tooltip:
-          "Object passed to `L.map(el, options)` plus one wrapper-only key.\n\n**Required:**\n- `height` — CSS length on the map ITSELF (e.g. `\"500px\"`, `\"60vh\"`). The map has no intrinsic height. **Do NOT rely on a parent container** — set the height directly here. Use `\"100%\"` ONLY when the immediate parent has an explicit non-auto height. Default suggestion: `\"500px\"`.\n- `center: [lat, lng]` — initial center.\n- `zoom` — initial zoom level.\n\n**Optional Leaflet [Map options](https://leafletjs.com/reference.html#map-option):**\n`minZoom`, `maxZoom`, `maxBounds`, `zoomControl`, `attributionControl`, `dragging`, `scrollWheelZoom`, `doubleClickZoom`, `touchZoom`, `keyboard`, `boxZoom`, `worldCopyJump`, `inertia`, …\n\nCoordinates use Leaflet `[lat, lng]` order — NOT GeoJSON `[lng, lat]`.",
+          "Object passed to `L.map(el, options)`.\n\n**Required:**\n- `center: [lat, lng]` — initial center.\n- `zoom` — initial zoom level.\n\n**Sizing:** the map fills its container (100% of the wrapper). Set the element's height via the editor's Styling panel (Sizing > Height: Fixed / Ratio). `map.height` exists as an optional manual override (CSS length) but is not the recommended sizing path.\n\n**Optional Leaflet [Map options](https://leafletjs.com/reference.html#map-option):**\n`minZoom`, `maxZoom`, `maxBounds`, `zoomControl`, `attributionControl`, `dragging`, `scrollWheelZoom`, `doubleClickZoom`, `touchZoom`, `keyboard`, `boxZoom`, `worldCopyJump`, `inertia`, `preferCanvas`, `zoomSnap`, `zoomDelta`, …\n\nCoordinates use Leaflet `[lat, lng]` order — NOT GeoJSON `[lng, lat]`.",
       },
       bindingValidation: {
         type: "object",
