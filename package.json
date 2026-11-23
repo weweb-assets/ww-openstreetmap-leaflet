@@ -1,6 +1,6 @@
 {
   "name": "ww-openStreetMap",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "build": "weweb build",
     "serve": "weweb serve"
@@ -9,6 +9,7 @@
     "@weweb/cli": "latest"
   },
   "dependencies": {
+    "dompurify": "3.4.17",
     "leaflet": "^1.9.4",
     "leaflet-providers": "^1.13.0"
   }

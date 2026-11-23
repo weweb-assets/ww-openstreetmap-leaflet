@@ -2,6 +2,7 @@ import { ref, watch } from "vue";
 import L from "../leaflet";
 import _L from "leaflet";
 import "leaflet-providers";
+import DOMPurify from "dompurify";
 
 import default_iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import default_iconUrl from "leaflet/dist/images/marker-icon.png";
@@ -191,7 +192,7 @@ export default function useLeafletMap(
           typeof tooltipContent === "string" &&
           tooltipContent.length
         ) {
-          markerInstance.bindTooltip(tooltipContent, {
+          markerInstance.bindTooltip(DOMPurify.sanitize(tooltipContent), {
             permanent: tooltipPermanent,
             direction: tooltipDirection,
           });
@@ -267,7 +268,7 @@ export default function useLeafletMap(
           typeof tooltipContent === "string" &&
           tooltipContent.length
         ) {
-          circleInstance.bindTooltip(tooltipContent, {
+          circleInstance.bindTooltip(DOMPurify.sanitize(tooltipContent), {
             permanent: tooltipPermanent,
             direction: tooltipDirection,
           });
@@ -339,7 +340,7 @@ export default function useLeafletMap(
           typeof tooltipContent === "string" &&
           tooltipContent.length
         ) {
-          polygonInstance.bindTooltip(tooltipContent, {
+          polygonInstance.bindTooltip(DOMPurify.sanitize(tooltipContent), {
             permanent: tooltipPermanent,
             direction: tooltipDirection,
           });
