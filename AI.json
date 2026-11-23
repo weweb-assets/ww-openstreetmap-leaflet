@@ -93,6 +93,61 @@
             "name": "polygonDataField",
             "description": "Property path for the coordinate array in a bound polygon row. Use data for the example row shape.",
             "type": "string"
+        },
+        {
+            "name": "markers_tooltipContentField",
+            "description": "For a bound marker label, map this property to the row field containing the tooltip text, such as tooltipContent.",
+            "type": "string"
+        },
+        {
+            "name": "circles_tooltipContentField",
+            "description": "For a bound circle label, map this property to the row field containing the tooltip text, such as tooltipContent.",
+            "type": "string"
+        },
+        {
+            "name": "circles_colorField",
+            "description": "Map the color style of a bound circle to its row field, such as color.",
+            "type": "string"
+        },
+        {
+            "name": "circles_weightField",
+            "description": "Map the weight style of a bound circle to its row field, such as weight.",
+            "type": "string"
+        },
+        {
+            "name": "circles_fillColorField",
+            "description": "Map the fillColor style of a bound circle to its row field, such as fillColor.",
+            "type": "string"
+        },
+        {
+            "name": "circles_fillOpacityField",
+            "description": "Map the fillOpacity style of a bound circle to its row field, such as fillOpacity.",
+            "type": "string"
+        },
+        {
+            "name": "polygons_tooltipContentField",
+            "description": "For a bound polygon label, map this property to the row field containing the tooltip text, such as tooltipContent.",
+            "type": "string"
+        },
+        {
+            "name": "polygons_colorField",
+            "description": "Map the color style of a bound polygon to its row field, such as color.",
+            "type": "string"
+        },
+        {
+            "name": "polygons_weightField",
+            "description": "Map the weight style of a bound polygon to its row field, such as weight.",
+            "type": "string"
+        },
+        {
+            "name": "polygons_fillColorField",
+            "description": "Map the fillColor style of a bound polygon to its row field, such as fillColor.",
+            "type": "string"
+        },
+        {
+            "name": "polygons_fillOpacityField",
+            "description": "Map the fillOpacity style of a bound polygon to its row field, such as fillOpacity.",
+            "type": "string"
         }
     ],
     "states": [],
@@ -166,6 +221,7 @@
         "Use [latitude, longitude] for all coordinates. Keep latitude and longitude as strings in content.default.lat and content.default.lng.",
         "Give the element an explicit height. Its Leaflet container needs a nonzero height to display the map.",
         "For a bound layer array, return rows with the same data and radius keys as the static example so they also work in the published app. In the same content.default object set markerDataField, circleDataField or polygonDataField to the string data for each bound layer you use, and set circleRadiusField to the string radius for bound circles.",
+        "To display bound tooltips in the editor and published app, give rows tooltip: true and tooltipContent, and set the corresponding markers_tooltipContentField, circles_tooltipContentField or polygons_tooltipContentField to the string tooltipContent. For a bound circle or polygon, map each style field you use to the matching row property, such as circles_colorField to color.",
         "Generate tooltip content as plain trusted text. Do not insert raw user-provided HTML in map tooltips.",
         "Use the default provider and keep attribution on unless the user specifies another compatible provider."
     ],
