@@ -11,7 +11,7 @@ import default_shadowUrl from "leaflet/dist/images/marker-shadow.png";
 import { markerFields, circleFields, polygonFields } from "./fields.js";
 
 const generateVectorStyles = (fields, vector) => {
-  return {
+  const styles = {
     stroke: fields[`${vector}_strokeField`],
     color: fields[`${vector}_colorField`],
     weight: fields[`${vector}_weightField`],
@@ -25,6 +25,9 @@ const generateVectorStyles = (fields, vector) => {
     fillOpacity: fields[`${vector}_fillOpacityField`],
     fillRule: fields[`${vector}_fillRuleField`],
   };
+
+  // Omit missing mappings so Leaflet keeps its defaults. Explicit false and zero still override them.
+  return Object.fromEntries(Object.entries(styles).filter(([, value]) => value !== undefined));
 };
 
 export default function useLeafletMap(
