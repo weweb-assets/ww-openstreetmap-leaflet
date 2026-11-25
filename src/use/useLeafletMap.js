@@ -2,6 +2,7 @@ import { ref, watch } from "vue";
 import L from "../leaflet";
 import _L from "leaflet";
 import "leaflet-providers";
+import DOMPurify from "dompurify";
 
 import default_iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import default_iconUrl from "leaflet/dist/images/marker-icon.png";
@@ -10,7 +11,7 @@ import default_shadowUrl from "leaflet/dist/images/marker-shadow.png";
 import { markerFields, circleFields, polygonFields } from "./fields.js";
 
 const generateVectorStyles = (fields, vector) => {
-  return {
+  const styles = {
     stroke: fields[`${vector}_strokeField`],
     color: fields[`${vector}_colorField`],
     weight: fields[`${vector}_weightField`],
@@ -24,6 +25,9 @@ const generateVectorStyles = (fields, vector) => {
     fillOpacity: fields[`${vector}_fillOpacityField`],
     fillRule: fields[`${vector}_fillRuleField`],
   };
+
+  // Omit missing mappings so Leaflet keeps its defaults. Explicit false and zero still override them.
+  return Object.fromEntries(Object.entries(styles).filter(([, value]) => value !== undefined));
 };
 
 export default function useLeafletMap(
@@ -191,7 +195,7 @@ export default function useLeafletMap(
           typeof tooltipContent === "string" &&
           tooltipContent.length
         ) {
-          markerInstance.bindTooltip(tooltipContent, {
+          markerInstance.bindTooltip(DOMPurify.sanitize(tooltipContent), {
             permanent: tooltipPermanent,
             direction: tooltipDirection,
           });
@@ -267,7 +271,7 @@ export default function useLeafletMap(
           typeof tooltipContent === "string" &&
           tooltipContent.length
         ) {
-          circleInstance.bindTooltip(tooltipContent, {
+          circleInstance.bindTooltip(DOMPurify.sanitize(tooltipContent), {
             permanent: tooltipPermanent,
             direction: tooltipDirection,
           });
@@ -339,7 +343,7 @@ export default function useLeafletMap(
           typeof tooltipContent === "string" &&
           tooltipContent.length
         ) {
-          polygonInstance.bindTooltip(tooltipContent, {
+          polygonInstance.bindTooltip(DOMPurify.sanitize(tooltipContent), {
             permanent: tooltipPermanent,
             direction: tooltipDirection,
           });

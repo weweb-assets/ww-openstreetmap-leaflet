@@ -1,0 +1,234 @@
+{
+    "metadata": {
+        "name": "ww-openstreetmap-leaflet",
+        "leafletTooltipsSanitized": true,
+        "description": "Interactive Leaflet map using OpenStreetMap tiles by default, with markers, circles, polygons and click events. The default provider requires no key.",
+        "keywords": [
+            "map",
+            "leaflet",
+            "openstreetmap",
+            "osm",
+            "location",
+            "marker",
+            "circle",
+            "polygon"
+        ],
+        "features": [
+            "OpenStreetMap tile attribution",
+            "Static or bound marker and shape arrays",
+            "Map, marker and shape click workflows"
+        ]
+    },
+    "properties": [
+        {
+            "name": "tileLayer",
+            "description": "A leaflet-providers preset. Use OpenStreetMap.Mapnik for a map that needs no provider key.",
+            "type": "string",
+            "defaultValue": "OpenStreetMap.Mapnik"
+        },
+        {
+            "name": "lat",
+            "description": "Initial latitude in decimal degrees.",
+            "type": "string",
+            "defaultValue": "46.603354"
+        },
+        {
+            "name": "lng",
+            "description": "Initial longitude in decimal degrees.",
+            "type": "string",
+            "defaultValue": "1.888334"
+        },
+        {
+            "name": "zoom",
+            "description": "Initial whole-number zoom level. Stay within the selected provider’s supported range.",
+            "type": "number",
+            "defaultValue": 4
+        },
+        {
+            "name": "zoomControl",
+            "description": "Displays the Leaflet zoom buttons.",
+            "type": "boolean",
+            "defaultValue": true
+        },
+        {
+            "name": "attributionControl",
+            "description": "Displays tile attribution. Keep enabled when using OpenStreetMap tiles.",
+            "type": "boolean",
+            "defaultValue": true
+        },
+        {
+            "name": "markers",
+            "description": "Marker objects with data: [latitude, longitude]. Optional tooltip, tooltipContent, tooltipDirection and tooltipPermanent control the label. Use user-approved URLs if setting customIcon and iconUrl.",
+            "type": "array",
+            "defaultValue": []
+        },
+        {
+            "name": "circles",
+            "description": "Circle objects with data: [latitude, longitude] and radius in metres. Optional Leaflet path style properties include color, weight, fillColor and fillOpacity.",
+            "type": "array",
+            "defaultValue": []
+        },
+        {
+            "name": "polygons",
+            "description": "Polygon objects with data: [[latitude, longitude], …]. Provide at least three positions. Supports Leaflet path styling.",
+            "type": "array",
+            "defaultValue": []
+        },
+        {
+            "name": "markerDataField",
+            "description": "Property path for coordinates in a bound marker row. Use data when rows have the shape shown in the example.",
+            "type": "string"
+        },
+        {
+            "name": "circleDataField",
+            "description": "Property path for coordinates in a bound circle row. Use data for the example row shape.",
+            "type": "string"
+        },
+        {
+            "name": "circleRadiusField",
+            "description": "Property path for the radius in a bound circle row. Use radius for the example row shape.",
+            "type": "string"
+        },
+        {
+            "name": "polygonDataField",
+            "description": "Property path for the coordinate array in a bound polygon row. Use data for the example row shape.",
+            "type": "string"
+        },
+        {
+            "name": "markers_tooltipContentField",
+            "description": "For a bound marker label, map this property to the row field containing the tooltip text, such as tooltipContent.",
+            "type": "string"
+        },
+        {
+            "name": "circles_tooltipContentField",
+            "description": "For a bound circle label, map this property to the row field containing the tooltip text, such as tooltipContent.",
+            "type": "string"
+        },
+        {
+            "name": "circles_colorField",
+            "description": "Map the color style of a bound circle to its row field, such as color.",
+            "type": "string"
+        },
+        {
+            "name": "circles_weightField",
+            "description": "Map the weight style of a bound circle to its row field, such as weight.",
+            "type": "string"
+        },
+        {
+            "name": "circles_fillColorField",
+            "description": "Map the fillColor style of a bound circle to its row field, such as fillColor.",
+            "type": "string"
+        },
+        {
+            "name": "circles_fillOpacityField",
+            "description": "Map the fillOpacity style of a bound circle to its row field, such as fillOpacity.",
+            "type": "string"
+        },
+        {
+            "name": "polygons_tooltipContentField",
+            "description": "For a bound polygon label, map this property to the row field containing the tooltip text, such as tooltipContent.",
+            "type": "string"
+        },
+        {
+            "name": "polygons_colorField",
+            "description": "Map the color style of a bound polygon to its row field, such as color.",
+            "type": "string"
+        },
+        {
+            "name": "polygons_weightField",
+            "description": "Map the weight style of a bound polygon to its row field, such as weight.",
+            "type": "string"
+        },
+        {
+            "name": "polygons_fillColorField",
+            "description": "Map the fillColor style of a bound polygon to its row field, such as fillColor.",
+            "type": "string"
+        },
+        {
+            "name": "polygons_fillOpacityField",
+            "description": "Map the fillOpacity style of a bound polygon to its row field, such as fillOpacity.",
+            "type": "string"
+        }
+    ],
+    "states": [],
+    "events": [
+        {
+            "name": "map:click",
+            "description": "Runs when the map is clicked.",
+            "payload": {
+                "latlng": {
+                    "lat": 48.8566,
+                    "lng": 2.3522
+                }
+            }
+        },
+        {
+            "name": "map:zoom",
+            "description": "Runs after the map zoom changes.",
+            "payload": {
+                "zoom": 12
+            }
+        },
+        {
+            "name": "map:move",
+            "description": "Runs after the map stops moving.",
+            "payload": {
+                "center": {
+                    "lat": 48.8566,
+                    "lng": 2.3522
+                }
+            }
+        },
+        {
+            "name": "marker:click",
+            "description": "Runs when a marker is clicked. The marker contains the original row.",
+            "payload": {
+                "marker": {
+                    "data": [
+                        48.8566,
+                        2.3522
+                    ]
+                },
+                "latlng": {
+                    "lat": 48.8566,
+                    "lng": 2.3522
+                }
+            }
+        },
+        {
+            "name": "shape:click",
+            "description": "Runs when a circle or polygon is clicked.",
+            "payload": {
+                "type": "circle",
+                "shape": {
+                    "data": [
+                        48.86,
+                        2.34
+                    ],
+                    "radius": 500
+                },
+                "latlng": {
+                    "lat": 48.86,
+                    "lng": 2.34
+                }
+            }
+        }
+    ],
+    "actions": [],
+    "slots": [],
+    "variables": [],
+    "specifications": [
+        "Use [latitude, longitude] for all coordinates. Keep latitude and longitude as strings in content.default.lat and content.default.lng.",
+        "Give the element an explicit height. Its Leaflet container needs a nonzero height to display the map.",
+        "For a bound layer array, return rows with the same data and radius keys as the static example so they also work in the published app. In the same content.default object set markerDataField, circleDataField or polygonDataField to the string data for each bound layer you use, and set circleRadiusField to the string radius for bound circles.",
+        "To display bound tooltips in the editor and published app, give rows tooltip: true and tooltipContent, and set the corresponding markers_tooltipContentField, circles_tooltipContentField or polygons_tooltipContentField to the string tooltipContent. For a bound circle or polygon, map each style field you use to the matching row property, such as circles_colorField to color.",
+        "Generate tooltip content as plain trusted text. Do not insert raw user-provided HTML in map tooltips.",
+        "Use the default provider and keep attribution on unless the user specifies another compatible provider."
+    ],
+    "examples": [
+        {
+            "description": "OpenStreetMap centered on Paris with a marker, a circle and a polygon.",
+            "example": "{\"uid\":\"map\",\"tag\":\"ww-openstreetmap-leaflet\",\"name\":\"Paris map\",\"style\":{\"default\":{\"width\":\"100%\",\"height\":\"360px\"}},\"content\":{\"default\":{\"lat\":\"48.8566\",\"lng\":\"2.3522\",\"zoom\":12,\"tileLayer\":\"OpenStreetMap.Mapnik\",\"attributionControl\":true,\"markers\":[{\"data\":[48.8566,2.3522],\"tooltip\":true,\"tooltipContent\":\"Paris\"}],\"circles\":[{\"data\":[48.86,2.34],\"radius\":500,\"color\":\"#2563eb\",\"fillOpacity\":0.15}],\"polygons\":[{\"data\":[[48.851,2.348],[48.854,2.363],[48.846,2.359]],\"color\":\"#16a34a\",\"fillOpacity\":0.18}]}}}"
+        }
+    ]
+}
